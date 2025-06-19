@@ -1,0 +1,90 @@
+2025-06-16 14:20:45.728 +07:00 [INF] Đã áp dụng migrations cho cơ sở dữ liệu SQLite.
+2025-06-16 14:20:45.754 +07:00 [INF] Thư mục Uploads đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Uploads
+2025-06-16 14:20:45.754 +07:00 [INF] Thư mục Logs đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Logs
+2025-06-16 14:25:12.235 +07:00 [ERR] The view 'Create' was not found. Searched locations: ["/Views/Movies/Create.vi-VN.cshtml","/Views/Movies/Create.vi.cshtml","/Views/Movies/Create.cshtml","/Views/Shared/Create.vi-VN.cshtml","/Views/Shared/Create.vi.cshtml","/Views/Shared/Create.cshtml"]
+2025-06-16 14:25:12.246 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The view 'Create' was not found. The following locations were searched:
+/Views/Movies/Create.vi-VN.cshtml
+/Views/Movies/Create.vi.cshtml
+/Views/Movies/Create.cshtml
+/Views/Shared/Create.vi-VN.cshtml
+/Views/Shared/Create.vi.cshtml
+/Views/Shared/Create.cshtml
+   at Microsoft.AspNetCore.Mvc.ViewEngines.ViewEngineResult.EnsureSuccessful(IEnumerable`1 originalLocations)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewResultExecutor.ExecuteAsync(ActionContext context, ViewResult result)
+   at Microsoft.AspNetCore.Mvc.ViewResult.ExecuteResultAsync(ActionContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResultFilterAsync>g__Awaited|30_0[TFilter,TFilterAsync](ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-06-16 14:25:37.758 +07:00 [INF] Đã áp dụng migrations cho cơ sở dữ liệu SQLite.
+2025-06-16 14:25:37.786 +07:00 [INF] Thư mục Uploads đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Uploads
+2025-06-16 14:25:37.786 +07:00 [INF] Thư mục Logs đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Logs
+2025-06-16 14:27:20.503 +07:00 [INF] Nhận được MovieViewModel: Title=1111111, Episodes=2, SelectedGenres=2, PosterFile=12.png, TrailerFile=[TRAILER] LÂM GIANG TIÊN - Lần đầu kết hợp đầy ngược tâm của Bạch Lộc và Tăng Thuấn Hy.mp4
+2025-06-16 14:27:20.511 +07:00 [INF] Đang tải file poster: 12.png lên /Users/tanloc/MovieWebsite/wwwroot/Uploads/poster_4b8d2a4f-330b-4050-8eaf-6cc54cc78f50.png
+2025-06-16 14:27:20.514 +07:00 [INF] Đang tải file trailer: [TRAILER] LÂM GIANG TIÊN - Lần đầu kết hợp đầy ngược tâm của Bạch Lộc và Tăng Thuấn Hy.mp4 lên /Users/tanloc/MovieWebsite/wwwroot/Uploads/trailer_7aa5e2c0-d056-44e2-99ae-59aa9f7ba593.mp4
+2025-06-16 14:27:20.529 +07:00 [INF] Xử lý tập phim: EpisodeNumber=1, VideoFile=[TRAILER] LÂM GIANG TIÊN - Lần đầu kết hợp đầy ngược tâm của Bạch Lộc và Tăng Thuấn Hy.mp4
+2025-06-16 14:27:20.529 +07:00 [INF] Đang tải file episode_1: [TRAILER] LÂM GIANG TIÊN - Lần đầu kết hợp đầy ngược tâm của Bạch Lộc và Tăng Thuấn Hy.mp4 lên /Users/tanloc/MovieWebsite/wwwroot/Uploads/episode_1_5dd9a709-6242-4c09-9275-b1a484197b8c.mp4
+2025-06-16 14:27:20.546 +07:00 [INF] Xử lý tập phim: EpisodeNumber=2, VideoFile=Jurassic World Rebirth - Official Trailer 2.mp4
+2025-06-16 14:27:20.546 +07:00 [INF] Đang tải file episode_2: Jurassic World Rebirth - Official Trailer 2.mp4 lên /Users/tanloc/MovieWebsite/wwwroot/Uploads/episode_2_e34e4eda-8bf2-4a7d-ba60-c6cb093374d6.mp4
+2025-06-16 14:27:20.660 +07:00 [INF] Đã thêm phim: 1111111 (ID: 7)
+2025-06-16 14:27:24.195 +07:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2025-06-16 14:27:24.218 +07:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2025-06-16 14:27:34.983 +07:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2025-06-16 14:27:34.994 +07:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2025-06-16 14:34:47.298 +07:00 [INF] Đã áp dụng migrations cho cơ sở dữ liệu SQLite.
+2025-06-16 14:34:47.324 +07:00 [INF] Thư mục Uploads đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Uploads
+2025-06-16 14:34:47.324 +07:00 [INF] Thư mục Logs đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Logs
+2025-06-16 14:35:51.977 +07:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2025-06-16 14:35:52.183 +07:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2025-06-16 14:37:25.570 +07:00 [INF] Đã áp dụng migrations cho cơ sở dữ liệu SQLite.
+2025-06-16 14:37:25.594 +07:00 [INF] Thư mục Uploads đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Uploads
+2025-06-16 14:37:25.594 +07:00 [INF] Thư mục Logs đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Logs
+2025-06-16 14:37:35.704 +07:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2025-06-16 14:37:35.870 +07:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2025-06-16 14:37:36.006 +07:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2025-06-16 14:37:36.031 +07:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2025-06-16 14:38:53.559 +07:00 [ERR] The view 'Index' was not found. Searched locations: ["/Views/AdMovies/Index.vi-VN.cshtml","/Views/AdMovies/Index.vi.cshtml","/Views/AdMovies/Index.cshtml","/Views/Shared/Index.vi-VN.cshtml","/Views/Shared/Index.vi.cshtml","/Views/Shared/Index.cshtml"]
+2025-06-16 14:38:53.566 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The view 'Index' was not found. The following locations were searched:
+/Views/AdMovies/Index.vi-VN.cshtml
+/Views/AdMovies/Index.vi.cshtml
+/Views/AdMovies/Index.cshtml
+/Views/Shared/Index.vi-VN.cshtml
+/Views/Shared/Index.vi.cshtml
+/Views/Shared/Index.cshtml
+   at Microsoft.AspNetCore.Mvc.ViewEngines.ViewEngineResult.EnsureSuccessful(IEnumerable`1 originalLocations)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewResultExecutor.ExecuteAsync(ActionContext context, ViewResult result)
+   at Microsoft.AspNetCore.Mvc.ViewResult.ExecuteResultAsync(ActionContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResultFilterAsync>g__Awaited|30_0[TFilter,TFilterAsync](ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
