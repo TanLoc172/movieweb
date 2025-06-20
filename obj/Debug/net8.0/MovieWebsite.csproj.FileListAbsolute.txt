@@ -118,6 +118,7 @@
 /Users/tanloc/MovieWebsite/obj/Debug/net8.0/MovieWebsite.MvcApplicationPartsAssemblyInfo.cache
 /Users/tanloc/MovieWebsite/obj/Debug/net8.0/MovieWebsite.RazorAssemblyInfo.cache
 /Users/tanloc/MovieWebsite/obj/Debug/net8.0/MovieWebsite.RazorAssemblyInfo.cs
+/Users/tanloc/MovieWebsite/obj/Debug/net8.0/MovieWebsite.sourcelink.json
 /Users/tanloc/MovieWebsite/obj/Debug/net8.0/staticwebassets.build.json
 /Users/tanloc/MovieWebsite/obj/Debug/net8.0/staticwebassets.development.json
 /Users/tanloc/MovieWebsite/obj/Debug/net8.0/staticwebassets/msbuild.MovieWebsite.Microsoft.AspNetCore.StaticWebAssets.props
@@ -134,3 +135,17 @@
 /Users/tanloc/MovieWebsite/obj/Debug/net8.0/MovieWebsite.pdb
 /Users/tanloc/MovieWebsite/obj/Debug/net8.0/MovieWebsite.genruntimeconfig.cache
 /Users/tanloc/MovieWebsite/obj/Debug/net8.0/ref/MovieWebsite.dll
+/Users/tanloc/MovieWebsite/bin/Debug/net8.0/Clerk.Net.dll
+/Users/tanloc/MovieWebsite/bin/Debug/net8.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+/Users/tanloc/MovieWebsite/bin/Debug/net8.0/Microsoft.Extensions.Configuration.dll
+/Users/tanloc/MovieWebsite/bin/Debug/net8.0/Microsoft.Extensions.Configuration.Abstractions.dll
+/Users/tanloc/MovieWebsite/bin/Debug/net8.0/Microsoft.Extensions.Configuration.EnvironmentVariables.dll
+/Users/tanloc/MovieWebsite/bin/Debug/net8.0/Microsoft.Extensions.Primitives.dll
+/Users/tanloc/MovieWebsite/bin/Debug/net8.0/Microsoft.Kiota.Abstractions.dll
+/Users/tanloc/MovieWebsite/bin/Debug/net8.0/Microsoft.Kiota.Bundle.dll
+/Users/tanloc/MovieWebsite/bin/Debug/net8.0/Microsoft.Kiota.Http.HttpClientLibrary.dll
+/Users/tanloc/MovieWebsite/bin/Debug/net8.0/Microsoft.Kiota.Serialization.Form.dll
+/Users/tanloc/MovieWebsite/bin/Debug/net8.0/Microsoft.Kiota.Serialization.Json.dll
+/Users/tanloc/MovieWebsite/bin/Debug/net8.0/Microsoft.Kiota.Serialization.Multipart.dll
+/Users/tanloc/MovieWebsite/bin/Debug/net8.0/Microsoft.Kiota.Serialization.Text.dll
+/Users/tanloc/MovieWebsite/bin/Debug/net8.0/Std.UriTemplate.dll

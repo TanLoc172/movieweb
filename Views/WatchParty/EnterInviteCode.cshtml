@@ -1,0 +1,246 @@
+@* @{
+    ViewData["Title"] = "Nhập Mã Mời Xem Chung";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Sử dụng layout chính của ứng dụng
+}
+
+<div class="container mx-auto mt-10 px-4">
+    <div class="max-w-lg mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8">
+        <h2 class="text-3xl font-bold text-center mb-6 text-gray-900 dark:text-white">Tham gia Phòng Xem Chung</h2>
+        <p class="text-lg text-gray-600 dark:text-gray-300 text-center mb-8">
+            Nhập mã mời bạn bè đã gửi cho bạn để cùng xem phim.
+        </p>
+
+        <!-- Form để nhập mã mời -->
+        <form asp-controller="WatchParty" asp-action="Join" method="post" id="joinRoomFormOnPage" class="space-y-6">
+            @Html.AntiForgeryToken()
+
+            <div>
+                <label for="inviteCodeInput" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Mã Mời:</label>
+                <input
+                    type="text"
+                    name="inviteCode"
+                    id="inviteCodeInput"
+                    class="form-control block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder-gray-400"
+                    placeholder="Nhập mã mời..."
+                    required />
+            </div>
+
+            <div class="text-center">
+                <button
+                    type="submit"
+                    id="submitJoinFormBtn"
+                    class="w-full inline-flex justify-center py-3 px-6 border border-transparent rounded-md shadow-sm text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-700 dark:hover:bg-blue-600">
+                    Tham gia Ngay
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Không cần JS để mở modal ở đây vì form submit trực tiếp
+        // Js cho modal vẫn ở _JoinRoomModal.cshtml nếu bạn muốn gọi nó bằng JS
+    </script>
+} *@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhập Mã Mời Xem Chung</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-effect {
+            backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        @@keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .pulse-slow {
+            animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        .movie-icons {
+            position: absolute;
+            opacity: 0.1;
+            font-size: 2rem;
+            color: white;
+        }
+        .icon-1 { top: 10%; left: 15%; animation: float 3s ease-in-out infinite; }
+        .icon-2 { top: 20%; right: 20%; animation: float 3s ease-in-out infinite 1s; }
+        .icon-3 { bottom: 30%; left: 10%; animation: float 3s ease-in-out infinite 2s; }
+        .icon-4 { bottom: 20%; right: 15%; animation: float 3s ease-in-out infinite 0.5s; }
+        .icon-5 { top: 50%; left: 5%; animation: float 3s ease-in-out infinite 1.5s; }
+        .icon-6 { top: 60%; right: 8%; animation: float 3s ease-in-out infinite 2.5s; }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg relative overflow-hidden">
+    <!-- Background animated icons -->
+    <div class="movie-icons icon-1"><i class="fas fa-film"></i></div>
+    <div class="movie-icons icon-2"><i class="fas fa-video"></i></div>
+    <div class="movie-icons icon-3"><i class="fas fa-popcorn"></i></div>
+    <div class="movie-icons icon-4"><i class="fas fa-ticket-alt"></i></div>
+    <div class="movie-icons icon-5"><i class="fas fa-play-circle"></i></div>
+    <div class="movie-icons icon-6"><i class="fas fa-theater-masks"></i></div>
+
+    <!-- Main content -->
+    <div class="container mx-auto min-h-screen flex items-center justify-center px-4 py-8 relative z-10">
+        <div class="max-w-md w-full">
+            <!-- Movie watching illustration -->
+            <div class="text-center mb-8">
+                <div class="relative inline-block">
+                    <div class="w-32 h-32 mx-auto mb-4 floating">
+                        <div class="w-full h-full rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center shadow-2xl">
+                            <i class="fas fa-users text-5xl text-white"></i>
+                        </div>
+                    </div>
+                    <!-- Decorative circles -->
+                    <div class="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 rounded-full pulse-slow"></div>
+                    <div class="absolute -bottom-2 -left-2 w-6 h-6 bg-pink-400 rounded-full pulse-slow" style="animation-delay: 1s;"></div>
+                </div>
+            </div>
+
+            <!-- Main card -->
+            <div class="glass-effect rounded-2xl shadow-2xl p-8 transform transition-all duration-300 hover:scale-105">
+                <!-- Header -->
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl font-bold text-white mb-3">
+                        <i class="fas fa-door-open mr-2 text-yellow-300"></i>
+                        Tham Gia Phòng Xem
+                    </h1>
+                    <p class="text-white/80 text-lg">
+                        Nhập mã mời để cùng bạn bè thưởng thức phim hay
+                    </p>
+                </div>
+
+                <!-- Invitation code input form -->
+                
+                <form class="space-y-6"asp-controller="WatchParty" asp-action="Join" method="post" id="joinRoomFormOnPage" class="space-y-6">
+            @Html.AntiForgeryToken()
+                    <div class="relative">
+                        <label for="inviteCode" class="block text-white/90 font-medium mb-3">
+                            <i class="fas fa-key mr-2 text-yellow-300"></i>
+                            Mã Mời
+                        </label>
+                        <div class="relative">
+                            <input
+                                type="text"
+                    name="inviteCode"
+                    id="inviteCodeInput"
+                                placeholder="Nhập mã mời từ bạn bè..."
+                                required
+                                class="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:border-transparent backdrop-blur-sm transition-all duration-300"
+                            />
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                <i class="fas fa-qrcode text-white/40"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button
+                        type="submit"
+                        id="submitJoinFormBtn"
+                        class="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-4 px-6 rounded-xl shadow-lg transform transition-all duration-200 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-transparent"
+                    >
+                        <i class="fas fa-rocket mr-2"></i>
+                        Tham Gia Ngay
+                    </button>
+                </form>
+
+                <!-- Divider -->
+                <div class="flex items-center my-8">
+                    <div class="flex-1 h-px bg-white/20"></div>
+                    <span class="px-4 text-white/60 text-sm">HOẶC</span>
+                    <div class="flex-1 h-px bg-white/20"></div>
+                </div>
+
+                <!-- Additional options -->
+                <div class="grid grid-cols-2 gap-4">
+                    <button class="flex flex-col items-center justify-center p-4 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-all duration-200 group">
+                        <i class="fas fa-qr-code text-2xl text-white/70 group-hover:text-white mb-2"></i>
+                        <span class="text-white/70 group-hover:text-white text-sm">Quét QR</span>
+                    </button>
+                    <button class="flex flex-col items-center justify-center p-4 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-all duration-200 group">
+                        <i class="fas fa-plus text-2xl text-white/70 group-hover:text-white mb-2"></i>
+                        <span class="text-white/70 group-hover:text-white text-sm">Tạo Phòng</span>
+                    </button>
+                </div>
+
+                <!-- Info section -->
+                <div class="mt-8 p-4 bg-white/5 rounded-xl border border-white/10">
+                    <div class="flex items-start space-x-3">
+                        <i class="fas fa-info-circle text-blue-300 mt-1"></i>
+                        <div>
+                            <h3 class="text-white font-medium mb-1">Cách thức hoạt động</h3>
+                            <p class="text-white/70 text-sm">
+                                Bạn bè sẽ gửi cho bạn mã mời 6-8 ký tự. Nhập mã này để tham gia phòng xem chung và cùng thưởng thức phim với nhau.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="mt-8 grid grid-cols-3 gap-4 text-center">
+                <div class="text-white/80">
+                    <i class="fas fa-sync-alt text-2xl mb-2 block"></i>
+                    <span class="text-sm">Đồng bộ</span>
+                </div>
+                <div class="text-white/80">
+                    <i class="fas fa-comments text-2xl mb-2 block"></i>
+                    <span class="text-sm">Chat</span>
+                </div>
+                <div class="text-white/80">
+                    <i class="fas fa-heart text-2xl mb-2 block"></i>
+                    <span class="text-sm">Reaction</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactive effects
+        document.getElementById('inviteCode').addEventListener('focus', function() {
+            this.parentElement.classList.add('scale-105');
+        });
+
+        document.getElementById('inviteCode').addEventListener('blur', function() {
+            this.parentElement.classList.remove('scale-105');
+        });
+
+        // Simulate form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const button = this.querySelector('button[type="submit"]');
+            const originalText = button.innerHTML;
+            
+            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Đang tham gia...';
+            button.disabled = true;
+            
+            // Simulate loading
+            setTimeout(() => {
+                button.innerHTML = '<i class="fas fa-check mr-2"></i>Thành công!';
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }, 1000);
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

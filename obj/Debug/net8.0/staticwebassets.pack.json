@@ -5,10 +5,6 @@
       "PackagePath": "staticwebassets/MovieWebsite.bundle.scp.css"
     },
     {
-      "Id": "/Users/tanloc/MovieWebsite/wwwroot/Logs/app-20250611.log",
-      "PackagePath": "staticwebassets/Logs/app-20250611.log"
-    },
-    {
       "Id": "/Users/tanloc/MovieWebsite/wwwroot/Logs/app-20250614.log",
       "PackagePath": "staticwebassets/Logs/app-20250614.log"
     },
@@ -33,8 +29,28 @@
       "PackagePath": "staticwebassets/Logs/app-20250619.log"
     },
     {
+      "Id": "/Users/tanloc/MovieWebsite/wwwroot/Logs/app-20250620.log",
+      "PackagePath": "staticwebassets/Logs/app-20250620.log"
+    },
+    {
       "Id": "/Users/tanloc/MovieWebsite/wwwroot/Uploads/episode_1_98b0941e-9e66-42d9-b03f-317d1182446a.mp4",
       "PackagePath": "staticwebassets/Uploads/episode_1_98b0941e-9e66-42d9-b03f-317d1182446a.mp4"
+    },
+    {
+      "Id": "/Users/tanloc/MovieWebsite/wwwroot/Uploads/episode_39_2_938ab919-32d9-4286-b4e4-267970dbe82d.mp4",
+      "PackagePath": "staticwebassets/Uploads/episode_39_2_938ab919-32d9-4286-b4e4-267970dbe82d.mp4"
+    },
+    {
+      "Id": "/Users/tanloc/MovieWebsite/wwwroot/Uploads/episode_39_2_fbf2373b-e6f3-4a97-a303-312e45c77ac4.mp4",
+      "PackagePath": "staticwebassets/Uploads/episode_39_2_fbf2373b-e6f3-4a97-a303-312e45c77ac4.mp4"
+    },
+    {
+      "Id": "/Users/tanloc/MovieWebsite/wwwroot/Uploads/episode_39_3_673eaae3-3cc7-4023-9770-b851b408b058.mp4",
+      "PackagePath": "staticwebassets/Uploads/episode_39_3_673eaae3-3cc7-4023-9770-b851b408b058.mp4"
+    },
+    {
+      "Id": "/Users/tanloc/MovieWebsite/wwwroot/Uploads/episode_70_1_fed9286b-fedb-4883-8a1a-e8ac4e9d27aa.mp4",
+      "PackagePath": "staticwebassets/Uploads/episode_70_1_fed9286b-fedb-4883-8a1a-e8ac4e9d27aa.mp4"
     },
     {
       "Id": "/Users/tanloc/MovieWebsite/wwwroot/Uploads/poster_61357853-8c68-4c3f-a478-fbc9bb697835.png",
@@ -87,6 +103,10 @@
     {
       "Id": "/Users/tanloc/MovieWebsite/wwwroot/css/site.css",
       "PackagePath": "staticwebassets/css/site.css"
+    },
+    {
+      "Id": "/Users/tanloc/MovieWebsite/wwwroot/css/watchparty.css",
+      "PackagePath": "staticwebassets/css/watchparty.css"
     },
     {
       "Id": "/Users/tanloc/MovieWebsite/wwwroot/favicon.ico",

@@ -1,503 +1,498 @@
-/* wwwroot/css/rophim.css
+
+/* ==========================================================================
+   Fixed Header Styles
+   ========================================================================== */
 
 .fly.fixed {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    background-color: #1a1a1a;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000; /* Đảm bảo header luôn ở trên cùng */
+  background-color: #010c1c; /* Màu nền tối đặc trưng */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Bóng đổ nhẹ phía dưới */
 }
+
+/* ==========================================================================
+   Header Elements Container
+   ========================================================================== */
+
 .header-elements {
-    display: flex;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    max-width: 1200px;
-    margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem; /* Padding thoáng đãng hơn */
+  max-width: 1900px; /* Giới hạn chiều rộng tối đa cho màn hình lớn */
+  margin: 0 auto; /* Căn giữa header trên màn hình lớn */
+  width: 100%; /* Đảm bảo chiếm toàn bộ chiều rộng trước khi áp dụng max-width */
+  box-sizing: border-box; /* Đảm bảo padding không làm tăng kích thước */
 }
+
+/* ==========================================================================
+   Mobile Menu Toggle Styles
+   ========================================================================== */
+
 .for-mobile {
-    display: none;
-}
-.icon-menu span {
-    display: block;
-    width: 24px;
-    height: 3px;
-    background: #fff;
-    margin: 5px 0;
-}
-.icon-search {
-    display: flex;
-    align-items: center;
-}
-.icon-search span {
-    display: block;
-    width: 18px;
-    height: 2px;
-    background: #fff;
-    margin: 0 2px;
-}
-#logo img {
-    height: 40px;
-}
-#search {
-    flex-grow: 1;
-    max-width: 300px;
-    margin: 0 1rem;
-}
-.search-elements {
-    position: relative;
-}
-.search-icon {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #fff;
-}
-.search-input {
-    width: 100%;
-    padding: 0.5rem 1rem 0.5rem 2.5rem;
-    border-radius: 20px;
-    border: none;
-    background: #333;
-    color: #fff;
-}
-.search-input::placeholder {
-    color: #aaa;
-}
-.el-group {
-    display: flex;
-    align-items: center;
-    flex-grow: 1;
-    justify-content: flex-end;
-}
-#main_menu {
-    display: flex;
-    align-items: center;
-}
-.menu-item {
-    margin: 0 0.5rem;
-}
-.menu-item a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 1rem;
-    padding: 0.5rem;
-}
-.menu-item a:hover {
-    color: #0d6efd;
-}
-.season-dropdown a {
-    cursor: pointer;
-}
-.app-download-button {
-    display: flex;
-    align-items: center;
-    color: #fff;
-    text-decoration: none;
-    padding: 0.5rem;
-}
-.app-download-button .inc-icon svg {
-    width: 24px;
-    height: 24px;
-    margin-right: 0.5rem;
-}
-.app-download-button .text {
-    display: flex;
-    flex-direction: column;
-}
-.app-download-button .text strong {
-    font-weight: bold;
-}
-.button-user {
-    display: flex;
-    align-items: center;
-    color: #fff;
-    text-decoration: none;
-    padding: 0.5rem;
-    margin-left: 1rem;
-}
-.button-user .line-center {
-    display: flex;
-    align-items: center;
-}
-.button-user i {
-    margin-right: 0.5rem;
-}
-@media (max-width: 767.98px) {
-    .for-mobile {
-        display: block;
-    }
-    #main_menu {
-        display: none;
-    }
-    #search {
-        display: none;
-    }
-    .el-group {
-        display: none;
-    }
-} */
-
-
-/* wwwroot/css/rophim.css */
-
-/* Fixed header */
-.fly.fixed {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    background-color: #010c1c;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-/* Header container */
-.header-elements {
-    display: flex;
-    align-items: center;
-    padding: 0.5rem 1rem; /* Tăng padding nhẹ để thoáng hơn */
-    max-width: 1700px; /* Tăng max-width để phù hợp màn hình lớn hơn */
-    margin: 0 auto;
-}
-
-/* Mobile menu toggle */
-.for-mobile {
-    display: none;
+  display: none; /* Ẩn mặc định trên desktop */
+  cursor: pointer;
+  align-items: center; /* Căn chỉnh theo chiều dọc */
 }
 
 .icon-menu span {
-    display: block;
-    width: 24px;
-    height: 3px;
-    background: #fff;
-    margin: 5px 0;
-    transition: background 0.3s; /* Thêm transition cho hiệu ứng mượt */
+  display: block;
+  width: 24px; /* Kích thước thanh gạch */
+  height: 3px;
+  background: #fff; /* Màu trắng */
+  margin: 5px 0; /* Khoảng cách giữa các thanh gạch */
+  transition: background 0.3s; /* Hiệu ứng chuyển màu mượt */
 }
 
-/* Search icon */
+/* ==========================================================================
+   Icon Styles (Search)
+   ========================================================================== */
+
 .icon-search {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .icon-search span {
-    display: block;
-    width: 18px;
-    height: 2px;
-    background: #fff;
-    margin: 0 2px;
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: #fff;
+  margin: 0 2px;
 }
 
-/* Logo */
+/* ==========================================================================
+   Logo Styles
+   ========================================================================== */
+
 #logo img {
-    height: 48px; /* Tăng nhẹ kích thước logo cho cân đối */
-    object-fit: contain; /* Đảm bảo logo không bị méo */
+  height: 48px; /* Kích thước logo mặc định */
+  object-fit: contain; /* Đảm bảo logo không bị méo */
+  display: block; /* Loại bỏ khoảng trống thừa dưới ảnh */
 }
 
-/* Search bar */
+/* ==========================================================================
+   Search Bar Styles
+   ========================================================================== */
+
 #search {
-    flex-grow: 1;
-    max-width: 400px; /* Tăng max-width để phù hợp giao diện rộng hơn */
-    margin: 0 1.5rem; /* Tăng margin để tạo khoảng cách */
+  flex-grow: 1; /* Cho phép thanh tìm kiếm chiếm không gian còn lại */
+  max-width: 400px; /* Giới hạn chiều rộng của thanh tìm kiếm */
+  margin: 0 1.5rem; /* Khoảng cách hai bên */
+  display: flex; /* Đảm bảo flex hoạt động */
+  align-items: center;
 }
 
 .search-elements {
-    position: relative;
+  position: relative;
+  width: 100%; /* Đảm bảo chiếm hết không gian của #search */
 }
 
 .search-icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #fff;
-    font-size: 1.1rem; /* Tăng kích thước icon nhẹ */
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%); /* Căn giữa theo chiều dọc */
+  color: #fff;
+  font-size: 1.1rem; /* Kích thước icon tìm kiếm */
+  pointer-events: none; /* Ngăn icon ảnh hưởng đến click input */
 }
 
 .search-input {
-    width: 100%;
-    padding: 0.5rem 1rem 0.5rem 2.75rem; /* Điều chỉnh padding để cân đối với icon */
-    border-radius: 999px; /* Sử dụng giá trị lớn để bo góc hoàn toàn */
-    border: none;
-    background: #6c6c6c4e;
-    color: #fff;
-    font-size: 1rem; /* Đảm bảo font chữ đồng nhất */
-    transition: background 0.3s, box-shadow 0.3s; /* Thêm hiệu ứng khi hover */
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2.75rem; /* Padding cân đối với icon */
+  border-radius: 999px; /* Bo góc hoàn toàn (pill shape) */
+  border: none;
+  background: #6c6c6c4e; /* Nền xám mờ */
+  color: #fff;
+  font-size: 1rem; /* Kích thước font chữ */
+  transition: background 0.3s, box-shadow 0.3s; /* Hiệu ứng khi focus */
+  box-sizing: border-box; /* Đảm bảo padding không làm thay đổi kích thước */
 }
 
 .search-input:focus {
-    background: #444; /* Đổi màu nền khi focus */
-    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2); /* Thêm viền focus */
-    outline: none;
+  background: #444; /* Nền tối hơn khi focus */
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2); /* Viền focus xanh nhẹ */
+  outline: none; /* Loại bỏ viền mặc định của trình duyệt */
 }
 
 .search-input::placeholder {
-    color: #aaa;
+  color: #aaa; /* Màu chữ cho placeholder */
 }
 
-/* Menu and elements group */
+/* ==========================================================================
+   Main Menu & Elements Group Styles
+   ========================================================================== */
+
 .el-group {
-    display: flex;
-    align-items: center;
-    flex-grow: 1;
-    justify-content: flex-end;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Đẩy các phần tử về bên phải */
+  gap: 1.5rem; /* Khoảng cách giữa các mục chính (menu, download, user) */
 }
 
 #main_menu {
-    display: flex;
-    align-items: center;
-    gap: 2.5rem; /* Sử dụng gap thay vì margin để bố cục gọn gàng hơn */
+  display: flex;
+  align-items: center;
+  gap: 2.5rem; /* Khoảng cách giữa các mục menu */
 }
 
 .menu-item {
-    margin: 0; /* Xóa margin vì đã dùng gap */
+  margin: 0; /* Xóa margin mặc định, dùng gap của #main_menu */
 }
 
 .menu-item a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 0.8rem;
-    padding: 0.5rem 0rem; /* Tăng padding nhẹ để dễ click */
-    transition: color 0.3s; /* Thêm transition mượt mà */
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem; /* Tăng nhẹ font-size để dễ đọc */
+  padding: 0.5rem 0; /* Padding cho vùng click */
+  transition: color 0.3s; /* Hiệu ứng chuyển màu khi hover */
+  display: block; /* Đảm bảo padding hoạt động tốt */
+  white-space: nowrap;
 }
 
 .menu-item a:hover {
-    color: #ffc107;
+  color: #ffc107; /* Màu vàng khi hover */
 }
 
-/* Dropdown */
+/* Dropdown Styles (General) */
 .season-dropdown a {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-/* App download button */
+/* ==========================================================================
+   App Download Button Styles
+   ========================================================================== */
+
 .app-download-button {
-    display: flex;
-    align-items: center;
-    color: #fff;
-    text-decoration: none;
-    padding: 0.5rem 1.5rem;
-    transition: background 0.3s; /* Thêm hiệu ứng hover */
+  display: flex;
+  align-items: center;
+  color: #fff;
+  text-decoration: none;
+  padding: 0.5rem 1.5rem;
+  transition: background 0.3s;
+  border-radius: 4px; /* Bo góc nhẹ */
 }
 
 .app-download-button:hover {
-    background: rgba(255, 255, 255, 0.1); /* Hiệu ứng hover nhẹ */
+  background: rgba(255, 255, 255, 0.1); /* Hiệu ứng hover nhẹ */
 }
 
 .app-download-button .inc-icon svg {
-    width: 24px;
-    height: 24px;
-    margin-right: 0.5rem;
+  width: 24px;
+  height: 24px;
+  margin-right: 0.5rem;
 }
 
 .app-download-button .text {
-    display: flex;
-    flex-direction: column;
-    font-size: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
 }
 
 .app-download-button .text strong {
-    font-weight: 600; /* Sử dụng font-weight cụ thể */
+  font-weight: 600;
 }
 
-/* User button */
+/* ==========================================================================
+   User Button Styles
+   ========================================================================== */
+
 .button-user {
-    /* display: flex;
-    align-items: center;
-    color: #fff;
-    text-decoration: none;
-    padding: 0.5rem 0.75rem;
-    margin-left: 1rem;
-    transition: background 0.3s; Thêm hiệu ứng hover */
-     display: flex;
-    align-items: center;
-    color: #000; /* chữ màu đen */
-    background-color: #ffffffea; /* nền trắng */
-    text-decoration: none;
-    padding: 0.7rem 1.5rem;
-    margin-left: 1rem;
-    border-radius: 20px; /* bo góc cho đẹp */
-    box-shadow: 0 2px 6px rgba(255, 255, 255, 0.1); /* đổ bóng nhẹ */
-    transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  color: #000; /* Chữ màu đen */
+  background-color: #ffffffea; /* Nền trắng mờ */
+  text-decoration: none;
+  padding: 0.7rem 1.5rem;
+  margin-left: 1rem; /* Khoảng cách với item trước đó */
+  border-radius: 20px; /* Bo góc lớn cho nút tròn */
+  box-shadow: 0 2px 6px rgba(255, 255, 255, 0.1); /* Đổ bóng nhẹ */
+  transition: background 0.3s;
+  white-space: nowrap; /* Ngăn văn bản bị xuống dòng */
 }
 
 .button-user:hover {
-    background: rgb(255, 255, 255); /* Hiệu ứng hover nhẹ */
+  background: rgb(255, 255, 255); /* Nền trắng hoàn toàn khi hover */
 }
 
 .button-user .line-center {
-    display: flex;
-    align-items: center;
-    font-size: 0.8rem;
-    font-weight: 500;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem; /* Font chữ cân đối hơn */
+  font-weight: 500;
 }
 
 .button-user i {
-    margin-right: 0.5rem;
-    font-size: 1rem; /* Tăng kích thước icon nhẹ */
+  margin-right: 0.5rem;
+  font-size: 1.1rem; /* Kích thước icon lớn hơn một chút */
 }
 
-/* Responsive design */
+/* ==========================================================================
+   Responsive Design - Media Queries
+   ========================================================================== */
+
+/* Tablets và màn hình có độ phân giải trung bình */
 @media (max-width: 991.98px) {
-    .header-elements {
-        padding: 0.5rem 0.75rem; /* Giảm padding trên màn hình nhỏ */
-    }
+  .header-elements {
+    padding: 0.5rem 1rem; /* Giảm padding hai bên */
+  }
 
-    #logo img {
-        height: 40px; /* Giảm kích thước logo cho màn hình nhỏ */
-    }
+  #logo img {
+    height: 40px; /* Giảm kích thước logo */
+  }
 
-    #search {
-        max-width: 250px; /* Giảm chiều rộng thanh tìm kiếm */
-        margin: 0 1rem;
-    }
+  #search {
+    max-width: 250px; /* Giảm chiều rộng thanh tìm kiếm */
+    margin: 0 1rem; /* Giảm margin */
+  }
 
-    .menu-item a {
-        font-size: 0.9rem; /* Giảm kích thước chữ cho menu */
-    }
+  #main_menu {
+    gap: 1.5rem; /* Giảm khoảng cách giữa các menu item */
+  }
+
+  .menu-item a {
+    font-size: 0.85rem; /* Giảm font size menu */
+  }
+
+  .el-group {
+    gap: 1rem; /* Giảm khoảng cách trong el-group */
+  }
+
+  .app-download-button {
+    padding: 0.5rem 1rem; /* Giảm padding nút download */
+  }
+  .app-download-button .text {
+    font-size: 0.75rem;
+  }
+
+  .button-user {
+    padding: 0.6rem 1.2rem; /* Giảm padding nút user */
+    margin-left: 0.75rem;
+  }
+  .button-user .line-center {
+    font-size: 0.8rem;
+  }
+  .button-user i {
+    font-size: 1rem;
+    margin-right: 0.4rem;
+  }
 }
 
+/* Mobile devices */
 @media (max-width: 767.98px) {
-    .for-mobile {
-        display: block;
-    }
+  .header-elements {
+    justify-content: space-between; /* Đẩy logo và menu toggle sang hai bên */
+    padding: 0.5rem 0.75rem;
+  }
 
-    #main_menu {
-        display: none;
-    }
+  #logo {
+    flex-shrink: 0; /* Ngăn logo bị co lại */
+  }
 
-    #search {
-        display: none;
-    }
+  #logo img {
+    height: 36px; /* Giảm kích thước logo cho mobile */
+  }
 
-    .el-group {
-        display: none;
-    }
+  /* Hiển thị nút menu mobile và ẩn các phần tử khác */
+  .for-mobile {
+    display: flex; /* Sử dụng flex để căn chỉnh icon menu */
+  }
 
-    .header-elements {
-        padding: 0.5rem; /* Giảm padding hơn nữa cho mobile */
-    }
+  #main_menu,
+    #search,
+    .el-group .app-download-button, /* Ẩn các nút chức năng phụ trên mobile */
+    .el-group .button-user {
+    display: none; /* Ẩn hoàn toàn */
+  }
 
-    #logo img {
-        height: 36px; /* Giảm kích thước logo cho mobile */
-    }
+  /* Cần một phần tử để chứa menu khi mở ra (thường qua JS) */
+  /* Ví dụ: nếu bạn có một div với class 'mobile-nav-menu' */
+  .mobile-nav-menu {
+    display: none; /* Ẩn ban đầu */
+    position: absolute;
+    top: 100%; /* Nằm dưới header */
+    left: 0;
+    width: 100%;
+    background-color: #010c1c;
+    padding: 1rem 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 999; /* Dưới header fixed */
+  }
+
+  .mobile-nav-menu.show {
+    display: block; /* Hiển thị khi class 'show' được thêm vào */
+  }
+
+  .mobile-nav-menu .menu-item a {
+    text-align: center; /* Căn giữa menu item */
+    padding: 0.75rem 1.5rem; /* Padding cho menu item trên mobile */
+    font-size: 1rem; /* Tăng font size menu cho dễ đọc */
+  }
+
+  /* Ẩn mũi tên quốc gia khi menu chính bị ẩn */
+  .menu-item.quoc-gia-item a::after {
+    display: none;
+  }
 }
 
+/* Mobile devices rất nhỏ */
 @media (max-width: 575.98px) {
-    .icon-menu span {
-        width: 20px; /* Giảm kích thước icon menu cho màn hình rất nhỏ */
-        height: 2px;
-        margin: 4px 0;
-    }
+  .header-elements {
+    padding: 0.5rem 0.5rem; /* Giảm padding hai bên */
+  }
 
-    .app-download-button .inc-icon svg {
-        width: 20px;
-        height: 20px;
-    }
+  .icon-menu span {
+    width: 20px; /* Giảm kích thước icon menu */
+    height: 2px;
+    margin: 4px 0;
+  }
 
-    .button-user i {
-        font-size: 1rem;
-    }
+  /* Giảm kích thước và padding cho các nút chức năng khi hiển thị trên mobile */
+  .app-download-button {
+    padding: 0.4rem 1rem; /* Giảm padding nút download */
+  }
+
+  .app-download-button .inc-icon svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.3rem; /* Giảm margin icon */
+  }
+
+  .app-download-button .text {
+    font-size: 0.7rem; /* Giảm font size nút download */
+  }
+
+  .button-user {
+    padding: 0.5rem 1rem; /* Giảm padding nút user */
+    margin-left: 0.5rem; /* Giảm margin */
+  }
+
+  .button-user .line-center {
+    font-size: 0.75rem; /* Giảm font size nút user */
+  }
+
+  .button-user i {
+    font-size: 0.9rem; /* Giảm icon nút user */
+    margin-right: 0.3rem; /* Giảm margin */
+  }
+
+  /* Căn chỉnh lại menu trên mobile rất nhỏ nếu cần */
+  .mobile-nav-menu .menu-item a {
+    font-size: 0.9rem; /* Tăng font size menu */
+  }
 }
 
-
-/* Custom CSS for TheLoai Dropdown (add to rophim.css) */
+/* ==========================================================================
+   Custom Styles for Specific Features (Dropdowns, Labels)
+   ========================================================================== */
 
 /* NEW Label (For "Phim Bộ NEW") */
 .new-label {
-    background-color: #ffc107; /* Màu vàng RoPhim */
-    color: #010c1c; /* Chữ đen đậm hơn */
-    font-size: 0.6em; /* Nhỏ hơn một chút cho cân đối */
-    font-weight: bold;
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-left: 5px;
-    vertical-align: super;
-    display: inline-block;
+  background-color: #ffc107; /* Màu vàng RoPhim */
+  color: #010c1c; /* Chữ đen đậm hơn */
+  font-size: 0.6em; /* Nhỏ hơn một chút cho cân đối */
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 5px;
+  vertical-align: super; /* Đặt lên trên */
+  display: inline-block;
 }
 
 /* For "NEW Xem Chung" */
 .menu-item.new-item-xem-chung a {
-    color: #ffc107; /* Chữ màu vàng cho "Xem Chung" */
+  color: #ffc107; /* Chữ màu vàng */
 }
 .menu-item.new-item-xem-chung a::before {
-    content: 'NEW ';
-    background-color: #ffc107;
-    color: #010c1c;
-    font-size: 0.6em; /* Nhỏ hơn một chút cho cân đối */
-    font-weight: bold;
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-right: 5px;
-    vertical-align: middle;
-    display: inline-block;
+  content: "NEW ";
+  background-color: #ffc107;
+  color: #010c1c;
+  font-size: 0.6em;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-right: 5px;
+  vertical-align: middle;
+  display: inline-block;
 }
 
-
-/* Wrapper cho item "Thể loại" và dropdown của nó */
+/* Wrapper for "Thể loại" menu item and its dropdown */
 .the-loai-wrapper {
-    position: relative;
-    /* Dùng gap của #main_menu để tạo khoảng cách, không cần margin-right ở đây */
+  position: relative; /* Cần thiết để định vị dropdown con */
+  display: inline-block; /* Đảm bảo các thuộc tính position hoạt động */
 }
 
-/* Dropdown menu cho "Thể loại" */
+/* Dropdown menu for "Thể loại" */
 .the-loai-dropdown {
-    position: absolute;
-    top: calc(100% + 20px); /* Cách thanh header 20px */
-    left: 0; /* Căn lề trái với item "Thể loại" */
-    background-color: #081a32; /* Nền của dropdown, hơi sáng hơn header */
-    border-radius: 8px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6); /* Đổ bóng mạnh hơn */
-    padding: 20px 30px;
-    min-width: 650px; /* Chiều rộng tối thiểu để chứa 3 cột */
-    z-index: 999; /* Đảm bảo nằm trên nội dung khác */
+  position: absolute;
+  top: 100%; /* Nằm ngay dưới phần tử cha */
+  left: 0;
+  background-color: #081a32; /* Nền tối hơn */
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6); /* Đổ bóng mạnh */
+  padding: 20px 30px;
+  min-width: 650px; /* Chiều rộng tối thiểu */
+  max-width: 800px; /* Chiều rộng tối đa */
+  z-index: 1001; /* Đảm bảo nằm trên header fixed */
 
-    /* Hiệu ứng ẩn/hiện */
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(10px);
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+  opacity: 0; /* Ẩn mặc định */
+  visibility: hidden; /* Ẩn mặc định */
+  transform: translateY(10px); /* Hiệu ứng dịch chuyển nhẹ khi hiện */
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+  pointer-events: none; /* Ngăn tương tác khi ẩn */
 }
 
+/* Hiển thị dropdown khi hover vào .the-loai-wrapper */
+.the-loai-wrapper:hover .the-loai-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0); /* Về vị trí ban đầu */
+  pointer-events: auto; /* Cho phép tương tác khi hiển thị */
+}
+
+/* Nếu dùng JS để hiển thị */
 .the-loai-dropdown.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
-/* Grid layout cho các thể loại bên trong dropdown */
+/* Grid layout for genres within the dropdown */
 .genre-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(150px, 1fr)); /* 3 cột, mỗi cột tối thiểu 150px */
-    gap: 15px 30px; /* Khoảng cách giữa các hàng và cột */
+  display: grid;
+  grid-template-columns: repeat(3, minmax(150px, 1fr)); /* 3 cột */
+  gap: 15px 30px; /* Khoảng cách giữa các ô */
 }
 
 .genre-grid a {
-    color: #e0e0e0; /* Màu chữ sáng */
-    text-decoration: none;
-    padding: 5px 0;
-    font-size: 0.85rem; /* Kích thước font cho các mục thể loại */
-    white-space: nowrap; /* Ngăn chữ bị xuống dòng */
-    transition: color 0.2s ease;
+  color: #e0e0e0; /* Màu chữ sáng */
+  text-decoration: none;
+  padding: 5px 0;
+  font-size: 0.85rem; /* Kích thước font cho thể loại */
+  white-space: nowrap; /* Ngăn xuống dòng */
+  transition: color 0.2s ease;
 }
 
 .genre-grid a:hover {
-    color: #ffc107; /* Màu vàng khi hover */
+  color: #ffc107; /* Màu vàng khi hover */
 }
 
-/* Mũi tên xổ xuống cho "Quốc gia" */
+/* Arrow for "Quốc gia" dropdown */
 .menu-item.quoc-gia-item a::after {
-    content: '▼';
-    font-size: 0.6em;
-    margin-left: 8px;
-    vertical-align: middle;
-    transition: transform 0.2s;
+  content: "▼"; /* Biểu tượng mũi tên */
+  font-size: 0.6em;
+  margin-left: 8px;
+  vertical-align: middle;
+  transition: transform 0.2s;
 }
 .menu-item.quoc-gia-item.open a::after {
-    transform: rotate(180deg);
+  transform: rotate(180deg); /* Quay mũi tên khi menu mở */
 }
 
-/* Điều chỉnh khoảng cách menu item để phù hợp với NEW label */
-/* Bạn có thể bỏ qua hoặc điều chỉnh 'gap' trong #main_menu trong CSS gốc nếu cần,
-   nhưng thông thường không cần ghi đè nếu đã dùng 'gap' chung */
+
+body {
+    padding-top: 70px; /* Thay 70px bằng chiều cao thực tế của header của bạn */
+}

@@ -122,12 +122,36 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/tanloc/MovieWebsite/Views/Shared/_JoinRoomModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19Kb2luUm9vbU1vZGFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/tanloc/MovieWebsite/Views/Shared/_LayoutAdmin.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXRBZG1pbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/tanloc/MovieWebsite/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tanloc/MovieWebsite/Views/Shared/_WatchTogetherPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19XYXRjaFRvZ2V0aGVyUGFydGlhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tanloc/MovieWebsite/Views/WatchParty/CreateWatchParty.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvV2F0Y2hQYXJ0eS9DcmVhdGVXYXRjaFBhcnR5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tanloc/MovieWebsite/Views/WatchParty/EnterInviteCode.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvV2F0Y2hQYXJ0eS9FbnRlckludml0ZUNvZGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tanloc/MovieWebsite/Views/WatchParty/Room.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvV2F0Y2hQYXJ0eS9Sb29tLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tanloc/MovieWebsite/Views/WatchParty/Room1.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvV2F0Y2hQYXJ0eS9Sb29tMS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/tanloc/MovieWebsite/Views/_ViewImports.cshtml]

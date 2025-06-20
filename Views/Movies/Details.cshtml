@@ -711,6 +711,7 @@
                 <a asp-action="Watch" asp-controller="Movies" asp-route-movieId="@Model.Movie.Id" asp-route-episodeNumber="@firstEpisodeNumber" class="btn-watch-now">
                     <i class="fas fa-play"></i> Xem Ngay
                 </a>
+                @await Html.PartialAsync("_WatchTogetherPartial")
                 <div class="action-icon-group">
                     <a href="#" class="action-item"><i class="far fa-heart"></i> Yêu thích</a>
                     <a href="#" class="action-item"><i class="fas fa-plus"></i> Thêm vào</a>

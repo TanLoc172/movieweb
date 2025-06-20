@@ -1,0 +1,19 @@
+@* Partial: _WatchTogetherPartial.cshtml *@
+@{
+    var currentMovieId = ViewBag.CurrentMovieId;
+}
+
+@if (currentMovieId != null)
+{
+    <div class="menu-item">
+        <form asp-controller="WatchParty" asp-action="Create" method="post" class="d-inline">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="movieId" value="@currentMovieId" />
+            <button type="submit" class="btn btn-success" style="padding: 6px 12px; line-height: 1.5;">
+                <i class="fas fa-users"></i> Xem Cùng Nhau
+            </button>
+        </form>
+    </div>
+}
+
+

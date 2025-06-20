@@ -1,6 +1,6 @@
 @model MovieSearchViewModel
 @{
-    ViewBag.Title = "CineViet - Xem Phim Online Miễn Phí";
+    ViewBag.Title = "RoPhim - Xem Phim Online Miễn Phí";
 }
 <!DOCTYPE html>
 <html lang="vi">
@@ -17,7 +17,6 @@
 </head>
 
 <body>
-
 
     <!-- Hero Banner -->
     <section class="hero-banner">
@@ -75,7 +74,7 @@
             </div>
         </div>
 
-        <!-- Thumbnails at the bottom right -->
+        @* <!-- Thumbnails at the bottom right -->
         <div class="series-thumbnails">
             <div class="thumbnail" style="background-image: url('https://i.imgur.com/kS9lY4i.png');"></div>
             <div class="thumbnail" style="background-image: url('https://i.imgur.com/vH1oUjB.jpeg');"></div>
@@ -83,7 +82,7 @@
             <div class="thumbnail" style="background-image: url('https://i.imgur.com/Z4c9r7Q.jpeg');"></div>
             <div class="thumbnail" style="background-image: url('https://i.imgur.com/0F9g7gD.jpeg');"></div>
             <div class="thumbnail" style="background-image: url('https://i.imgur.com/Uo2wJ3A.jpeg');"></div>
-        </div>
+        </div> *@
     </section>
 
     <!-- Genre Topics Section -->
@@ -181,7 +180,7 @@
     {
         <section class="movie-section">
             <div class="section-header">
-                <h2 class="section-title">
+                <h2 class="section-title1">
                     
                     Phim Hàn Quốc mới
                 </h2>
@@ -238,7 +237,7 @@
     {
         <section class="movie-section">
             <div class="section-header">
-                <h2 class="section-title">
+                <h2 class="section-title2">
                     @* <div class="country-flag">🇨🇳</div> *@
                     Phim Trung Quốc mới
                 </h2>
@@ -272,7 +271,7 @@
     {
         <section class="movie-section">
             <div class="section-header">
-                <h2 class="section-title">
+                <h2 class="section-title2">
                     @* <div class="country-flag">🇨🇳</div> *@
                     Phim Trung Quốc mới
                 </h2>
@@ -295,9 +294,9 @@
     {
         <section class="movie-section">
             <div class="section-header">
-                <h2 class="section-title">
+                <h2 class="section-title3">
                     @* <div class="country-flag">🇺🇸</div> *@
-                    Phim US - Uk
+                    Phim US-Uk mới
                 </h2>
                 <a href="/Movies?CountryId=@(Model.Countries.FirstOrDefault(c => c.Code == "US")?.Id)" class="view-all">Xem
                     tất cả <i class="fas fa-arrow-right"></i></a>

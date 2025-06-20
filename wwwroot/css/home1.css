@@ -34,6 +34,7 @@ body {
   margin-bottom: 15px; /* Khoảng cách với link "Xem toàn bộ" */
   line-height: 1.2; /* Tối ưu khoảng cách dòng cho tiêu đề đa dòng */
   color: #ffc107; /* Màu vàng cam giống trong ảnh */
+  
   /* Có thể thêm gradient nếu muốn giống hệt ảnh:
     background: linear-gradient(90deg, #ffc107, #ff6f00);
     -webkit-background-clip: text;

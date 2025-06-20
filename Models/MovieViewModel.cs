@@ -307,3 +307,60 @@ public class HomeViewModel1
         public int EpisodeCount { get; set; }
         public int UserCount { get; set; }
     }
+
+    // public class CreateWatchPartyViewModel
+    // {
+    //     public int MovieId { get; set; }
+    //     public Movie Movie { get; set; } // Thông tin phim đầy đủ
+
+    //     // --- Các thuộc tính cho form tạo phòng ---
+    //     [Display(Name = "Tên phòng")]
+    //     [Required(ErrorMessage = "Tên phòng là bắt buộc.")]
+    //     [StringLength(100, ErrorMessage = "Tên phòng không được quá 100 ký tự.")]
+    //     public string RoomName { get; set; } // Phải khớp với Name trong WatchPartyRoom
+
+    //     [Display(Name = "Poster hiển thị")]
+    //     // [Required(ErrorMessage = "Vui lòng chọn một poster hiển thị.")] // Nếu bắt buộc chọn
+    //     public string SelectedPosterUrl { get; set; } // Phải khớp với SelectedPosterUrl trong WatchPartyRoom
+    //     public IEnumerable<string> AvailablePosters { get; set; } // Các tùy chọn poster
+
+    //     // --- Cài đặt thời gian ---
+    //     [Display(Name = "Tự động bắt đầu")]
+    //     public bool AutoStart { get; set; } // Phải khớp với AutoStart trong WatchPartyRoom
+
+    //     // --- Quyền riêng tư ---
+    //     [Display(Name = "Chỉ xem với bạn bè")]
+    //     public bool PrivateRoom { get; set; } // Phải khớp với Private trong WatchPartyRoom (lưu ý tên khác nhau)
+
+    //     // --- Các thuộc tính khác có thể thêm ---
+    //     // public string HostUserId { get; set; }
+    //     // public int? MaxParticipants { get; set; }
+    // }
+
+
+
+    public class CreateWatchPartyViewModel
+    {
+        public int MovieId { get; set; }
+        public Movie Movie { get; set; } // Thông tin phim đầy đủ
+
+        [Display(Name = "Tên phòng")]
+        [Required(ErrorMessage = "Tên phòng là bắt buộc.")]
+        [StringLength(100, ErrorMessage = "Tên phòng không được quá 100 ký tự.")]
+        public string RoomName { get; set; } // Phải khớp với Name trong WatchPartyRoom
+
+        [Display(Name = "Poster hiển thị")]
+        public string SelectedPosterUrl { get; set; } // Không bắt buộc nếu DB cho phép null
+
+        public IEnumerable<string> AvailablePosters { get; set; } // Các tùy chọn poster
+
+        [Display(Name = "Tự động bắt đầu")]
+        public bool AutoStart { get; set; } // Phải khớp với AutoStart trong WatchPartyRoom
+
+        [Display(Name = "Chỉ xem với bạn bè")]
+        public bool PrivateRoom { get; set; } // Phải khớp với Private trong WatchPartyRoom
+    }
+
+
+
+    

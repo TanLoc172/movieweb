@@ -17,6 +17,31 @@ namespace MovieWebsite.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
 
+            modelBuilder.Entity("MovieWebsite.Models.ChatMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("RoomId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ChatMessages");
+                });
+
             modelBuilder.Entity("MovieWebsite.Models.Comment", b =>
                 {
                     b.Property<int>("Id")
@@ -69,7 +94,7 @@ namespace MovieWebsite.Migrations
                         {
                             Id = 1,
                             Content = "Phim này thực sự làm mình khóc rất nhiều!",
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7740),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(10),
                             Dislikes = 2,
                             Likes = 50,
                             MovieId = 1,
@@ -80,7 +105,7 @@ namespace MovieWebsite.Migrations
                         {
                             Id = 2,
                             Content = "Cảm ơn Trấn Thành đã mang đến một bộ phim ý nghĩa!",
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7740),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(10),
                             Dislikes = 1,
                             Likes = 30,
                             MovieId = 1,
@@ -92,7 +117,7 @@ namespace MovieWebsite.Migrations
                         {
                             Id = 3,
                             Content = "Tập 1 rất hấp dẫn, chemistry giữa hai diễn viên chính đỉnh cao!",
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7750),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(20),
                             Dislikes = 0,
                             EpisodeId = 1,
                             Likes = 40,
@@ -104,7 +129,7 @@ namespace MovieWebsite.Migrations
                         {
                             Id = 4,
                             Content = "Tập 2 càng cuốn, không thể rời mắt!",
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7750),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(20),
                             Dislikes = 1,
                             EpisodeId = 2,
                             Likes = 35,
@@ -245,982 +270,982 @@ namespace MovieWebsite.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7630),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9900),
                             Description = "Yoon Se-ri vô tình hạ cánh xuống Bắc Triều Tiên sau một tai nạn.",
                             Duration = 70,
                             EpisodeNumber = 1,
                             MovieId = 2,
                             ReleaseDate = new DateTime(2019, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Tập 1: Cuộc gặp gỡ định mệnh",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7640),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9910),
                             VideoPath = "/videos/1.mp4",
                             Views = 10000
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7640),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9910),
                             Description = "Ri Jeong-hyeok giúp Se-ri tìm cách trở về Hàn Quốc.",
                             Duration = 65,
                             EpisodeNumber = 2,
                             MovieId = 2,
                             ReleaseDate = new DateTime(2019, 12, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Tập 2: Kế hoạch trốn thoát",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7640),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9910),
                             VideoPath = "/videos/1.mp4",
                             Views = 9500
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7650),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9920),
                             Description = "Se-ri dần thích nghi với cuộc sống ở Bắc Triều Tiên.",
                             Duration = 68,
                             EpisodeNumber = 3,
                             MovieId = 2,
                             ReleaseDate = new DateTime(2019, 12, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Tập 3: Bí mật bị hé lộ",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7650),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9920),
                             VideoPath = "/videos/1.mp4",
                             Views = 9000
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7660),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9920),
                             Description = "Tình cảm giữa Se-ri và Jeong-hyeok bắt đầu phát triển.",
                             Duration = 72,
                             EpisodeNumber = 4,
                             MovieId = 2,
                             ReleaseDate = new DateTime(2019, 12, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Tập 4: Tình cảm nảy nở",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7660),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9930),
                             VideoPath = "/videos/1.mp4",
                             Views = 8800
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7660),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9930),
                             Description = "Se-ri đối mặt với những nguy hiểm mới ở Bắc Triều Tiên.",
                             Duration = 70,
                             EpisodeNumber = 5,
                             MovieId = 2,
                             ReleaseDate = new DateTime(2019, 12, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Tập 5: Thách thức mới",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7660),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9930),
                             VideoPath = "/videos/1.mp4",
                             Views = 8500
                         },
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7670),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9940),
                             Description = "Jeong-hyeok lên kế hoạch bảo vệ Se-ri.",
                             Duration = 67,
                             EpisodeNumber = 6,
                             MovieId = 2,
                             ReleaseDate = new DateTime(2019, 12, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Tập 6: Hành trình nguy hiểm",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7670),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9940),
                             VideoPath = "/videos/1.mp4",
                             Views = 8200
                         },
                         new
                         {
                             Id = 7,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8100),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(350),
                             Description = "Mô tả tập 1 của phim Đất Rừng Phương Nam",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 4,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8050),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(290),
                             Title = "Tập 1: Đất Rừng Phương Nam",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8100),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(350),
                             VideoPath = "/videos/4.mp4",
-                            Views = 7320
+                            Views = 14276
                         },
                         new
                         {
                             Id = 8,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8130),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(380),
                             Description = "Mô tả tập 1 của phim Nhà Bà Nữ",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 5,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8120),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(380),
                             Title = "Tập 1: Nhà Bà Nữ",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8130),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(390),
                             VideoPath = "/videos/5.mp4",
-                            Views = 7889
+                            Views = 9942
                         },
                         new
                         {
                             Id = 9,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8180),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(410),
                             Description = "Mô tả tập 1 của phim Lật Mặt 6: Tấm Vé Định Mệnh",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 6,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8180),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(400),
                             Title = "Tập 1: Lật Mặt 6: Tấm Vé Định Mệnh",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8180),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(410),
                             VideoPath = "/videos/6.mp4",
-                            Views = 11808
+                            Views = 12817
                         },
                         new
                         {
                             Id = 10,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8210),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(430),
                             Description = "Mô tả tập 1 của phim Tiệc Trăng Máu",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 7,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8200),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(430),
                             Title = "Tập 1: Tiệc Trăng Máu",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8210),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(430),
                             VideoPath = "/videos/7.mp4",
-                            Views = 5885
+                            Views = 9339
                         },
                         new
                         {
                             Id = 11,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8230),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(460),
                             Description = "Mô tả tập 1 của phim Em Chưa 18",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 8,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8230),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(460),
                             Title = "Tập 1: Em Chưa 18",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8230),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(460),
                             VideoPath = "/videos/3.mp4",
-                            Views = 8605
+                            Views = 10316
                         },
                         new
                         {
                             Id = 12,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8260),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(490),
                             Description = "Mô tả tập 1 của phim Cô Dâu Băng Giá",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 9,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8250),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(480),
                             Title = "Tập 1: Cô Dâu Băng Giá",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8260),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(490),
                             VideoPath = "/videos/7.mp4",
-                            Views = 14678
+                            Views = 12510
                         },
                         new
                         {
                             Id = 13,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8280),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(510),
                             Description = "Mô tả tập 1 của phim Chiếc Lá Cuốn Bay",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 10,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8280),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(500),
                             Title = "Tập 1: Chiếc Lá Cuốn Bay",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8280),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(510),
                             VideoPath = "/videos/8.mp4",
-                            Views = 11673
+                            Views = 10308
                         },
                         new
                         {
                             Id = 14,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8300),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(520),
                             Description = "Mô tả tập 2 của phim Chiếc Lá Cuốn Bay",
                             Duration = 60,
                             EpisodeNumber = 2,
                             MovieId = 10,
-                            ReleaseDate = new DateTime(2025, 5, 29, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8290),
+                            ReleaseDate = new DateTime(2025, 5, 29, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(520),
                             Title = "Tập 2: Chiếc Lá Cuốn Bay",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8300),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(520),
                             VideoPath = "/videos/8.mp4",
-                            Views = 9678
+                            Views = 8605
                         },
                         new
                         {
                             Id = 15,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8310),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(530),
                             Description = "Mô tả tập 3 của phim Chiếc Lá Cuốn Bay",
                             Duration = 60,
                             EpisodeNumber = 3,
                             MovieId = 10,
-                            ReleaseDate = new DateTime(2025, 6, 5, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8300),
+                            ReleaseDate = new DateTime(2025, 6, 5, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(530),
                             Title = "Tập 3: Chiếc Lá Cuốn Bay",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8310),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(540),
                             VideoPath = "/videos/8.mp4",
-                            Views = 12665
+                            Views = 12862
                         },
                         new
                         {
                             Id = 16,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8320),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(550),
                             Description = "Mô tả tập 4 của phim Chiếc Lá Cuốn Bay",
                             Duration = 60,
                             EpisodeNumber = 4,
                             MovieId = 10,
-                            ReleaseDate = new DateTime(2025, 6, 12, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8320),
+                            ReleaseDate = new DateTime(2025, 6, 12, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(540),
                             Title = "Tập 4: Chiếc Lá Cuốn Bay",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8330),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(550),
                             VideoPath = "/videos/8.mp4",
-                            Views = 11795
+                            Views = 5888
                         },
                         new
                         {
                             Id = 17,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8340),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(560),
                             Description = "Mô tả tập 5 của phim Chiếc Lá Cuốn Bay",
                             Duration = 60,
                             EpisodeNumber = 5,
                             MovieId = 10,
-                            ReleaseDate = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8330),
+                            ReleaseDate = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(560),
                             Title = "Tập 5: Chiếc Lá Cuốn Bay",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8340),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(560),
                             VideoPath = "/videos/8.mp4",
-                            Views = 8068
+                            Views = 5162
                         },
                         new
                         {
                             Id = 18,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8360),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(590),
                             Description = "Mô tả tập 1 của phim Goblin",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 11,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8360),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(580),
                             Title = "Tập 1: Goblin",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8360),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(590),
                             VideoPath = "/videos/1.mp4",
-                            Views = 12950
+                            Views = 13890
                         },
                         new
                         {
                             Id = 19,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8380),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(600),
                             Description = "Mô tả tập 2 của phim Goblin",
                             Duration = 60,
                             EpisodeNumber = 2,
                             MovieId = 11,
-                            ReleaseDate = new DateTime(2025, 5, 29, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8370),
+                            ReleaseDate = new DateTime(2025, 5, 29, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(590),
                             Title = "Tập 2: Goblin",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8380),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(600),
                             VideoPath = "/videos/1.mp4",
-                            Views = 14339
+                            Views = 8230
                         },
                         new
                         {
                             Id = 20,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8390),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(610),
                             Description = "Mô tả tập 3 của phim Goblin",
                             Duration = 60,
                             EpisodeNumber = 3,
                             MovieId = 11,
-                            ReleaseDate = new DateTime(2025, 6, 5, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8390),
+                            ReleaseDate = new DateTime(2025, 6, 5, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(610),
                             Title = "Tập 3: Goblin",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8400),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(610),
                             VideoPath = "/videos/1.mp4",
-                            Views = 5942
+                            Views = 13619
                         },
                         new
                         {
                             Id = 21,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8410),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(630),
                             Description = "Mô tả tập 4 của phim Goblin",
                             Duration = 60,
                             EpisodeNumber = 4,
                             MovieId = 11,
-                            ReleaseDate = new DateTime(2025, 6, 12, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8400),
+                            ReleaseDate = new DateTime(2025, 6, 12, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(620),
                             Title = "Tập 4: Goblin",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8410),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(630),
                             VideoPath = "/videos/1.mp4",
-                            Views = 10874
+                            Views = 6923
                         },
                         new
                         {
                             Id = 22,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8420),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(640),
                             Description = "Mô tả tập 5 của phim Goblin",
                             Duration = 60,
                             EpisodeNumber = 5,
                             MovieId = 11,
-                            ReleaseDate = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8420),
+                            ReleaseDate = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(630),
                             Title = "Tập 5: Goblin",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8420),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(640),
                             VideoPath = "/videos/1.mp4",
-                            Views = 14510
+                            Views = 5023
                         },
                         new
                         {
                             Id = 23,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8450),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(680),
                             Description = "Mô tả tập 1 của phim Vinh Quang Trong Thù Hận",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 12,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8440),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(680),
                             Title = "Tập 1: Vinh Quang Trong Thù Hận",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8450),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(680),
                             VideoPath = "/videos/3.mp4",
-                            Views = 13702
+                            Views = 13565
                         },
                         new
                         {
                             Id = 24,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8460),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(700),
                             Description = "Mô tả tập 2 của phim Vinh Quang Trong Thù Hận",
                             Duration = 60,
                             EpisodeNumber = 2,
                             MovieId = 12,
-                            ReleaseDate = new DateTime(2025, 5, 29, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8460),
+                            ReleaseDate = new DateTime(2025, 5, 29, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(690),
                             Title = "Tập 2: Vinh Quang Trong Thù Hận",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8460),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(700),
                             VideoPath = "/videos/3.mp4",
-                            Views = 13481
+                            Views = 5181
                         },
                         new
                         {
                             Id = 25,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8480),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(710),
                             Description = "Mô tả tập 3 của phim Vinh Quang Trong Thù Hận",
                             Duration = 60,
                             EpisodeNumber = 3,
                             MovieId = 12,
-                            ReleaseDate = new DateTime(2025, 6, 5, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8470),
+                            ReleaseDate = new DateTime(2025, 6, 5, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(710),
                             Title = "Tập 3: Vinh Quang Trong Thù Hận",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8480),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(710),
                             VideoPath = "/videos/3.mp4",
-                            Views = 13090
+                            Views = 8581
                         },
                         new
                         {
                             Id = 26,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8490),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(720),
                             Description = "Mô tả tập 4 của phim Vinh Quang Trong Thù Hận",
                             Duration = 60,
                             EpisodeNumber = 4,
                             MovieId = 12,
-                            ReleaseDate = new DateTime(2025, 6, 12, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8490),
+                            ReleaseDate = new DateTime(2025, 6, 12, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(720),
                             Title = "Tập 4: Vinh Quang Trong Thù Hận",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8490),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(730),
                             VideoPath = "/videos/3.mp4",
-                            Views = 14303
+                            Views = 9663
                         },
                         new
                         {
                             Id = 27,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8500),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(740),
                             Description = "Mô tả tập 5 của phim Vinh Quang Trong Thù Hận",
                             Duration = 60,
                             EpisodeNumber = 5,
                             MovieId = 12,
-                            ReleaseDate = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8500),
+                            ReleaseDate = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(730),
                             Title = "Tập 5: Vinh Quang Trong Thù Hận",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8510),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(740),
                             VideoPath = "/videos/3.mp4",
-                            Views = 13578
+                            Views = 14658
                         },
                         new
                         {
                             Id = 28,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8530),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(760),
                             Description = "Mô tả tập 1 của phim Hospital Playlist",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 13,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8520),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(760),
                             Title = "Tập 1: Hospital Playlist",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8530),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(760),
                             VideoPath = "/videos/4.mp4",
-                            Views = 6983
+                            Views = 12450
                         },
                         new
                         {
                             Id = 29,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8540),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(780),
                             Description = "Mô tả tập 2 của phim Hospital Playlist",
                             Duration = 60,
                             EpisodeNumber = 2,
                             MovieId = 13,
-                            ReleaseDate = new DateTime(2025, 5, 29, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8540),
+                            ReleaseDate = new DateTime(2025, 5, 29, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(770),
                             Title = "Tập 2: Hospital Playlist",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8540),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(780),
                             VideoPath = "/videos/4.mp4",
-                            Views = 10028
+                            Views = 9185
                         },
                         new
                         {
                             Id = 30,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8560),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(790),
                             Description = "Mô tả tập 3 của phim Hospital Playlist",
                             Duration = 60,
                             EpisodeNumber = 3,
                             MovieId = 13,
-                            ReleaseDate = new DateTime(2025, 6, 5, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8550),
+                            ReleaseDate = new DateTime(2025, 6, 5, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(780),
                             Title = "Tập 3: Hospital Playlist",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8560),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(790),
                             VideoPath = "/videos/4.mp4",
-                            Views = 8199
+                            Views = 6086
                         },
                         new
                         {
                             Id = 31,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8590),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(800),
                             Description = "Mô tả tập 4 của phim Hospital Playlist",
                             Duration = 60,
                             EpisodeNumber = 4,
                             MovieId = 13,
-                            ReleaseDate = new DateTime(2025, 6, 12, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8590),
+                            ReleaseDate = new DateTime(2025, 6, 12, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(800),
                             Title = "Tập 4: Hospital Playlist",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8600),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(800),
                             VideoPath = "/videos/4.mp4",
-                            Views = 7972
+                            Views = 11760
                         },
                         new
                         {
                             Id = 32,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8610),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(820),
                             Description = "Mô tả tập 5 của phim Hospital Playlist",
                             Duration = 60,
                             EpisodeNumber = 5,
                             MovieId = 13,
-                            ReleaseDate = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8600),
+                            ReleaseDate = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(810),
                             Title = "Tập 5: Hospital Playlist",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8610),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(820),
                             VideoPath = "/videos/4.mp4",
-                            Views = 5722
+                            Views = 10596
                         },
                         new
                         {
                             Id = 33,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8630),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(840),
                             Description = "Mô tả tập 1 của phim Reply 1988",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 14,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8630),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(830),
                             Title = "Tập 1: Reply 1988",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8630),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(840),
                             VideoPath = "/videos/5.mp4",
-                            Views = 11703
+                            Views = 9241
                         },
                         new
                         {
                             Id = 34,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8650),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(860),
                             Description = "Mô tả tập 2 của phim Reply 1988",
                             Duration = 60,
                             EpisodeNumber = 2,
                             MovieId = 14,
-                            ReleaseDate = new DateTime(2025, 5, 29, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8640),
+                            ReleaseDate = new DateTime(2025, 5, 29, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(850),
                             Title = "Tập 2: Reply 1988",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8650),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(860),
                             VideoPath = "/videos/5.mp4",
-                            Views = 8671
+                            Views = 12152
                         },
                         new
                         {
                             Id = 35,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8660),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(870),
                             Description = "Mô tả tập 3 của phim Reply 1988",
                             Duration = 60,
                             EpisodeNumber = 3,
                             MovieId = 14,
-                            ReleaseDate = new DateTime(2025, 6, 5, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8650),
+                            ReleaseDate = new DateTime(2025, 6, 5, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(870),
                             Title = "Tập 3: Reply 1988",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8660),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(870),
                             VideoPath = "/videos/5.mp4",
-                            Views = 6898
+                            Views = 10888
                         },
                         new
                         {
                             Id = 36,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8670),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(880),
                             Description = "Mô tả tập 4 của phim Reply 1988",
                             Duration = 60,
                             EpisodeNumber = 4,
                             MovieId = 14,
-                            ReleaseDate = new DateTime(2025, 6, 12, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8670),
+                            ReleaseDate = new DateTime(2025, 6, 12, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(880),
                             Title = "Tập 4: Reply 1988",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8670),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(880),
                             VideoPath = "/videos/5.mp4",
-                            Views = 12045
+                            Views = 11863
                         },
                         new
                         {
                             Id = 37,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8690),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(900),
                             Description = "Mô tả tập 5 của phim Reply 1988",
                             Duration = 60,
                             EpisodeNumber = 5,
                             MovieId = 14,
-                            ReleaseDate = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8680),
+                            ReleaseDate = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(890),
                             Title = "Tập 5: Reply 1988",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8690),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(900),
                             VideoPath = "/videos/5.mp4",
-                            Views = 12181
+                            Views = 7505
                         },
                         new
                         {
                             Id = 38,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8710),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(920),
                             Description = "Mô tả tập 1 của phim The Wandering Earth",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 15,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8710),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(910),
                             Title = "Tập 1: The Wandering Earth",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8710),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(920),
                             VideoPath = "/videos/1.mp4",
-                            Views = 12677
+                            Views = 14944
                         },
                         new
                         {
                             Id = 39,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8750),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(940),
                             Description = "Mô tả tập 1 của phim Ngoạ Hổ Tàng Long",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 16,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8750),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(940),
                             Title = "Tập 1: Ngoạ Hổ Tàng Long",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8750),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(940),
                             VideoPath = "/videos/11.mp4",
-                            Views = 6501
+                            Views = 10968
                         },
                         new
                         {
                             Id = 40,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8780),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(970),
                             Description = "Mô tả tập 1 của phim Tam Sinh Tam Thế Thập Lý Đào Hoa",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 17,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8770),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(960),
                             Title = "Tập 1: Tam Sinh Tam Thế Thập Lý Đào Hoa",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8780),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(970),
                             VideoPath = "/videos/2.mp4",
-                            Views = 13690
+                            Views = 11051
                         },
                         new
                         {
                             Id = 41,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8800),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(980),
                             Description = "Mô tả tập 2 của phim Tam Sinh Tam Thế Thập Lý Đào Hoa",
                             Duration = 60,
                             EpisodeNumber = 2,
                             MovieId = 17,
-                            ReleaseDate = new DateTime(2025, 5, 29, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8780),
+                            ReleaseDate = new DateTime(2025, 5, 29, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(980),
                             Title = "Tập 2: Tam Sinh Tam Thế Thập Lý Đào Hoa",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8800),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(980),
                             VideoPath = "/videos/2.mp4",
-                            Views = 5718
+                            Views = 13362
                         },
                         new
                         {
                             Id = 42,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8810),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1000),
                             Description = "Mô tả tập 3 của phim Tam Sinh Tam Thế Thập Lý Đào Hoa",
                             Duration = 60,
                             EpisodeNumber = 3,
                             MovieId = 17,
-                            ReleaseDate = new DateTime(2025, 6, 5, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8800),
+                            ReleaseDate = new DateTime(2025, 6, 5, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(990),
                             Title = "Tập 3: Tam Sinh Tam Thế Thập Lý Đào Hoa",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8810),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1000),
                             VideoPath = "/videos/2.mp4",
-                            Views = 10474
+                            Views = 6508
                         },
                         new
                         {
                             Id = 43,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8820),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1010),
                             Description = "Mô tả tập 4 của phim Tam Sinh Tam Thế Thập Lý Đào Hoa",
                             Duration = 60,
                             EpisodeNumber = 4,
                             MovieId = 17,
-                            ReleaseDate = new DateTime(2025, 6, 12, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8820),
+                            ReleaseDate = new DateTime(2025, 6, 12, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1000),
                             Title = "Tập 4: Tam Sinh Tam Thế Thập Lý Đào Hoa",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8820),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1010),
                             VideoPath = "/videos/2.mp4",
-                            Views = 11022
+                            Views = 7147
                         },
                         new
                         {
                             Id = 44,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8840),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1050),
                             Description = "Mô tả tập 5 của phim Tam Sinh Tam Thế Thập Lý Đào Hoa",
                             Duration = 60,
                             EpisodeNumber = 5,
                             MovieId = 17,
-                            ReleaseDate = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8830),
+                            ReleaseDate = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1040),
                             Title = "Tập 5: Tam Sinh Tam Thế Thập Lý Đào Hoa",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8840),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1050),
                             VideoPath = "/videos/2.mp4",
-                            Views = 10756
+                            Views = 5382
                         },
                         new
                         {
                             Id = 45,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8860),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1070),
                             Description = "Mô tả tập 1 của phim Chiến Lang 2",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 18,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8860),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1060),
                             Title = "Tập 1: Chiến Lang 2",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8860),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1070),
                             VideoPath = "/videos/36.mp4",
-                            Views = 8448
+                            Views = 7379
                         },
                         new
                         {
                             Id = 46,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8880),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1090),
                             Description = "Mô tả tập 1 của phim Your Name",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 19,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8880),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1090),
                             Title = "Tập 1: Your Name",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8880),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1090),
                             VideoPath = "/videos/3.mp4",
-                            Views = 9875
+                            Views = 10165
                         },
                         new
                         {
                             Id = 47,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8910),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1110),
                             Description = "Mô tả tập 1 của phim Spirited Away",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 20,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8900),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1110),
                             Title = "Tập 1: Spirited Away",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8910),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1110),
                             VideoPath = "/videos/4.mp4",
-                            Views = 10777
+                            Views = 9305
                         },
                         new
                         {
                             Id = 48,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8940),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1140),
                             Description = "Mô tả tập 1 của phim One Piece Film: Red",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 21,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8930),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1130),
                             Title = "Tập 1: One Piece Film: Red",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8940),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1140),
                             VideoPath = "/videos/15.mp4",
-                            Views = 8536
+                            Views = 7384
                         },
                         new
                         {
                             Id = 49,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8960),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1160),
                             Description = "Mô tả tập 1 của phim Your Lie in April",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 22,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8950),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1150),
                             Title = "Tập 1: Your Lie in April",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8960),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1160),
                             VideoPath = "/videos/7.mp4",
-                            Views = 6867
+                            Views = 14941
                         },
                         new
                         {
                             Id = 50,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8970),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1170),
                             Description = "Mô tả tập 2 của phim Your Lie in April",
                             Duration = 60,
                             EpisodeNumber = 2,
                             MovieId = 22,
-                            ReleaseDate = new DateTime(2025, 5, 29, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8970),
+                            ReleaseDate = new DateTime(2025, 5, 29, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1170),
                             Title = "Tập 2: Your Lie in April",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8970),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1170),
                             VideoPath = "/videos/7.mp4",
-                            Views = 7684
+                            Views = 9526
                         },
                         new
                         {
                             Id = 51,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9010),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1190),
                             Description = "Mô tả tập 3 của phim Your Lie in April",
                             Duration = 60,
                             EpisodeNumber = 3,
                             MovieId = 22,
-                            ReleaseDate = new DateTime(2025, 6, 5, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9010),
+                            ReleaseDate = new DateTime(2025, 6, 5, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1180),
                             Title = "Tập 3: Your Lie in April",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9010),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1190),
                             VideoPath = "/videos/7.mp4",
-                            Views = 13749
+                            Views = 7174
                         },
                         new
                         {
                             Id = 52,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9030),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1200),
                             Description = "Mô tả tập 4 của phim Your Lie in April",
                             Duration = 60,
                             EpisodeNumber = 4,
                             MovieId = 22,
-                            ReleaseDate = new DateTime(2025, 6, 12, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9020),
+                            ReleaseDate = new DateTime(2025, 6, 12, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1200),
                             Title = "Tập 4: Your Lie in April",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9030),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1200),
                             VideoPath = "/videos/7.mp4",
-                            Views = 12046
+                            Views = 14835
                         },
                         new
                         {
                             Id = 53,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9040),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1210),
                             Description = "Mô tả tập 5 của phim Your Lie in April",
                             Duration = 60,
                             EpisodeNumber = 5,
                             MovieId = 22,
-                            ReleaseDate = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9040),
+                            ReleaseDate = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1210),
                             Title = "Tập 5: Your Lie in April",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9040),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1220),
                             VideoPath = "/videos/7.mp4",
-                            Views = 7756
+                            Views = 13063
                         },
                         new
                         {
                             Id = 54,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9070),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1240),
                             Description = "Mô tả tập 1 của phim Avengers: Endgame",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 23,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9060),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1240),
                             Title = "Tập 1: Avengers: Endgame",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9070),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1240),
                             VideoPath = "/videos/6.mp4",
-                            Views = 12974
+                            Views = 13466
                         },
                         new
                         {
                             Id = 55,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9090),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1260),
                             Description = "Mô tả tập 1 của phim Joker",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 24,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9080),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1260),
                             Title = "Tập 1: Joker",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9090),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1270),
                             VideoPath = "/videos/17.mp4",
-                            Views = 13266
+                            Views = 8427
                         },
                         new
                         {
                             Id = 56,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9110),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1290),
                             Description = "Mô tả tập 1 của phim Fast & Furious 9",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 25,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9110),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1280),
                             Title = "Tập 1: Fast & Furious 9",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9110),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1290),
                             VideoPath = "/videos/18.mp4",
-                            Views = 14428
+                            Views = 10527
                         },
                         new
                         {
                             Id = 57,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9140),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1310),
                             Description = "Mô tả tập 1 của phim Spider-Man: No Way Home",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 26,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9130),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1310),
                             Title = "Tập 1: Spider-Man: No Way Home",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9140),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1310),
                             VideoPath = "/videos/1.mp4",
-                            Views = 11695
+                            Views = 8049
                         },
                         new
                         {
                             Id = 58,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9160),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1340),
                             Description = "Mô tả tập 1 của phim Dune",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 27,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9150),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1330),
                             Title = "Tập 1: Dune",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9160),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1340),
                             VideoPath = "/videos/2.mp4",
-                            Views = 9442
+                            Views = 10038
                         },
                         new
                         {
                             Id = 59,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9180),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1360),
                             Description = "Mô tả tập 1 của phim Encanto",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 28,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9170),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1350),
                             Title = "Tập 1: Encanto",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9180),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1360),
                             VideoPath = "/videos/1.mp4",
-                            Views = 12984
+                            Views = 10289
                         },
                         new
                         {
                             Id = 60,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9210),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1380),
                             Description = "Mô tả tập 1 của phim The Lion King",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 29,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9200),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1380),
                             Title = "Tập 1: The Lion King",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9210),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1380),
                             VideoPath = "/videos/4.mp4",
-                            Views = 10444
+                            Views = 7918
                         },
                         new
                         {
                             Id = 61,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9230),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1410),
                             Description = "Mô tả tập 1 của phim The Dark Knight",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 30,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9230),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1400),
                             Title = "Tập 1: The Dark Knight",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9230),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1410),
                             VideoPath = "/videos/8.mp4",
-                            Views = 12461
+                            Views = 6036
                         },
                         new
                         {
                             Id = 62,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9250),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1440),
                             Description = "Mô tả tập 1 của phim Inception",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 31,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9250),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1430),
                             Title = "Tập 1: Inception",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9260),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1440),
                             VideoPath = "/videos/3.mp4",
-                            Views = 8919
+                            Views = 13883
                         },
                         new
                         {
                             Id = 63,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9280),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1460),
                             Description = "Mô tả tập 1 của phim Forrest Gump",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 32,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9270),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1460),
                             Title = "Tập 1: Forrest Gump",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9280),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1460),
                             VideoPath = "/videos/40.mp4",
-                            Views = 7012
+                            Views = 7673
                         },
                         new
                         {
                             Id = 64,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9300),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1480),
                             Description = "Mô tả tập 1 của phim Bad Genius",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 33,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9300),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1480),
                             Title = "Tập 1: Bad Genius",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9300),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1490),
                             VideoPath = "/videos/3.mp4",
-                            Views = 10404
+                            Views = 12132
                         },
                         new
                         {
                             Id = 65,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9320),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1510),
                             Description = "Mô tả tập 1 của phim Friend Zone",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 34,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9320),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1500),
                             Title = "Tập 1: Friend Zone",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9320),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1510),
                             VideoPath = "/videos/24.mp4",
-                            Views = 7629
+                            Views = 13497
                         },
                         new
                         {
                             Id = 66,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9350),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1530),
                             Description = "Mô tả tập 1 của phim The Imitation Game",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 35,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9340),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1520),
                             Title = "Tập 1: The Imitation Game",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9350),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1530),
                             VideoPath = "/videos/5.mp4",
-                            Views = 10444
+                            Views = 9578
                         },
                         new
                         {
                             Id = 67,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9370),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1550),
                             Description = "Mô tả tập 1 của phim Harry Potter and the Sorcerer's Stone",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 36,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9370),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1550),
                             Title = "Tập 1: Harry Potter and the Sorcerer's Stone",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9370),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1550),
                             VideoPath = "/videos/6.mp4",
-                            Views = 9227
+                            Views = 6473
                         },
                         new
                         {
                             Id = 68,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9420),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1580),
                             Description = "Mô tả tập 1 của phim Amélie",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 37,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9420),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1570),
                             Title = "Tập 1: Amélie",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9420),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1580),
                             VideoPath = "/videos/7.mp4",
-                            Views = 11993
+                            Views = 8317
                         },
                         new
                         {
                             Id = 69,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9440),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1600),
                             Description = "Mô tả tập 1 của phim The Intouchables",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 38,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9440),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1590),
                             Title = "Tập 1: The Intouchables",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9450),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1600),
                             VideoPath = "/videos/8.mp4",
-                            Views = 6040
+                            Views = 9724
                         },
                         new
                         {
                             Id = 70,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9470),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1650),
                             Description = "Mô tả tập 1 của phim Room",
                             Duration = 60,
                             EpisodeNumber = 1,
                             MovieId = 39,
-                            ReleaseDate = new DateTime(2025, 5, 22, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9460),
+                            ReleaseDate = new DateTime(2025, 5, 22, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1640),
                             Title = "Tập 1: Room",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9470),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1650),
                             VideoPath = "/videos/4.mp4",
-                            Views = 8437
+                            Views = 7517
                         });
                 });
 
@@ -1396,7 +1421,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 8.5,
                             Cast = "Trấn Thành, Tuấn Trần, Ngô Kiến Huy",
                             CountryId = 1,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7550),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9820),
                             Description = "Bộ phim kể về cuộc sống của một gia đình lao động nghèo ở Sài Gòn.",
                             Director = "Trấn Thành",
                             EnglishTitle = "Old Father",
@@ -1408,7 +1433,7 @@ namespace MovieWebsite.Migrations
                             Title = "Bố Già",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/1.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7550),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9820),
                             Views = 150000
                         },
                         new
@@ -1417,7 +1442,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 9.0,
                             Cast = "Hyun Bin, Son Ye-jin",
                             CountryId = 2,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7560),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9830),
                             Description = "Câu chuyện tình yêu giữa một nữ thừa kế Hàn Quốc và một sĩ quan Bắc Triều Tiên.",
                             Director = "Lee Jeong-hyo",
                             EnglishTitle = "Crash Landing on You",
@@ -1429,7 +1454,7 @@ namespace MovieWebsite.Migrations
                             Title = "Hạ Cánh Nơi Anh",
                             TotalEpisodes = 16,
                             TrailerPath = "/videos/2.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7560),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9830),
                             Views = 250000
                         },
                         new
@@ -1438,7 +1463,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 9.1999999999999993,
                             Cast = "Song Kang-ho, Lee Sun-kyun, Cho Yeo-jeong",
                             CountryId = 2,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7570),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9840),
                             Description = "Một gia đình nghèo tìm cách thâm nhập vào cuộc sống của một gia đình giàu có.",
                             Director = "Bong Joon-ho",
                             EnglishTitle = "Parasite",
@@ -1450,7 +1475,7 @@ namespace MovieWebsite.Migrations
                             Title = "Ký Sinh Trùng",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/3.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7570),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9840),
                             Views = 300000
                         },
                         new
@@ -1459,7 +1484,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 7.7999999999999998,
                             Cast = "Hạo Khang, Trấn Thành, Mai Cát Vi",
                             CountryId = 1,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7990),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(220),
                             Description = "Câu chuyện về hành trình trưởng thành của bé An tại miền Nam Việt Nam.",
                             Director = "Võ Thanh Hòa",
                             EnglishTitle = "Southern Forest Land",
@@ -1471,7 +1496,7 @@ namespace MovieWebsite.Migrations
                             Title = "Đất Rừng Phương Nam",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/4.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7990),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(220),
                             Views = 120000
                         },
                         new
@@ -1480,7 +1505,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 7.5,
                             Cast = "Trấn Thành, Uyển Ân, Ngọc Châu",
                             CountryId = 1,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8110),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(360),
                             Description = "Câu chuyện về mâu thuẫn gia đình và tình yêu.",
                             Director = "Trấn Thành",
                             EnglishTitle = "The House of No Man",
@@ -1492,7 +1517,7 @@ namespace MovieWebsite.Migrations
                             Title = "Nhà Bà Nữ",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/5.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8110),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(360),
                             Views = 180000
                         },
                         new
@@ -1501,7 +1526,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 7.2000000000000002,
                             Cast = "Thái Hòa, Thanh Thức, Huỳnh Đông",
                             CountryId = 1,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8140),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(390),
                             Description = "Cuộc phiêu lưu để giành tấm vé số định mệnh.",
                             Director = "Lý Hải",
                             EnglishTitle = "Face Off 6: The Destiny Ticket",
@@ -1513,7 +1538,7 @@ namespace MovieWebsite.Migrations
                             Title = "Lật Mặt 6: Tấm Vé Định Mệnh",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/6.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8140),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(390),
                             Views = 150000
                         },
                         new
@@ -1522,7 +1547,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 7.0,
                             Cast = "Thái Hòa, Kiều Minh Tuấn, Đức Thịnh",
                             CountryId = 1,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8190),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(420),
                             Description = "Những bí mật của một nhóm bạn được phơi bày qua một trò chơi.",
                             Director = "Nguyễn Quang Dũng",
                             EnglishTitle = "Full House",
@@ -1534,7 +1559,7 @@ namespace MovieWebsite.Migrations
                             Title = "Tiệc Trăng Máu",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/8.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8190),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(420),
                             Views = 130000
                         },
                         new
@@ -1543,7 +1568,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 6.7999999999999998,
                             Cast = "Kaity Nguyễn, Will",
                             CountryId = 1,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8210),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(440),
                             Description = "Câu chuyện tình yêu tuổi teen với nhiều tình huống dở khóc dở cười.",
                             Director = "Lê Thanh Sơn",
                             EnglishTitle = "Sweet 18",
@@ -1555,7 +1580,7 @@ namespace MovieWebsite.Migrations
                             Title = "Em Chưa 18",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/32.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8210),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(440),
                             Views = 110000
                         },
                         new
@@ -1564,7 +1589,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 8.6999999999999993,
                             Cast = "Suzu Hirose, Kôki Mitsushima",
                             CountryId = 2,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8240),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(470),
                             Description = "Một câu chuyện cổ tích về tình yêu và băng giá.",
                             Director = "Hayao Miyazaki",
                             EnglishTitle = "Frozen Bride",
@@ -1576,7 +1601,7 @@ namespace MovieWebsite.Migrations
                             Title = "Cô Dâu Băng Giá",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/7.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8240),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(470),
                             Views = 190000
                         },
                         new
@@ -1585,7 +1610,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 8.5,
                             Cast = "Baifern Pimchanok, Push Puttichai",
                             CountryId = 2,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8260),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(490),
                             Description = "Cuộc đời đầy biến cố của một cô gái chuyển giới.",
                             Director = "Sopon Sukapisoot",
                             EnglishTitle = "Bai Mai Tee Plid Plew",
@@ -1597,7 +1622,7 @@ namespace MovieWebsite.Migrations
                             Title = "Chiếc Lá Cuốn Bay",
                             TotalEpisodes = 20,
                             TrailerPath = "/videos/8.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8260),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(490),
                             Views = 400000
                         },
                         new
@@ -1606,7 +1631,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 9.0,
                             Cast = "Gong Yoo, Kim Go-eun, Lee Dong-wook",
                             CountryId = 2,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8350),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(570),
                             Description = "Câu chuyện tình yêu giữa một goblin và một cô dâu loài người.",
                             Director = "Kim Eun-sook",
                             EnglishTitle = "Guardian: The Lonely and Great God",
@@ -1618,7 +1643,7 @@ namespace MovieWebsite.Migrations
                             Title = "Goblin",
                             TotalEpisodes = 16,
                             TrailerPath = "/videos/9.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8350),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(570),
                             Views = 300000
                         },
                         new
@@ -1627,7 +1652,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 9.1999999999999993,
                             Cast = "Song Hye-kyo, Lee Do-hyun",
                             CountryId = 2,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8430),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(670),
                             Description = "Một cô gái tìm cách trả thù những kẻ đã bắt nạt mình.",
                             Director = "Ahn Gil-ho",
                             EnglishTitle = "The Glory",
@@ -1639,7 +1664,7 @@ namespace MovieWebsite.Migrations
                             Title = "Vinh Quang Trong Thù Hận",
                             TotalEpisodes = 16,
                             TrailerPath = "/videos/33.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8430),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(670),
                             Views = 350000
                         },
                         new
@@ -1648,7 +1673,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 9.3000000000000007,
                             Cast = "Jo Jung-suk, Yoo Yeon-seok, Jung Kyung-ho",
                             CountryId = 2,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8510),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(750),
                             Description = "Cuộc sống và tình bạn của 5 bác sĩ.",
                             Director = "Shin Won-ho",
                             EnglishTitle = "Hospital Playlist",
@@ -1660,7 +1685,7 @@ namespace MovieWebsite.Migrations
                             Title = "Hospital Playlist",
                             TotalEpisodes = 24,
                             TrailerPath = "/videos/34.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8510),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(750),
                             Views = 280000
                         },
                         new
@@ -1669,7 +1694,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 9.4000000000000004,
                             Cast = "Lee Hye-ri, Ryu Jun-yeol, Go Kyung-pyo",
                             CountryId = 2,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8620),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(820),
                             Description = "Câu chuyện về tình bạn và gia đình tại Seoul năm 1988.",
                             Director = "Shin Won-ho",
                             EnglishTitle = "Reply 1988",
@@ -1681,7 +1706,7 @@ namespace MovieWebsite.Migrations
                             Title = "Reply 1988",
                             TotalEpisodes = 20,
                             TrailerPath = "/videos/35.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8620),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(820),
                             Views = 290000
                         },
                         new
@@ -1690,7 +1715,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 7.0,
                             Cast = "Wu Jing, Qing Xu",
                             CountryId = 3,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8690),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(900),
                             Description = "Nhân loại di chuyển Trái Đất ra khỏi hệ Mặt Trời.",
                             Director = "Frant Gwo",
                             EnglishTitle = "The Wandering Earth",
@@ -1702,7 +1727,7 @@ namespace MovieWebsite.Migrations
                             Title = "The Wandering Earth",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/10.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8700),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(910),
                             Views = 320000
                         },
                         new
@@ -1711,7 +1736,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 8.1999999999999993,
                             Cast = "Châu Nhuận Phát, Dương Tử Quỳnh, Chương Tử Di",
                             CountryId = 3,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8720),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(930),
                             Description = "Kiếm hiệp tình duyên với những màn võ thuật đẹp mắt.",
                             Director = "Lý An",
                             EnglishTitle = "Crouching Tiger, Hidden Dragon",
@@ -1723,7 +1748,7 @@ namespace MovieWebsite.Migrations
                             Title = "Ngoạ Hổ Tàng Long",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/11.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8720),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(930),
                             Views = 250000
                         },
                         new
@@ -1732,7 +1757,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 8.8000000000000007,
                             Cast = "Dương Mịch, Triệu Hựu Đình",
                             CountryId = 3,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8760),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(950),
                             Description = "Chuyện tình xuyên không gian và thời gian.",
                             Director = "Lâm Ngọc Phượng",
                             EnglishTitle = "Eternal Love",
@@ -1744,7 +1769,7 @@ namespace MovieWebsite.Migrations
                             Title = "Tam Sinh Tam Thế Thập Lý Đào Hoa",
                             TotalEpisodes = 58,
                             TrailerPath = "/videos/12.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8760),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(950),
                             Views = 450000
                         },
                         new
@@ -1753,7 +1778,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 7.5,
                             Cast = "Ngô Kinh, Frank Grillo",
                             CountryId = 3,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8840),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1050),
                             Description = "Người lính giải cứu công dân Trung Quốc ở châu Phi.",
                             Director = "Ngô Kinh",
                             EnglishTitle = "Wolf Warrior 2",
@@ -1765,7 +1790,7 @@ namespace MovieWebsite.Migrations
                             Title = "Chiến Lang 2",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/6.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8840),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1050),
                             Views = 380000
                         },
                         new
@@ -1774,7 +1799,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 9.3000000000000007,
                             Cast = "Ryunosuke Kamiki, Mone Kamishiraishi",
                             CountryId = 4,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8870),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1080),
                             Description = "Câu chuyện tình yêu kỳ diệu giữa hai người xa lạ đổi linh hồn.",
                             Director = "Makoto Shinkai",
                             EnglishTitle = "Kimi no Na wa.",
@@ -1786,7 +1811,7 @@ namespace MovieWebsite.Migrations
                             Title = "Your Name",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/13.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8870),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1080),
                             Views = 420000
                         },
                         new
@@ -1795,7 +1820,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 9.1999999999999993,
                             Cast = "Rumi Hiiragi, Miyu Irino",
                             CountryId = 4,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8890),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1100),
                             Description = "Hành trình phiêu lưu của cô bé Chihiro tại thế giới linh hồn.",
                             Director = "Hayao Miyazaki",
                             EnglishTitle = "Sen to Chihiro no Kamikakushi",
@@ -1807,7 +1832,7 @@ namespace MovieWebsite.Migrations
                             Title = "Spirited Away",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/14.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8890),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1100),
                             Views = 380000
                         },
                         new
@@ -1816,7 +1841,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 8.0,
                             Cast = "Mayumi Tanaka, Kazuya Nakai",
                             CountryId = 4,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8910),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1120),
                             Description = "Chuyến phiêu lưu âm nhạc của nhóm Mũ Rơm.",
                             Director = "Goro Taniguchi",
                             EnglishTitle = "One Piece Film: Red",
@@ -1828,7 +1853,7 @@ namespace MovieWebsite.Migrations
                             Title = "One Piece Film: Red",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/5.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8910),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1120),
                             Views = 300000
                         },
                         new
@@ -1837,7 +1862,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 8.5,
                             Cast = "Haruka Misaki, Kousei Arima",
                             CountryId = 4,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8940),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1140),
                             Description = "Câu chuyện tình cảm học đường về âm nhạc và tình yêu.",
                             Director = "Hiroshi Nishikori",
                             EnglishTitle = "Shigatsu wa Kimi no Uso",
@@ -1849,7 +1874,7 @@ namespace MovieWebsite.Migrations
                             Title = "Your Lie in April",
                             TotalEpisodes = 22,
                             TrailerPath = "/videos/37.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(8940),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1150),
                             Views = 220000
                         },
                         new
@@ -1858,7 +1883,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 9.5,
                             Cast = "Robert Downey Jr., Chris Evans, Mark Ruffalo",
                             CountryId = 5,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9050),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1230),
                             Description = "Cuộc chiến cuối cùng của các siêu anh hùng chống lại Thanos.",
                             Director = "Anthony Russo, Joe Russo",
                             EnglishTitle = "Avengers: Endgame",
@@ -1870,7 +1895,7 @@ namespace MovieWebsite.Migrations
                             Title = "Avengers: Endgame",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/16.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9050),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1230),
                             Views = 500000
                         },
                         new
@@ -1879,7 +1904,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 9.0,
                             Cast = "Joaquin Phoenix, Robert De Niro",
                             CountryId = 5,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9070),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1250),
                             Description = "Nguồn gốc của gã hề phản diện Joker.",
                             Director = "Todd Phillips",
                             EnglishTitle = "Joker",
@@ -1891,7 +1916,7 @@ namespace MovieWebsite.Migrations
                             Title = "Joker",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/7.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9070),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1250),
                             Views = 450000
                         },
                         new
@@ -1900,7 +1925,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 6.5,
                             Cast = "Vin Diesel, Michelle Rodriguez",
                             CountryId = 5,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9090),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1270),
                             Description = "Dom và gia đình đối mặt với kẻ thù mới.",
                             Director = "Justin Lin",
                             EnglishTitle = "F9",
@@ -1912,7 +1937,7 @@ namespace MovieWebsite.Migrations
                             Title = "Fast & Furious 9",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/8.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9100),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1270),
                             Views = 300000
                         },
                         new
@@ -1921,7 +1946,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 9.0,
                             Cast = "Tom Holland, Zendaya, Benedict Cumberbatch",
                             CountryId = 5,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9120),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1290),
                             Description = "Spider-Man đối mặt với đa vũ trụ.",
                             Director = "Jon Watts",
                             EnglishTitle = "Spider-Man: No Way Home",
@@ -1933,7 +1958,7 @@ namespace MovieWebsite.Migrations
                             Title = "Spider-Man: No Way Home",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/19.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9120),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1300),
                             Views = 550000
                         },
                         new
@@ -1942,7 +1967,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 8.0,
                             Cast = "Timothée Chalamet, Rebecca Ferguson",
                             CountryId = 5,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9140),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1320),
                             Description = "Hành trình của Paul Atreides tại hành tinh Arrakis.",
                             Director = "Denis Villeneuve",
                             EnglishTitle = "Dune",
@@ -1954,7 +1979,7 @@ namespace MovieWebsite.Migrations
                             Title = "Dune",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/2.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9140),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1320),
                             Views = 350000
                         },
                         new
@@ -1963,7 +1988,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 8.0,
                             Cast = "Stephanie Beatriz, María Cecilia Botero",
                             CountryId = 5,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9160),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1340),
                             Description = "Gia đình Madrigal với phép thuật.",
                             Director = "Jared Bush, Byron Howard",
                             EnglishTitle = "Encanto",
@@ -1975,7 +2000,7 @@ namespace MovieWebsite.Migrations
                             Title = "Encanto",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/2.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9170),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1340),
                             Views = 330000
                         },
                         new
@@ -1984,7 +2009,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 7.0,
                             Cast = "Donald Glover, Beyoncé, Seth Rogen",
                             CountryId = 5,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9190),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1360),
                             Description = "Câu chuyện về chú sư tử Simba.",
                             Director = "Jon Favreau",
                             EnglishTitle = "The Lion King",
@@ -1996,7 +2021,7 @@ namespace MovieWebsite.Migrations
                             Title = "The Lion King",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/22.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9190),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1370),
                             Views = 360000
                         },
                         new
@@ -2005,7 +2030,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 9.5999999999999996,
                             Cast = "Christian Bale, Heath Ledger, Aaron Eckhart",
                             CountryId = 5,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9210),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1390),
                             Description = "Batman đối đầu với Joker.",
                             Director = "Christopher Nolan",
                             EnglishTitle = "The Dark Knight",
@@ -2017,7 +2042,7 @@ namespace MovieWebsite.Migrations
                             Title = "The Dark Knight",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/38.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9210),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1390),
                             Views = 480000
                         },
                         new
@@ -2026,7 +2051,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 9.3000000000000007,
                             Cast = "Leonardo DiCaprio, Joseph Gordon-Levitt",
                             CountryId = 5,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9240),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1410),
                             Description = "Cuộc hành trình vào thế giới giấc mơ.",
                             Director = "Christopher Nolan",
                             EnglishTitle = "Inception",
@@ -2038,7 +2063,7 @@ namespace MovieWebsite.Migrations
                             Title = "Inception",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/39.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9240),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1410),
                             Views = 460000
                         },
                         new
@@ -2047,7 +2072,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 9.0999999999999996,
                             Cast = "Tom Hanks, Robin Wright",
                             CountryId = 5,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9260),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1440),
                             Description = "Cuộc đời của một người đàn ông đặc biệt.",
                             Director = "Robert Zemeckis",
                             EnglishTitle = "Forrest Gump",
@@ -2059,7 +2084,7 @@ namespace MovieWebsite.Migrations
                             Title = "Forrest Gump",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/4.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9260),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1450),
                             Views = 400000
                         },
                         new
@@ -2068,7 +2093,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 7.7999999999999998,
                             Cast = "Chutimon Chuengcharoensukying, Non Chanon Santinatornkul",
                             CountryId = 6,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9280),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1470),
                             Description = "Câu chuyện về những học sinh thiên tài gian lận thi cử.",
                             Director = "Nattawut Poonpiriya",
                             EnglishTitle = "Chalard Games Goeng",
@@ -2080,7 +2105,7 @@ namespace MovieWebsite.Migrations
                             Title = "Bad Genius",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/23.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9280),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1470),
                             Views = 200000
                         },
                         new
@@ -2089,7 +2114,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 7.2000000000000002,
                             Cast = "Nine Naphat Siwopornthong, Pimchanok Luevisadpaipa",
                             CountryId = 6,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9310),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1490),
                             Description = "Hành trình tìm kiếm tình yêu của một chàng trai.",
                             Director = "Chayanop Boonprakob",
                             EnglishTitle = "Friend Zone",
@@ -2101,7 +2126,7 @@ namespace MovieWebsite.Migrations
                             Title = "Friend Zone",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/4.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9310),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1490),
                             Views = 220000
                         },
                         new
@@ -2110,7 +2135,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 8.0,
                             Cast = "Benedict Cumberbatch, Keira Knightley",
                             CountryId = 7,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9330),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1510),
                             Description = "Câu chuyện về nhà toán học Alan Turing.",
                             Director = "Morten Tyldum",
                             EnglishTitle = "The Imitation Game",
@@ -2122,7 +2147,7 @@ namespace MovieWebsite.Migrations
                             Title = "The Imitation Game",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/41.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9330),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1510),
                             Views = 180000
                         },
                         new
@@ -2131,7 +2156,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 8.5,
                             Cast = "Daniel Radcliffe, Rupert Grint, Emma Watson",
                             CountryId = 7,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9350),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1530),
                             Description = "Cuộc phiêu lưu đầu tiên của Harry Potter.",
                             Director = "Chris Columbus",
                             EnglishTitle = "Harry Potter and the Philosopher's Stone",
@@ -2143,7 +2168,7 @@ namespace MovieWebsite.Migrations
                             Title = "Harry Potter and the Sorcerer's Stone",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/42.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9350),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1540),
                             Views = 400000
                         },
                         new
@@ -2152,7 +2177,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 8.3000000000000007,
                             Cast = "Audrey Tautou, Mathieu Kassovitz",
                             CountryId = 8,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9400),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1560),
                             Description = "Cuộc sống kỳ diệu của một cô gái ở Paris.",
                             Director = "Jean-Pierre Jeunet",
                             EnglishTitle = "Le Fabuleux Destin d'Amélie Poulain",
@@ -2164,7 +2189,7 @@ namespace MovieWebsite.Migrations
                             Title = "Amélie",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/43.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9400),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1560),
                             Views = 190000
                         },
                         new
@@ -2173,7 +2198,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 8.5999999999999996,
                             Cast = "François Cluzet, Omar Sy",
                             CountryId = 8,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9430),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1580),
                             Description = "Câu chuyện tình bạn giữa một triệu phú và người chăm sóc anh.",
                             Director = "Olivier Nakache, Éric Toledano",
                             EnglishTitle = "Intouchables",
@@ -2185,7 +2210,7 @@ namespace MovieWebsite.Migrations
                             Title = "The Intouchables",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/44.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9430),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1580),
                             Views = 210000
                         },
                         new
@@ -2194,7 +2219,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 8.0999999999999996,
                             Cast = "Brie Larson, Jacob Tremblay",
                             CountryId = 9,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9450),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1630),
                             Description = "Câu chuyện về một người mẹ và con trai thoát khỏi nơi giam cầm.",
                             Director = "Lenny Abrahamson",
                             EnglishTitle = "Room",
@@ -2206,7 +2231,7 @@ namespace MovieWebsite.Migrations
                             Title = "Room",
                             TotalEpisodes = 1,
                             TrailerPath = "/videos/45.mp4",
-                            UpdatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(9450),
+                            UpdatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 362, DateTimeKind.Local).AddTicks(1630),
                             Views = 160000
                         });
                 });
@@ -2502,7 +2527,7 @@ namespace MovieWebsite.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7700),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9970),
                             MovieId = 1,
                             Review = "Phim rất cảm động, diễn xuất của Trấn Thành tuyệt vời!",
                             Score = 8,
@@ -2512,7 +2537,7 @@ namespace MovieWebsite.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7710),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9970),
                             MovieId = 1,
                             Review = "Cốt truyện gần gũi, phản ánh đúng cuộc sống.",
                             Score = 9,
@@ -2522,13 +2547,56 @@ namespace MovieWebsite.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 6, 19, 0, 33, 56, 452, DateTimeKind.Local).AddTicks(7710),
+                            CreatedAt = new DateTime(2025, 6, 19, 22, 44, 37, 361, DateTimeKind.Local).AddTicks(9980),
                             MovieId = 3,
                             Review = "Một kiệt tác của điện ảnh Hàn Quốc!",
                             Score = 10,
                             UserEmail = "levanc@example.com",
                             UserName = "LeVanC"
                         });
+                });
+
+            modelBuilder.Entity("MovieWebsite.Models.WatchPartyRoom", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("AutoStart")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("InviteCode")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MovieId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Private")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SelectedPosterUrl")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
+
+                    b.ToTable("WatchPartyRooms");
                 });
 
             modelBuilder.Entity("MovieWebsite.Models.Comment", b =>
@@ -2608,6 +2676,17 @@ namespace MovieWebsite.Migrations
                 {
                     b.HasOne("MovieWebsite.Models.Movie", "Movie")
                         .WithMany("Ratings")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+                });
+
+            modelBuilder.Entity("MovieWebsite.Models.WatchPartyRoom", b =>
+                {
+                    b.HasOne("MovieWebsite.Models.Movie", "Movie")
+                        .WithMany()
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

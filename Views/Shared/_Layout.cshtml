@@ -121,6 +121,8 @@
 
 </html> *@
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -243,11 +245,16 @@
                         <a title="Phim lẻ" href="/phim-le">Phim Lẻ</a>
                     </div>
                     <div class="menu-item">
-                        <a title="Phim bộ" href="/phim-bo">Phim Bộ <span class="new-label">NEW</span></a>
+                        <a title="Phim bộ" href="/phim-bo">Phim Bộ </a>
                     </div>
-                    <div class="menu-item new-item-xem-chung">
-                        <a title="Xem Chung" href="/xem-chung">Xem Chung</a>
+                    <div class="menu-item ">
+                        @* <a title="Xem Chung" href="/xem-chung">Xem Chung <span class="new-label">NEW</span></a> *@
+                        <a class="nav-link" asp-controller="WatchParty" asp-action="EnterInviteCode">Xem Chung <span class="new-label">NEW</span></a>
                     </div>
+
+                    @* Chỉ hiển thị nút "Xem Cùng Nhau" nếu Controller đã cung cấp CurrentMovieId *@
+                    @* @await Html.PartialAsync("_WatchTogetherPartial") *@
+
                     <div class="menu-item quoc-gia-item">
                         <a title="Quốc gia" href="/quoc-gia">Quốc gia</a>
                     </div>
@@ -257,6 +264,12 @@
                     <div class="menu-item">
                         <a title="Lịch chiếu" href="/lich-chieu">Lịch chiếu</a>
                     </div>
+                    <!-- NÚT MỚI ĐỂ MỞ MODAL THAM GIA PHÒNG -->
+                    @* <div class="menu-item">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#joinRoomModal" class="text-warning">
+                            <i class="fas fa-sign-in-alt"></i> Tham gia phòng
+                        </a>
+                    </div> *@
                 </div>
                 <div class="flex-grow-1"></div>
                 <div class="app-download">
@@ -292,25 +305,33 @@
         </div>
     </header>
 
+
     <div class="container1">
-        <main role="main" >
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
+   
+
+
+    <!-- Trong file _Layout.cshtml -->
+        @await Html.PartialAsync("_JoinRoomModal")
+
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
     @* Đặt script của bạn ở đây, hoặc trong một file JS riêng và gọi nó *@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const theLoaiLink = document.getElementById('theLoaiLink');
             const genreDropdown = document.getElementById('genreDropdown');
-            const theLoaiWrapper = document.querySelector('.the-loai-wrapper'); 
+            const theLoaiWrapper = document.querySelector('.the-loai-wrapper');
 
             if (theLoaiLink && genreDropdown && theLoaiWrapper) {
                 theLoaiLink.addEventListener('click', (event) => {
@@ -327,6 +348,29 @@
                 });
             }
         });
+        const joinRoomModalEl = document.getElementById('joinRoomModal');
+        if (joinRoomModalEl) {
+            const inviteCodeInput = joinRoomModalEl.querySelector('input[name="inviteCode"]');
+
+            // Lắng nghe sự kiện KHI modal được hiển thị xong
+            joinRoomModalEl.addEventListener('shown.bs.modal', function () {
+                // Đặt focus vào ô input
+                if (inviteCodeInput) {
+                    inviteCodeInput.focus();
+                }
+            });
+        }
+        const joinRoomForm = document.getElementById('joinRoomForm');
+        const joinRoomSubmitBtn = document.getElementById('joinRoomSubmitBtn');
+
+        if (joinRoomForm && joinRoomSubmitBtn) {
+            // Lắng nghe sự kiện click trên nút "Tham gia"
+            joinRoomSubmitBtn.addEventListener('click', function () {
+                // Tự tay ra lệnh cho form submit
+                console.log("Nút Tham gia trong modal được nhấn, đang submit form...");
+                joinRoomForm.submit();
+            });
+        }
     </script>
 
     @RenderSection("Scripts", required: false)

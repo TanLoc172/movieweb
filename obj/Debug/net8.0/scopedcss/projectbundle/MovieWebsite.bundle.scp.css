@@ -9,6 +9,7 @@ for details on configuring this project to bundle and minify static web assets. 
   margin: 0 auto; /* Căn giữa container */
   padding: 0 15px; /* Khoảng cách lề trái/phải */
   box-sizing: border-box; /* Đảm bảo padding không làm tăng kích thước */
+  margin-top: auto;
 }
 
 /* Main content styles */

@@ -16,6 +16,8 @@ namespace MovieWebsite.Data
         public DbSet<MovieGenre> MovieGenres { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<WatchPartyRoom> WatchPartyRooms { get; set; }
+        public DbSet<ChatMessage> ChatMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -446,6 +446,8 @@ namespace MovieWebsite.Controllers
                     return NotFound();
                 }
 
+
+ViewBag.CurrentMovieId = movie.Id;
                 // Increment views
                 movie.Views++; // Fixed line
                 await _context.SaveChangesAsync();
