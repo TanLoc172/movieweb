@@ -1,5 +1,3 @@
-
-
 @model MovieViewModel
 
 @{
@@ -7,10 +5,11 @@
 }
 
 <style>
-    /* Custom styles for the form */
+    /* Custom styles for the form (giữ nguyên, không cần thay đổi) */
     body {
         background-color: #f4f7fa;
     }
+
     .form-container {
         background-color: #ffffff;
         border-radius: 10px;
@@ -19,6 +18,7 @@
         margin-top: 2rem;
         margin-bottom: 2rem;
     }
+
     .form-section-title {
         font-size: 1.25rem;
         font-weight: 600;
@@ -27,19 +27,25 @@
         border-bottom: 2px solid #007bff;
         padding-bottom: 0.5rem;
     }
+
     .form-label {
         font-weight: 500;
         color: #444;
     }
-    .form-control, .form-select {
+
+    .form-control,
+    .form-select {
         border-radius: 6px;
         border: 1px solid #ced4da;
         transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
     }
-    .form-control:focus, .form-select:focus {
+
+    .form-control:focus,
+    .form-select:focus {
         border-color: #007bff;
         box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
     }
+
     .btn-primary {
         background-color: #007bff;
         border-color: #007bff;
@@ -47,19 +53,23 @@
         padding: 0.75rem 1.5rem;
         transition: background-color 0.2s ease-in-out;
     }
+
     .btn-primary:hover {
         background-color: #0056b3;
         border-color: #0056b3;
     }
+
     .btn-secondary {
         background-color: #6c757d;
         border-color: #6c757d;
         border-radius: 6px;
         padding: 0.75rem 1.5rem;
     }
+
     .btn-danger {
         border-radius: 6px;
     }
+
     .episode-card {
         border: 1px solid #e2e8f0;
         border-radius: 8px;
@@ -67,28 +77,36 @@
         margin-bottom: 1rem;
         transition: transform 0.2s ease-in-out;
     }
+
     .episode-card:hover {
         transform: translateY(-3px);
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     }
+
     .alert {
         border-radius: 6px;
         margin-bottom: 1.5rem;
     }
+
     .current-media-preview {
         border: 1px solid #dee2e6;
         border-radius: 6px;
         padding: 0.5rem;
         background-color: #f8f9fa;
     }
-    .current-media-preview img, .current-media-preview video {
+
+    .current-media-preview img,
+    .current-media-preview video {
         border-radius: 4px;
     }
+
     @@media (max-width: 768px) {
         .form-container {
             padding: 1.5rem;
         }
-        .btn-primary, .btn-secondary {
+
+        .btn-primary,
+        .btn-secondary {
             width: 100%;
             margin-bottom: 0.5rem;
         }
@@ -115,7 +133,8 @@
             </div>
         }
 
-        <form asp-action="Edit" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+        <form asp-action="Edit" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data"
+            class="needs-validation" novalidate>
             <div asp-validation-summary="ModelOnly" class="text-danger mb-4"></div>
             <input type="hidden" asp-for="Id" />
 
@@ -139,7 +158,8 @@
                 </div>
                 <div class="col-md-4">
                     <label asp-for="ReleaseYear" class="form-label">Năm phát hành</label>
-                    <input asp-for="ReleaseYear" type="number" class="form-control" min="1900" max="@DateTime.Now.Year" required />
+                    <input asp-for="ReleaseYear" type="number" class="form-control" min="1900" max="@DateTime.Now.Year"
+                        required />
                     <span asp-validation-for="ReleaseYear" class="text-danger"></span>
                 </div>
                 <div class="col-md-4">
@@ -158,11 +178,16 @@
                     <select asp-for="SelectedGenreIds" class="form-select" multiple required>
                         @foreach (var genre in Model.Genres)
                         {
-                            <option value="@genre.Id" selected="@Model.SelectedGenreIds.Contains(genre.Id)">@genre.Name</option>
+                            <option value="@genre.Id" selected="@Model.SelectedGenreIds.Contains(genre.Id)">
+                                @genre.Name
+                            </option>
                         }
                     </select>
                     <span asp-validation-for="SelectedGenreIds" class="text-danger"></span>
-                    <small class="form-text text-muted">Giữ Ctrl (Windows) hoặc Cmd (Mac) để chọn nhiều thể loại.</small>
+                    <small class="form-text text-muted">
+                        Giữ Ctrl (Windows) hoặc Cmd (Mac) để chọn nhiều thể
+                        loại.
+                    </small>
                 </div>
                 <div class="col-md-6">
                     <label asp-for="Director" class="form-label">Đạo diễn</label>
@@ -188,25 +213,75 @@
                 </div>
             </div>
 
-            <!-- Media Uploads -->
+
             <div class="form-section-title mt-5">Tải lên media</div>
             <div class="row g-3">
-                <div class="col-12">
-                    <label asp-for="PosterFile" class="form-label">Poster mới (JPEG, PNG, JPG, GIF, tối đa 5MB)</label>
-                    <input asp-for="PosterFile" type="file" class="form-control" accept="image/jpeg,image/png,image/jpg,image/gif" />
+
+                <!-- Poster Chính -->
+                <div class="col-md-4">
+                    <label asp-for="PosterFile" class="form-label">Poster chính mới</label>
+                    <input asp-for="PosterFile" type="file" class="form-control" accept="image/*" />
                     <span asp-validation-for="PosterFile" class="text-danger"></span>
                     @if (!string.IsNullOrEmpty(Model.PosterPath))
                     {
-                        <div class="current-media-preview mt-3">
-                            <label class="form-label">Poster hiện tại:</label>
-                            <img src="@Url.Content("~/" + Model.PosterPath)" alt="Poster hiện tại" class="img-fluid mb-2" style="max-width: 200px; max-height: 200px;" />
-                            <a href="@Url.Content("~/" + Model.PosterPath)" target="_blank" class="btn btn-sm btn-outline-primary">Xem chi tiết</a>
+                        <div class="current-media-preview mt-2">
+                            <label class="form-label">Poster chính hiện tại:</label>
+                            <img src="@Url.Content(Model.PosterPath)" alt="Poster" class="img-fluid"
+                                style="max-width: 150px;" />
                         </div>
                     }
                 </div>
-                <div class="col-12">
+
+                <!-- Poster Dọc -->
+                <div class="col-md-4">
+                    <label asp-for="PosterDocFile" class="form-label">Poster Dọc mới</label>
+                    <input asp-for="PosterDocFile" type="file" class="form-control" accept="image/*" />
+                    <span asp-validation-for="PosterDocFile" class="text-danger"></span>
+                    @if (!string.IsNullOrEmpty(Model.PosterDoc))
+                    {
+                        <div class="current-media-preview mt-2">
+                            <label class="form-label">Poster Dọc hiện tại:</label>
+                            <img src="@Url.Content(Model.PosterDoc)" alt="Poster Dọc" class="img-fluid"
+                                style="max-width: 150px;" />
+                        </div>
+                    }
+                </div>
+
+                <!-- Poster Banner -->
+                <div class="col-md-4">
+                    <label asp-for="PosterBannerFile" class="form-label">Poster Banner mới</label>
+                    <input asp-for="PosterBannerFile" type="file" class="form-control" accept="image/*" />
+                    <span asp-validation-for="PosterBannerFile" class="text-danger"></span>
+                    @if (!string.IsNullOrEmpty(Model.PosterBanner))
+                    {
+                        <div class="current-media-preview mt-2">
+                            <label class="form-label">Poster Banner hiện tại:</label>
+                            <img src="@Url.Content(Model.PosterBanner)" alt="Poster Banner" class="img-fluid"
+                                style="max-width: 150px;" />
+                        </div>
+                    }
+                </div>
+
+                <!-- Poster Phụ -->
+                <div class="col-md-4 mt-3">
+                    <label asp-for="PosterImageFile" class="form-label">Poster Phụ mới</label>
+                    <input asp-for="PosterImageFile" type="file" class="form-control" accept="image/*" />
+                    <span asp-validation-for="PosterImageFile" class="text-danger"></span>
+                    @if (!string.IsNullOrEmpty(Model.Poster))
+                    {
+                        <div class="current-media-preview mt-2">
+                            <label class="form-label">Poster Phụ hiện tại:</label>
+                            <img src="@Url.Content(Model.Poster)" alt="Poster Phụ" class="img-fluid"
+                                style="max-width: 150px;" />
+                        </div>
+                    }
+                </div>
+
+                <!-- Trailer -->
+                <div class="col-12 mt-3">
                     <label asp-for="TrailerFile" class="form-label">Trailer mới (MP4, MOV, AVI, tối đa 100MB)</label>
-                    <input asp-for="TrailerFile" type="file" class="form-control" accept="video/mp4,video/quicktime,video/x-msvideo" />
+                    <input asp-for="TrailerFile" type="file" class="form-control"
+                        accept="video/mp4,video/quicktime,video/x-msvideo" />
                     <span asp-validation-for="TrailerFile" class="text-danger"></span>
                     @if (!string.IsNullOrEmpty(Model.TrailerPath))
                     {
@@ -216,7 +291,8 @@
                                 <source src="@Url.Content("~/" + Model.TrailerPath)" type="video/mp4">
                                 Trình duyệt của bạn không hỗ trợ thẻ video.
                             </video>
-                            <a href="@Url.Content("~/" + Model.TrailerPath)" target="_blank" class="btn btn-sm btn-outline-primary">Tải xuống hoặc Xem</a>
+                            <a href="@Url.Content("~/" + Model.TrailerPath)" target="_blank"
+                                class="btn btn-sm btn-outline-primary">Tải xuống hoặc Xem</a>
                         </div>
                     }
                 </div>
@@ -237,8 +313,9 @@
                                 <input type="hidden" asp-for="ExistingEpisodes[i].VideoPath" />
                                 <div class="row g-3">
                                     <div class="col-md-6">
-                                        <label asp-for="ExistingEpisodes[i].EpisodeNumber" class="form-label">Số tập</label>
-                                        <input asp-for="ExistingEpisodes[i].EpisodeNumber" type="number" class="form-control" min="1" required />
+                                        <label asp-for="ExistingEpisodes[i].EpisodeNumber" class="form-label">Tập số</label>
+                                        <input asp-for="ExistingEpisodes[i].EpisodeNumber" type="number" class="form-control"
+                                            min="1" required />
                                         <span asp-validation-for="ExistingEpisodes[i].EpisodeNumber" class="text-danger"></span>
                                     </div>
                                     <div class="col-md-6">
@@ -248,37 +325,48 @@
                                     </div>
                                     <div class="col-12">
                                         <label asp-for="ExistingEpisodes[i].Description" class="form-label">Mô tả</label>
-                                        <textarea asp-for="ExistingEpisodes[i].Description" class="form-control" rows="3"></textarea>
+                                        <textarea asp-for="ExistingEpisodes[i].Description" class="form-control"
+                                            rows="3"></textarea>
                                         <span asp-validation-for="ExistingEpisodes[i].Description" class="text-danger"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label asp-for="ExistingEpisodes[i].Duration" class="form-label">Thời lượng (phút)</label>
-                                        <input asp-for="ExistingEpisodes[i].Duration" type="number" class="form-control" min="1" max="600" />
+                                        <label asp-for="ExistingEpisodes[i].Duration" class="form-label">Thời lượng
+                                            (phút)</label>
+                                        <input asp-for="ExistingEpisodes[i].Duration" type="number" class="form-control" min="1"
+                                            max="600" />
                                         <span asp-validation-for="ExistingEpisodes[i].Duration" class="text-danger"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label asp-for="ExistingEpisodes[i].ReleaseDate" class="form-label">Ngày phát hành</label>
+                                        <label asp-for="ExistingEpisodes[i].ReleaseDate" class="form-label">Ngày phát
+                                            hành</label>
                                         <input asp-for="ExistingEpisodes[i].ReleaseDate" type="date" class="form-control" />
                                         <span asp-validation-for="ExistingEpisodes[i].ReleaseDate" class="text-danger"></span>
                                     </div>
                                     <div class="col-12">
-                                        <label asp-for="ExistingEpisodes[i].VideoFile" class="form-label">Video tập mới (MP4, MOV, AVI, tối đa 100MB)</label>
-                                        <input asp-for="ExistingEpisodes[i].VideoFile" type="file" class="form-control" accept="video/mp4,video/quicktime,video/x-msvideo" />
+                                        <label asp-for="ExistingEpisodes[i].VideoFile" class="form-label">
+                                            Video tập mới (MP4, MOV, AVI,
+                                            tối đa 100MB)
+                                        </label>
+                                        <input asp-for="ExistingEpisodes[i].VideoFile" type="file" class="form-control"
+                                            accept="video/mp4,video/quicktime,video/x-msvideo" />
                                         <span asp-validation-for="ExistingEpisodes[i].VideoFile" class="text-danger"></span>
                                         @if (!string.IsNullOrEmpty(Model.ExistingEpisodes[i].VideoPath))
                                         {
                                             <div class="current-media-preview mt-3">
                                                 <label class="form-label">Video tập hiện tại:</label>
                                                 <video controls class="d-block mb-2" style="max-width: 200px;">
-                                                    <source src="@Url.Content("~/" + Model.ExistingEpisodes[i].VideoPath)" type="video/mp4">
+                                                    <source src="@Url.Content("~/" + Model.ExistingEpisodes[i].VideoPath)"
+                                                        type="video/mp4">
                                                     Trình duyệt của bạn không hỗ trợ thẻ video.
                                                 </video>
-                                                <a href="@Url.Content("~/" + Model.ExistingEpisodes[i].VideoPath)" target="_blank" class="btn btn-sm btn-outline-primary">Xem/Tải về</a>
+                                                <a href="@Url.Content("~/" + Model.ExistingEpisodes[i].VideoPath)" target="_blank"
+                                                    class="btn btn-sm btn-outline-primary">Xem/Tải về</a>
                                             </div>
                                         }
                                     </div>
                                     <div class="col-12">
-                                        <button type="button" class="btn btn-danger btn-sm remove-episode-existing">Xóa tập</button>
+                                        <button type="button" class="btn btn-danger btn-sm remove-episode-existing">Xóa
+                                            tập</button>
                                     </div>
                                 </div>
                             </div>
@@ -297,6 +385,9 @@
                 <i class="bi bi-plus-circle"></i> Thêm tập phim
             </button>
             <div id="new-episodes-container"></div>
+
+           
+
 
             <!-- Form Actions -->
             <div class="mt-5 d-flex justify-content-end gap-2">
@@ -380,45 +471,64 @@
                     <div class="card-body">
                         <h5 class="card-title">Tập mới ${index + 1}</h5>
                         <input type="hidden" name="NewEpisodesToAdd[${index}].MovieId" value="${'@Model.Id'}" />
-                        <div class="row g-3">
+                        <div class="row g-3"> 
                             <div class="col-md-6">
-                                <label class="form-label" for="NewEpisodesToAdd_${index}__EpisodeNumber">Số tập</label>
+                                <label class="form-label" for="NewEpisodesToAdd_${index}__EpisodeNumber">Tập số</label>
                                 <input type="number" class="form-control" name="NewEpisodesToAdd[${index}].EpisodeNumber" min="1" required />
-                                <span class="text-danger field-validation-valid" data-valmsg-for="NewEpisodesToAdd[${index}].EpisodeNumber" data-valmsg-replace="true"></span>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label" for="NewEpisodesToAdd_${index}__Title">Tên tập</label>
                                 <input type="text" class="form-control" name="NewEpisodesToAdd[${index}].Title" required />
-                                <span class="text-danger field-validation-valid" data-valmsg-for="NewEpisodesToAdd[${index}].Title" data-valmsg-replace="true"></span>
                             </div>
                             <div class="col-12">
                                 <label class="form-label" for="NewEpisodesToAdd_${index}__Description">Mô tả</label>
                                 <textarea class="form-control" name="NewEpisodesToAdd[${index}].Description" rows="3"></textarea>
-                                <span class="text-danger field-validation-valid" data-valmsg-for="NewEpisodesToAdd[${index}].Description" data-valmsg-replace="true"></span>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label" for="NewEpisodesToAdd_${index}__Duration">Thời lượng (phút)</label>
                                 <input type="number" class="form-control" name="NewEpisodesToAdd[${index}].Duration" min="1" max="600" />
-                                <span class="text-danger field-validation-valid" data-valmsg-for="NewEpisodesToAdd[${index}].Duration" data-valmsg-replace="true"></span>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label" for="NewEpisodesToAdd_${index}__ReleaseDate">Ngày phát hành</label>
                                 <input type="date" class="form-control" name="NewEpisodesToAdd[${index}].ReleaseDate" />
-                                <span class="text-danger field-validation-valid" data-valmsg-for="NewEpisodesToAdd[${index}].ReleaseDate" data-valmsg-replace="true"></span>
                             </div>
                             <div class="col-12">
-                                <label class="form-label" for="NewEpisodesToAdd_${index}__VideoFile">Video tập (MP4, MOV, AVI, tối đa 100MB)</label>
-                                <input type="file" class="form-control" name="NewEpisodesToAdd[${index}].VideoFile" accept="video/mp4,video/quicktime,video/x-msvideo" required />
-                                <span class="text-danger field-validation-valid" data-valmsg-for="NewEpisodesToAdd[${index}].VideoFile" data-valmsg-replace="true"></span>
+                                <label class="form-label" for="NewEpisodesToAdd_${index}__VideoFile">Video tập (Bắt buộc)</label>
+                                <input type="file" class="form-control" name="NewEpisodesToAdd[${index}].VideoFile" accept="video/*" required />
                             </div>
-                            <div class="col-12">
+                    
+                            <!-- ===== PHẦN LÊN LỊCH CHIẾU MỚI THÊM VÀO ĐÂY ===== -->
+                            <div class="col-12 mt-3 pt-3 border-top">
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input create-schedule-toggle" type="checkbox" role="switch" name="NewEpisodesToAdd[${index}].CreateSchedule" value="true" id="scheduleCheck${index}">
+                                    <label class="form-check-label" for="scheduleCheck${index}">Tự động lên lịch chiếu cho tập này</label>
+                                </div>
+                                <div class="schedule-time-input" style="display: none;">
+                                    <label class="form-label" for="NewEpisodesToAdd_${index}__ScheduledTime">Thời gian chiếu dự kiến</label>
+                                    <input type="datetime-local" class="form-control" name="NewEpisodesToAdd[${index}].ScheduledTime" />
+                                </div>
+                            </div>
+                            <!-- ================================================= -->
+
+                            <div class="col-12 mt-3">
                                 <button type="button" class="btn btn-danger btn-sm remove-new-episode">Xóa tập này</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            `;
+                   `;
             container.insertAdjacentHTML('beforeend', episodeHtml);
+        });
+        // Thêm đoạn script này để xử lý việc ẩn/hiện ô nhập thời gian
+        document.addEventListener('change', function (e) {
+            if (e.target.classList.contains('create-schedule-toggle')) {
+                const scheduleTimeInput = e.target.closest('.col-12').querySelector('.schedule-time-input');
+                if (e.target.checked) {
+                    scheduleTimeInput.style.display = 'block';
+                } else {
+                    scheduleTimeInput.style.display = 'none';
+                }
+            }
         });
 
         // Validate episodes
@@ -488,6 +598,52 @@
                     }
                 }
             });
+        });
+        // Lấy chỉ số bắt đầu cho các lịch chiếu mới để không bị trùng lặp
+        let scheduleIndex = @Model.Schedules.Count;
+
+        // Xử lý sự kiện click nút "Thêm Lịch chiếu"
+        document.getElementById('add-schedule-item').addEventListener('click', function () {
+            const newScheduleItemHtml = `
+                            <div class="schedule-item mb-3 p-3 border rounded" style="background-color: #f8f9fa;">
+                                <input type="hidden" name="Schedules.Index" value="${scheduleIndex}" />
+                                <input type="hidden" name="Schedules[${scheduleIndex}].Id" value="0" />
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold">Thời gian chiếu</label>
+                                        <input type="datetime-local" name="Schedules[${scheduleIndex}].ScheduledTime" class="form-control" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold">Tập phim (tùy chọn)</label>
+                                        <select name="Schedules[${scheduleIndex}].EpisodeId" class="form-select">
+                                            <option value="">-- Lịch chiếu cho cả phim --</option>
+                                            @foreach (var episode in Model.ExistingEpisodes)
+                                            {
+                                                            // Sử dụng phương pháp an toàn để chèn chuỗi vào JavaScript
+                                                            <option value="@episode.Id">@Html.Raw(System.Text.Json.JsonSerializer.Serialize(episode.Title))</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label fw-bold">Mô tả</label>
+                                        <input type="text" name="Schedules[${scheduleIndex}].Description" class="form-control" placeholder="Ví dụ: Tập cuối, Premiere..." />
+                                    </div>
+                                    <div class="col-md-1 d-flex align-items-end">
+                                        <button type="button" class="btn btn-danger btn-sm remove-schedule-item w-100">Xóa</button>
+                                    </div>
+                                </div>
+                            </div>`;
+
+            document.getElementById('schedule-list').insertAdjacentHTML('beforeend', newScheduleItemHtml);
+            scheduleIndex++;
+        });
+
+        // Xử lý sự kiện click nút "Xóa" lịch chiếu
+        // Dùng event delegation để áp dụng cho cả các phần tử được thêm sau này
+        document.getElementById('schedule-list').addEventListener('click', function (e) {
+            if (e.target && e.target.classList.contains('remove-schedule-item')) {
+                e.target.closest('.schedule-item').remove();
+            }
         });
     </script>
 }

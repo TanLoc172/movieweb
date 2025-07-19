@@ -1,0 +1,57 @@
+@* File: Views/Shared/Components/Notification/Default.cshtml *@
+@model NotificationViewModel
+
+<li class="nav-item dropdown">
+    <a class="nav-link" data-toggle="dropdown" href="#" id="notification-bell">
+        <i class="far fa-bell"></i>
+        @if (Model.UnreadCount > 0)
+        {
+            <span class="badge badge-warning navbar-badge" id="notification-count">@Model.UnreadCount</span>
+        }
+    </a>
+    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+        <span class="dropdown-item dropdown-header">@Model.RecentNotifications.Count() Thông báo</span>
+        <div class="dropdown-divider"></div>
+
+        @if (Model.RecentNotifications.Any())
+        {
+            foreach (var notification in Model.RecentNotifications)
+            {
+                <a href="@notification.Url" class="dropdown-item notification-item @(notification.IsRead ? "" : "font-weight-bold")" data-id="@notification.Id">
+                    <i class="fas fa-film mr-2"></i> @notification.Message
+                    <span class="float-right text-muted text-sm">@notification.CreatedAt.ToString("HH:mm dd/MM")</span>
+                </a>
+                <div class="dropdown-divider"></div>
+            }
+        }
+        else
+        {
+            <span class="dropdown-item">Không có thông báo nào.</span>
+            <div class="dropdown-divider"></div>
+        }
+        
+        <a asp-controller="Account" asp-action="Notifications" class="dropdown-item dropdown-footer">Xem tất cả thông báo</a>
+    </div>
+</li>
+
+@* Thêm đoạn script này vào cuối _Layout.cshtml hoặc trang chính *@
+@* <script>
+    $(document).on('click', '.notification-item', function(e) {
+        var notificationId = $(this).data('id');
+        var link = $(this);
+
+        // Đánh dấu đã đọc bằng AJAX
+        $.post('/api/notifications/markasread', { id: notificationId }, function(response) {
+            if(response.success) {
+                link.removeClass('font-weight-bold');
+                var currentCount = parseInt($('#notification-count').text());
+                if(currentCount > 1) {
+                    $('#notification-count').text(currentCount - 1);
+                } else {
+                    $('#notification-count').remove();
+                }
+            }
+        });
+        // Không cần e.preventDefault() để người dùng vẫn có thể click vào link
+    });
+</script> *@

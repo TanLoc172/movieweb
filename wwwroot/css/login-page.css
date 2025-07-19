@@ -1,0 +1,140 @@
+/* wwwroot/css/login-page.css */
+
+.login-container {
+    height: 100vh; /* Chiếm toàn bộ chiều cao của viewport */
+    display: flex;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    overflow: hidden; /* Tránh thanh cuộn không cần thiết */
+    background-color: #1a1a2e; /* Màu nền tối cho toàn bộ trang */
+}
+
+.login-row {
+    width: 100%;
+    max-width: 1200px; /* Giới hạn chiều rộng tối đa */
+    margin: 0 auto;
+}
+
+/* Cột ảnh nền */
+.login-background-col {
+    /* Đặt ảnh nền cho cột này */
+    background-image: url('../images/movie-posters-background.jpg'); /* Thay bằng đường dẫn ảnh nền thực tế của bạn */
+    background-size: cover; /* Bao phủ toàn bộ khu vực */
+    background-position: center; /* Căn giữa ảnh */
+    position: relative; /* Cần thiết cho lớp overlay */
+    padding: 0; /* Loại bỏ padding mặc định */
+}
+
+/* Lớp overlay làm tối ảnh và cho phép hiển thị logo */
+.overlay-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(26, 26, 46, 0.9), rgba(26, 26, 46, 0.5)); /* Gradient tối từ trái sang phải */
+    z-index: 1; /* Đảm bảo nó nằm trên ảnh nền */
+}
+
+.logo-container {
+    position: relative;
+    z-index: 2; /* Đảm bảo nó nằm trên overlay */
+    text-align: center;
+    color: #ffffff;
+    padding: 20px;
+}
+
+.logo-img {
+    max-width: 150px; /* Kích thước logo */
+    margin-bottom: 15px;
+}
+
+.site-title {
+    font-size: 2.5rem; /* Kích thước tiêu đề */
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #e0e0e0; /* Màu trắng hơi ngả xám */
+}
+
+.site-tagline {
+    font-size: 1.1rem;
+    color: #cccccc; /* Màu xám nhạt hơn */
+}
+
+/* Cột form đăng nhập */
+.login-form-col {
+    background-color: #1a1a2e; /* Màu nền tối cho cột form */
+    padding: 0; /* Loại bỏ padding mặc định */
+}
+
+.login-card {
+    background-color: #2a2a3e; /* Màu nền hơi sáng hơn cho card */
+    border: none; /* Không có viền */
+    border-radius: 10px; /* Bo góc cho card */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Tạo hiệu ứng bóng */
+    width: 100%; /* Chiếm toàn bộ chiều rộng của cột */
+}
+
+.login-card .card-body {
+    padding: 40px; /* Tăng padding bên trong card cho đẹp */
+}
+
+.login-card .card-title {
+    font-size: 2rem;
+    color: #ffffff; /* Màu trắng cho tiêu đề */
+    margin-bottom: 20px;
+}
+
+.login-card .form-floating > .form-control {
+    background-color: #3a3a50; /* Màu nền input */
+    color: #ffffff; /* Màu chữ input */
+    border: 1px solid #4a4a60; /* Viền input */
+}
+
+.login-card .form-floating > .form-label {
+    color: #aaaaaa; /* Màu nhãn input */
+}
+
+.login-card .form-check-label {
+    color: #ffffff; /* Màu chữ cho Remember me */
+}
+
+.login-card .text-primary {
+    color: #6495ED !important; /* Màu xanh dương cho các liên kết quan trọng */
+}
+
+.login-card .text-primary:hover {
+    color: #add8e6 !important; /* Màu xanh dương nhạt hơn khi hover */
+}
+
+.login-button {
+    background-color: #ffcc00; /* Màu vàng đặc trưng */
+    border-color: #ffcc00;
+    color: #1a1a2e; /* Màu chữ đen */
+    font-weight: bold;
+    padding: 12px 20px; /* Tăng kích thước nút */
+    border-radius: 5px; /* Bo góc nhẹ */
+}
+
+.login-button:hover {
+    background-color: #e6b800; /* Màu vàng sẫm hơn khi hover */
+    border-color: #e6b800;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767.98px) { /* Mobile and smaller tablets */
+    .login-background-col {
+        display: none !important; /* Ẩn ảnh nền trên màn hình nhỏ */
+    }
+    .login-form-col {
+        flex: 1; /* Cho phép cột form chiếm hết không gian */
+        padding: 20px; /* Giảm padding trên mobile */
+    }
+    .login-card {
+        width: 100%;
+        margin-top: 50px; /* Thêm khoảng cách */
+    }
+    .logo-container {
+        display: none; /* Ẩn logo trên mobile */
+    }
+}

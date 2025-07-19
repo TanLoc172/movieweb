@@ -16,4 +16,23 @@
     </div>
 }
 
+@* File: Views/Shared/_WatchTogetherPartial.cshtml *@
+@* @{
+    // Lấy movieId từ ViewBag, được truyền từ View cha (Details.cshtml)
+    var currentMovieId = ViewBag.CurrentMovieId;
+}
+
+@if (currentMovieId != null && (int)currentMovieId > 0)
+{
+    // Form này sẽ gửi một yêu cầu GET đến /WatchParty/CreateWatchParty?movieId=...
+    <form asp-controller="WatchParty" asp-action="CreateWatchParty" method="get" class="d-inline">
+        
+        <input type="hidden" name="movieId" value="@currentMovieId" />
+
+        <button type="submit" class="btn-watch-together">
+            <i class="fas fa-users"></i> Xem Cùng Nhau
+        </button>
+    </form>
+} *@
+
 

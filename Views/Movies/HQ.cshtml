@@ -1,0 +1,192 @@
+@model MoviesByCountryViewModel
+@{
+    ViewData["Title"] = $"Phim Phim {Model.SelectedCountry.Name} mới";
+}
+
+<div class="container ">
+    <h2 class="fw-bold mb-3"
+        style="font-size:2.5rem; background: linear-gradient(to right, #b993d6 0%, #ffffff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        @ViewData["Title"]
+    </h2>
+    <button class="btn btn-dark mb-4 px-4 py-2" style="font-weight:500;">
+        <i class="bi bi-funnel"></i> Bộ lọc
+    </button>
+
+    @if (Model.Movies.Any())
+    {
+        @* Thay thế lớp Bootstrap Grid bằng class CSS tùy chỉnh *@
+        <div class="custom-movie-grid g-4">
+            @foreach (var movie in Model.Movies)
+            {
+                @* Sử dụng một wrapper (.movie-item) cho từng card để áp dụng flexbox,
+                   đảm bảo chiều cao của các card là đồng nhất. *@
+                <div class="movie-item">
+                    <div class="card h-100 movie-card border-0 shadow-sm">
+                        <a asp-controller="Movies" asp-action="Details" asp-route-id="@movie.Id">
+                            <div class="position-relative">
+                                <img src="@(!string.IsNullOrEmpty(movie.PosterDoc) ? movie.PosterDoc : "/images/111.jpg")"
+                                     class="card-img-top" alt="@movie.Title poster"
+                                     onerror="this.onerror=null; this.src='/images/111.jpg';" />
+                                <div class="position-absolute top-0 start-0 m-2">
+                                    <span class="badge bg-light text-dark fw-bold me-1">PD. @movie.TotalEpisodes</span>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="card-body text-center px-2 py-3">
+                            <h6 class="card-title mb-1 text-truncate fw-bold" style="font-size:1rem;">
+                                <a asp-controller="Movies" asp-action="Details" asp-route-id="@movie.Id"
+                                   class="text-decoration-none text-white">
+                                    @movie.Title
+                                </a>
+                            </h6>
+                            <div class="text-secondary small text-truncate">@movie.EnglishTitle</div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center" role="alert">
+            Không tìm thấy bộ phim nào thuộc quốc gia này.
+        </div>
+    }
+</div>
+
+
+@section Scripts {
+    <style>
+        body {
+            background: linear-gradient(to bottom, #4a2071 0%, #090c1f 100%) !important;
+            min-height: 100vh;
+        }
+
+        /* --- Custom Grid Styles --- */
+        .custom-movie-grid {
+            display: grid;
+            /* Tùy chỉnh số cột dựa trên breakpoint, tương tự Bootstrap */
+            grid-template-columns: repeat(2, 1fr); /* Mặc định 2 cột cho màn hình rất nhỏ */
+            gap: var(--bs-gutter-x, 1.5rem); /* Sử dụng biến Bootstrap cho gap hoặc đặt giá trị cố định */
+        }
+
+        /* Responsive cho số cột */
+        @@media (min-width: 576px) { /* Tương đương xs breakpoint của Bootstrap */
+            .custom-movie-grid {
+                grid-template-columns: repeat(3, 1fr); /* 3 cột */
+            }
+        }
+        @@media (min-width: 768px) { /* Tương đương md breakpoint */
+            .custom-movie-grid {
+                grid-template-columns: repeat(4, 1fr); /* 4 cột */
+            }
+        }
+        @@media (min-width: 992px) { /* Tương đương lg breakpoint */
+            .custom-movie-grid {
+                grid-template-columns: repeat(5, 1fr); /* 5 cột */
+            }
+        }
+        @@media (min-width: 1200px) { /* Tương đương xl breakpoint */
+            .custom-movie-grid {
+                grid-template-columns: repeat(6, 1fr); /* 6 cột */
+            }
+        }
+        /* Điều chỉnh số cột này theo ý muốn của bạn, ví dụ có thể thêm repeat(8, 1fr) cho xl hoặc xxl */
+
+
+        /* --- Card Styles để làm đều chiều cao --- */
+        .movie-item { /* Wrapper cho từng card để áp dụng Flexbox */
+            display: flex;
+            flex-direction: column; /* Sắp xếp các thành phần con theo chiều dọc */
+            height: 100%; /* Đảm bảo item chiếm toàn bộ chiều cao của ô grid */
+            /* SỬA LẠI DÒNG NÀY: Bỏ "00" để card có màu nền và hiệu ứng bo góc hoạt động */
+            @* background-color: var(--bg-3, #2a2a2a); /* Màu nền card, sử dụng biến Bootstrap hoặc màu cố định */ *@
+            border-radius: .75rem; /* Bo góc cho card */
+            overflow: hidden; /* QUAN TRỌNG: Giữ mọi thứ (bao gồm cả góc ảnh) nằm gọn trong card đã được bo tròn */
+            @* box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15) !important; /* Shadow nhẹ */ *@
+            text-decoration: none;
+            color: inherit; /* Kế thừa màu font */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Thêm transition cho mượt mà */
+        }
+
+        .movie-item:hover {
+            transform: translateY(-8px) scale(1.03); /* Hiệu ứng khi hover */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25); /* Shadow tùy chỉnh khi hover */
+        }
+
+        .movie-card {
+            background-color: transparent; /* Bỏ nền trắng mặc định của card */
+            border: none; /* Bỏ border mặc định nếu có */
+            display: flex; /* Sử dụng Flexbox để sắp xếp ảnh và body */
+            flex-direction: column; /* Sắp xếp ảnh và body theo chiều dọc */
+            height: 100%; /* Quan trọng: để card chiếm hết chiều cao của movie-item */
+        }
+
+        .movie-card .card-img-top {
+            /* Cố định chiều cao cho ảnh poster */
+            height: 320px; /* Điều chỉnh chiều cao này tùy ý để phù hợp với thiết kế */
+            object-fit: cover; /* Đảm bảo ảnh lấp đầy vùng mà không bị méo */
+            flex-shrink: 0; /* Ngăn ảnh poster bị co lại */
+            border-radius: .75rem; /* Bo góc cho card */
+        }
+
+        .movie-card .card-body {
+            flex-grow: 1; /* Quan trọng: cho phép phần body card nở ra để lấp đầy không gian còn lại */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Căn giữa nội dung theo chiều dọc trong body */
+            padding: 1rem; /* Padding cho phần nội dung */
+            text-align: center; /* Căn text vào giữa */
+        }
+
+        /* Title and Subtitle Styles */
+        .card-title a {
+            font-size: 1rem; /* Kích thước font cho tiêu đề */
+            font-weight: bold;
+            color: #ffffff; /* Màu trắng cho tiêu đề */
+            text-decoration: none;
+            display: block; /* Đảm bảo chiếm hết chiều rộng cho text-truncate */
+        }
+
+        .text-secondary.small.text-truncate {
+            font-size: 0.85rem;
+            color: #adb5bd; /* Màu xám nhạt cho phụ đề */
+            margin-top: 0.2rem; /* Khoảng cách nhỏ với tiêu đề */
+        }
+
+        /* Badge Styles */
+        .badge {
+            font-size: 0.85em;
+            border-radius: 0.5em;
+            padding: 0.4em 0.7em;
+        }
+
+        /* Text Truncate */
+        .card-title, .text-truncate {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Container Styles */
+        .container {
+            margin-top: 50px;
+            margin-left: auto; /* Căn giữa container */
+            margin-right: auto;
+            max-width: 1400px; /* Giới hạn chiều rộng */
+            padding-left: var(--bs-gutter-x, 15px); /* Sử dụng padding của Bootstrap */
+            padding-right: var(--bs-gutter-x, 15px);
+        }
+
+        /* Bootstrap Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem; /* Khoảng cách giữa icon và text */
+        }
+        .btn-dark {
+            font-weight: 500;
+        }
+        
+    </style>
+}

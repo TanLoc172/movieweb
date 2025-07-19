@@ -55,6 +55,19 @@
                     </li>
                     <!-- Thêm các mục khác sau này, ví dụ: Quản lý người dùng -->
                     <!-- Link về trang chủ -->
+                    <li>
+                        <a asp-area="Admin" asp-controller="Schedule" asp-action="AdminIndex"
+                            class="nav-item @(currentController == "Schedule" ? "active" : "")">
+                            <i class="fas fa-calendar-alt"></i> <span>Quản Lý Lịch Chiếu</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a asp-area="Admin" asp-controller="Admin" asp-action="Index2"
+                            class="nav-item @(currentController == "Admin" ? "active" : "")">
+                            <i class="fa-solid fa-user"></i> <span>Quản Lý Người dùng</span>
+                        </a>
+                    </li>
 
                 </ul>
             </nav>

@@ -511,7 +511,7 @@ a {
 
 /* Individual Movie Card */
 .movie-card {
-    background-color: #242933; /* Màu nền đậm hơn cho từng thẻ phim */
+    background-color: #24293300; 
     border-radius: 10px; /* Bo tròn góc */
     overflow: hidden; /* Đảm bảo các nội dung bên trong cũng được bo tròn góc */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Đổ bóng nhẹ */

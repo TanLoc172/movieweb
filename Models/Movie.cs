@@ -35,7 +35,10 @@ namespace MovieWebsite.Models
         public string Cast { get; set; }
 
         public string PosterPath { get; set; }
-        
+        public string? PosterDoc { get; set; }
+        public string? PosterBanner { get; set; }
+        public string? Poster { get; set; }
+
         public string TrailerPath { get; set; }
 
         public int TotalEpisodes { get; set; } = 1;
@@ -52,5 +55,8 @@ namespace MovieWebsite.Models
         public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public ICollection<MovieGenre> MovieGenres { get; set; } = new List<MovieGenre>();
+        public ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
+        public ICollection<UserFavoriteMovie> FavoritedByUsers { get; set; } = new List<UserFavoriteMovie>();
+
     }
 }

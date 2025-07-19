@@ -1,0 +1,98 @@
+@model HomeViewModel
+
+<!-- Container chính cho banner -->
+<div class="movie-banner-container">
+    @if (Model.BannerMovies != null && Model.BannerMovies.Any())
+    {
+        <!-- Carousel chứa tất cả các banner item -->
+        <div class="banner-carousel" id="bannerCarousel">
+            @foreach (var movie in Model.BannerMovies)
+            {
+                <!-- Mỗi banner-item chứa thông tin của một phim -->
+                <div class="banner-item" data-trailer-path="@Url.Content(movie.TrailerPath)">
+                    <!-- Lớp poster nền -->
+                    <div class="banner-poster">
+                        <img src="@Url.Content(movie.PosterBanner)" alt="@movie.Title Poster">
+                    </div>
+                    <!-- Lớp video trailer (ban đầu ẩn) -->
+                    <div class="banner-trailer">
+                        <video muted loop playsinline>
+                            @if (!string.IsNullOrEmpty(movie.TrailerPath))
+                            {
+                                <source src="@Url.Content(movie.TrailerPath)" type="video/mp4">
+                            }
+                        </video>
+                    </div>
+                    <!-- Lớp nội dung chữ và nút bấm -->
+                    <div class="banner-content">
+                        <div class="banner-info">
+                            <!-- Logo có thể thay bằng tên phim nếu không có logo -->
+                            <h1 class="movie-title11">@movie.Title</h1>
+                            <div class="movie-meta">
+                                <span class="genre-badge">@movie.ReleaseYear</span>
+                                @if (!string.IsNullOrEmpty(movie.MainGenreName))
+                                {
+                                    <span class="genre-badge">@movie.MainGenreName</span>
+                                }
+                                @* @if (!string.IsNullOrEmpty(movie.CountryName))
+                                {
+                                    <span class="genre-badge">@movie.CountryName</span>
+                                }
+                                else
+                                {
+                                    
+                                    <span class="genre-badge" style="color: yellow;">CountryName_IS_NULL_OR_EMPTY</span>
+                                } *@
+                                @if (movie.TotalEpisodes > 1)
+                                {
+                                    <span class="genre-badge">@movie.TotalEpisodes Tập</span>
+                                }
+                            </div>
+                            <p class="movie-description">@movie.Description</p>
+                            <div class="banner-actions">
+                                <a href="@Url.Action("Watch", "Movies", new { movieId = movie.MovieId, episodeNumber = 1 })" class="btn-banner btn-play">
+                                    <i class="fas fa-play"></i>
+                                    Xem ngay
+                                </a>
+                                <a href="@Url.Action("Details", "Movies", new { id = movie.MovieId })" class="btn-banner btn-info">
+                                    <i class="fas fa-info-circle"></i>
+                                    Chi tiết
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Các nút điều khiển Carousel -->
+        <button class="banner-nav banner-nav-prev" id="prevBtn">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="banner-nav banner-nav-next" id="nextBtn">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <!-- Nút điều khiển âm lượng cho video trailer nền -->
+        <button class="volume-control" id="volumeBtn">
+            <i class="fas fa-volume-xmark"></i>
+        </button>
+
+        <!-- Lớp phủ dưới cùng chứa các chấm chỉ báo -->
+        <div class="banner-overlay">
+            <div class="banner-indicators" id="indicators">
+                @for (int i = 0; i < Model.BannerMovies.Count; i++)
+                {
+                    <button class="indicator-dot @(i == 0 ? "active" : "")" data-slide="@i"></button>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Hiển thị khi không có phim nào trong banner -->
+        <div class="d-flex justify-content-center align-items-center h-100">
+            <p class="text-white">Không có phim nào để hiển thị trong banner.</p>
+        </div>
+    }
+</div>

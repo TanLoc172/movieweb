@@ -1,0 +1,363 @@
+@* @model CreateWatchPartyViewModel
+@using System.IO
+
+@{
+    ViewData["Title"] = "Tạo Phòng Xem Chung";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Tạo Phòng Xem Chung: @Model.Movie.Title</h2>
+
+    <!-- Hiển thị thông báo lỗi nếu có -->
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <form asp-action="Create" method="post" class="card p-4 shadow">
+        <!-- Hidden field để lưu MovieId -->
+        <input type="hidden" asp-for="MovieId" value="@Model.Movie.Id" />
+
+        <!-- Tên phòng -->
+        <div class="mb-3">
+            <label asp-for="RoomName" class="form-label">Tên Phòng</label>
+            <input asp-for="RoomName" class="form-control" placeholder="Nhập tên phòng..." required />
+            <span asp-validation-for="RoomName" class="text-danger"></span>
+        </div>
+
+        <!-- Chọn poster -->
+        <div class="mb-3">
+            <label asp-for="SelectedPosterUrl" class="form-label">Chọn Poster</label>
+            <select asp-for="SelectedPosterUrl" class="form-select" required>
+                @foreach (var poster in Model.AvailablePosters)
+                {
+                    <option value="@poster" selected="@(poster == Model.SelectedPosterUrl)">
+                        @(string.IsNullOrEmpty(poster) ? "Poster mặc định" : poster)
+                    </option>
+                }
+            </select>
+            <span asp-validation-for="SelectedPosterUrl" class="text-danger"></span>
+
+            <!-- Hiển thị preview poster nếu có -->
+            @if (!string.IsNullOrEmpty(Model.SelectedPosterUrl))
+            {
+                <div class="mt-2">
+                    <img src="@Model.SelectedPosterUrl" alt="Poster Preview" class="img-fluid" style="max-width: 150px;" />
+                </div>
+            }
+        </div>
+
+        <!-- Tự động phát -->
+        <div class="mb-3 form-check">
+            <input asp-for="AutoStart" type="checkbox" class="form-check-input" id="autoStart" />
+            <label class="form-check-label" for="autoStart">Tự động phát khi mọi người tham gia</label>
+        </div>
+
+        <!-- Phòng riêng tư -->
+        <div class="mb-3 form-check">
+            <input asp-for="PrivateRoom" type="checkbox" class="form-check-input" id="privateRoom" />
+            <label class="form-check-label" for="privateRoom">Phòng riêng tư (chỉ người có mã mời tham gia được)</label>
+        </div>
+
+        <!-- Nút submit và quay lại -->
+        <div class="d-flex justify-content-between">
+            <a href="@Url.Action("Details", "Movies", new { id = Model.Movie.Id })" class="btn btn-secondary">Quay
+                lại</a>
+            <button type="submit" class="btn btn-primary">Tạo Phòng</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <!-- Kích hoạt validation phía client -->
+    <partial name="_ValidationScriptsPartial" />
+
+    <!-- Script để cập nhật preview poster khi thay đổi lựa chọn -->
+    <script>
+        document.querySelector('#SelectedPosterUrl').addEventListener('change', function () {
+            const selectedPoster = this.value;
+            const previewImg = document.querySelector('img[alt="Poster Preview"]');
+            if (previewImg && selectedPoster) {
+                previewImg.src = selectedPoster;
+            }
+        });
+    </script>
+} *@
+
+
+
+
+@model CreateWatchPartyViewModel
+@{
+    // Đặt tiêu đề cho trang, sẽ được hiển thị trên tab của trình duyệt nếu layout có @ViewData["Title"]
+    ViewData["Title"] = "Tạo Phòng Xem Chung";
+
+    // Helper để chuyển đổi phút thành định dạng "X giờ Y phút" cho đẹp hơn
+    string FormatDuration(int totalMinutes)
+    {
+        if (totalMinutes <= 0) return "N/A";
+        var timeSpan = TimeSpan.FromMinutes(totalMinutes);
+        return $"{(int)timeSpan.TotalHours} giờ {timeSpan.Minutes} phút";
+    }
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Tên Website Của Bạn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/8.0.0/css/all.min.css" rel="stylesheet">
+    @* --- CSS Styles được giữ nguyên --- *@
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); }
+        .glass-effect { backdrop-filter: blur(16px); background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .movie-card-bg { background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4); background-size: 400% 400%; animation: gradientShift 8s ease infinite; }
+        @@keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .floating { animation: float 3s ease-in-out infinite; }
+        @@keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+        .poster-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; max-height: 300px; overflow-y: auto; }
+        .poster-option { position: relative; border-radius: 12px; overflow: hidden; cursor: pointer; transition: all 0.3s ease; border: 3px solid transparent; }
+        .poster-option:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); }
+        .poster-option.selected { border-color: #fbbf24; box-shadow: 0 0 20px rgba(251, 191, 36, 0.5); }
+        .poster-option img { width: 100%; height: 160px; object-fit: cover; }
+        .poster-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
+        .poster-option:hover .poster-overlay { opacity: 1; }
+        .poster-option.selected .poster-overlay { opacity: 1; background: rgba(251, 191, 36, 0.8); }
+        .cinema-icons { position: absolute; opacity: 0.1; font-size: 1.5rem; color: white; animation: float 4s ease-in-out infinite; }
+        .icon-1 { top: 10%; left: 5%; animation-delay: 0s; } .icon-2 { top: 20%; right: 8%; animation-delay: 1s; } .icon-3 { bottom: 15%; left: 10%; animation-delay: 2s; } .icon-4 { bottom: 25%; right: 12%; animation-delay: 0.5s; } .icon-5 { top: 60%; left: 3%; animation-delay: 1.5s; } .icon-6 { top: 45%; right: 5%; animation-delay: 2.5s; }
+        .custom-checkbox { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .custom-checkbox input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.2); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked+.slider { background: #fbbf24; }
+        input:checked+.slider:before { transform: translateX(24px); }
+        .field-validation-error { color: #f87171; font-size: 0.875rem; margin-top: 0.5rem; }
+    </style>
+</head>
+
+<body class="min-h-screen gradient-bg relative overflow-hidden">
+    <!-- Background cinema icons -->
+    <div class="cinema-icons icon-1"><i class="fas fa-film"></i></div>
+    <div class="cinema-icons icon-2"><i class="fas fa-camera"></i></div>
+    <div class="cinema-icons icon-3"><i class="fas fa-popcorn"></i></div>
+    <div class="cinema-icons icon-4"><i class="fas fa-ticket-alt"></i></div>
+    <div class="cinema-icons icon-5"><i class="fas fa-theater-masks"></i></div>
+    <div class="cinema-icons icon-6"><i class="fas fa-video"></i></div>
+
+    <div class="container mx-auto px-4 py-8 relative z-10">
+        <!-- Header Section -->
+        <div class="text-center mb-8">
+            <div class="inline-block floating mb-4">
+                <div class="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center shadow-2xl">
+                    <i class="fas fa-plus-circle text-3xl text-white"></i>
+                </div>
+            </div>
+            <h1 class="text-4xl font-bold text-white mb-2">Tạo Phòng Xem Chung</h1>
+            <p class="text-white/80 text-lg">Thiết lập phòng xem để cùng bạn bè thưởng thức</p>
+        </div>
+
+        <!-- Error Message from TempData -->
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div id="errorMessage" class="mb-6 max-w-2xl mx-auto">
+                <div class="bg-red-500/20 border border-red-500/50 rounded-lg p-4 text-white backdrop-blur-sm">
+                    <div class="flex items-center">
+                        <i class="fas fa-exclamation-triangle mr-3 text-red-400"></i>
+                        <span>@TempData["ErrorMessage"]</span>
+                        <button onclick="document.getElementById('errorMessage').style.display = 'none'" class="ml-auto text-red-400 hover:text-red-300">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+        <div class="max-w-4xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Movie Info Card - Dữ liệu động từ @Model -->
+                <div class="lg:col-span-1">
+                    <div class="glass-effect rounded-2xl p-6 shadow-2xl">
+                        <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                            <i class="fas fa-film mr-2 text-yellow-400"></i>
+                            Thông Tin Phim
+                        </h3>
+                        <div class="movie-card-bg rounded-xl p-1 mb-4">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                <img src="@(string.IsNullOrEmpty(Model.Movie.PosterPath) ? "/images/default_poster.jpg" : Model.Movie.PosterPath)" alt="Poster phim @Model.Movie.Title"
+                                     class="w-full h-48 object-cover">
+                                <div class="p-4">
+                                    <h4 class="text-white font-semibold mb-2" style="min-height: 48px;">@Model.Movie.Title</h4>
+                                    <div class="flex items-center text-yellow-400 mb-2">
+                                        <i class="fas fa-star mr-1"></i>
+                                        <span class="text-sm">@Model.Movie.AverageRating.ToString("F1")/10</span>
+                                    </div>
+                                    @* <p class="text-gray-300 text-sm">Thời lượng: @Model.Movie.Duration phút</p> *@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-center text-white/80">
+                                <i class="fas fa-calendar mr-3 text-blue-400 w-4 text-center"></i>
+                                <span class="text-sm">@Model.Movie.ReleaseYear</span>
+                            </div>
+                            <div class="flex items-center text-white/80">
+                                <i class="fas fa-tags mr-3 text-green-400 w-4 text-center"></i>
+                                <span class="text-sm">@Model.Movie.Genre</span>
+                            </div>
+                            <div class="flex items-center text-white/80">
+                                <i class="fas fa-clock mr-3 text-purple-400 w-4 text-center"></i>
+                                @* <span class="text-sm">@FormatDuration(Model.Movie.Duration)</span> *@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Create Room Form -->
+                <div class="lg:col-span-2">
+                    <div class="glass-effect rounded-2xl p-8 shadow-2xl">
+                        <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
+                            <i class="fas fa-cog mr-3 text-yellow-400"></i>
+                            Cài Đặt Phòng
+                        </h3>
+
+                        <form asp-action="Create" asp-controller="WatchParty" method="post" id="createRoomForm" class="space-y-6">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" asp-for="MovieId" />
+                            <input type="hidden" asp-for="SelectedPosterUrl" />
+
+                            <!-- Room Name -->
+                            <div>
+                                <label asp-for="RoomName" class="block text-white font-medium mb-3">
+                                    <i class="fas fa-door-open mr-2 text-blue-400"></i> Tên Phòng
+                                </label>
+                                <input asp-for="RoomName" placeholder="Ví dụ: Cùng xem @Model.Movie.Title"
+                                       class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent backdrop-blur-sm transition-all duration-300" />
+                                <span asp-validation-for="RoomName" class="field-validation-error"></span>
+                            </div>
+
+                            <!-- Poster Selection -->
+                            <div>
+                                <label class="block text-white font-medium mb-3">
+                                    <i class="fas fa-image mr-2 text-green-400"></i>
+                                    Chọn Poster Phòng
+                                </label>
+                                <div class="poster-grid">
+                                    @if (Model.AvailablePosters != null)
+                                    {
+                                        @foreach (var posterUrl in Model.AvailablePosters)
+                                        {
+                                            var isSelected = posterUrl == Model.SelectedPosterUrl;
+                                            <div class="poster-option @(isSelected ? "selected" : "")" data-poster="@posterUrl">
+                                                <img src="@posterUrl" alt="Poster option">
+                                                <div class="poster-overlay">
+                                                    <i class="fas fa-check text-white text-2xl"></i>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+
+                            <!-- Room Settings -->
+                            <div class="space-y-4">
+                                <h4 class="text-white font-medium flex items-center">
+                                    <i class="fas fa-sliders-h mr-2 text-purple-400"></i>
+                                    Tùy Chọn Phòng
+                                </h4>
+
+                                <!-- Auto Start -->
+                                <div class="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
+                                    <div class="flex items-center">
+                                        <div class="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center mr-4">
+                                            <i class="fas fa-play text-blue-400"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="text-white font-medium">Tự Động Phát</h5>
+                                            <p class="text-white/60 text-sm">Phim sẽ tự động phát khi tất cả mọi người đã sẵn sàng</p>
+                                        </div>
+                                    </div>
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" asp-for="AutoStart">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+
+                                <!-- Private Room -->
+                                <div class="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
+                                    <div class="flex items-center">
+                                        <div class="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center mr-4">
+                                            <i class="fas fa-lock text-red-400"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="text-white font-medium">Phòng Riêng Tư</h5>
+                                            <p class="text-white/60 text-sm">Chỉ người có mã mời mới có thể tham gia</p>
+                                        </div>
+                                    </div>
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" asp-for="PrivateRoom">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex flex-col sm:flex-row gap-4 pt-6">
+                                <a asp-controller="Movie" asp-action="Details" asp-route-id="@Model.MovieId"
+                                   class="flex-1 bg-white/10 hover:bg-white/20 text-white font-medium py-3 px-6 rounded-xl border border-white/20 transition-all duration-300 flex items-center justify-center">
+                                    <i class="fas fa-arrow-left mr-2"></i>
+                                    Quay Lại
+                                </a>
+                                <button type="submit"
+                                        class="flex-1 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg transform transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-300 flex items-center justify-center">
+                                    <i class="fas fa-rocket mr-2"></i>
+                                    Tạo Phòng Ngay
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Cập nhật input ẩn khi chọn poster mới
+            document.querySelectorAll('.poster-option').forEach(option => {
+                option.addEventListener('click', function () {
+                    // Bỏ chọn tất cả
+                    document.querySelectorAll('.poster-option').forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Chọn cái hiện tại
+                    this.classList.add('selected');
+
+                    // Cập nhật giá trị cho input ẩn để gửi về server
+                    const selectedPosterUrl = this.dataset.poster;
+                    document.querySelector('input[name="SelectedPosterUrl"]').value = selectedPosterUrl;
+                });
+            });
+
+            // Hiệu ứng loading khi submit form
+            const form = document.getElementById('createRoomForm');
+            if (form) {
+                form.addEventListener('submit', function (e) {
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    if (submitBtn) {
+                        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Đang tạo phòng...';
+                        submitBtn.disabled = true;
+                    }
+                    // Form sẽ tiếp tục submit lên server
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

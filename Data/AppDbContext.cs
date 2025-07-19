@@ -1,13 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using MovieWebsite.Models;
 using MovieWebsite.Data;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 
 namespace MovieWebsite.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+            public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Episode> Episodes { get; set; }
@@ -18,6 +19,11 @@ namespace MovieWebsite.Data
         public DbSet<Comment> Comments { get; set; }
         public DbSet<WatchPartyRoom> WatchPartyRooms { get; set; }
         public DbSet<ChatMessage> ChatMessages { get; set; }
+        public DbSet<Schedule> Schedules { get; set; }
+        public DbSet<UserFavoriteMovie> UserFavoriteMovies { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -55,8 +61,39 @@ namespace MovieWebsite.Data
                 .HasIndex(e => new { e.MovieId, e.EpisodeNumber })
                 .IsUnique();
 
+
+            modelBuilder.Entity<Schedule>()
+                            .HasOne(s => s.Movie)
+                            .WithMany(m => m.Schedules)
+                            .HasForeignKey(s => s.MovieId);
+
+            modelBuilder.Entity<Schedule>()
+                .HasOne(s => s.Episode)
+                .WithMany(e => e.Schedules)
+                .HasForeignKey(s => s.EpisodeId)
+                .IsRequired(false); // EpisodeId có thể null
+
+            // Ensure a user can only favorite a movie once
+            modelBuilder.Entity<UserFavoriteMovie>()
+            .HasKey(ufm => new { ufm.UserId, ufm.MovieId });
+
+            // Configure the many-to-many relationship for Favorites
+            modelBuilder.Entity<UserFavoriteMovie>()
+                .HasOne(ufm => ufm.AppUser)
+                .WithMany(u => u.FavoriteMovies)
+                .HasForeignKey(ufm => ufm.UserId)
+                .OnDelete(DeleteBehavior.NoAction); // Prevent cascade delete from user to favorites
+
+            modelBuilder.Entity<UserFavoriteMovie>()
+                .HasOne(ufm => ufm.Movie)
+                .WithMany(m => m.FavoritedByUsers)
+                .HasForeignKey(ufm => ufm.MovieId)
+                .OnDelete(DeleteBehavior.NoAction); // Prevent cascade delete from movie to favorites
+
+
             // Apply seed data
             SeedData.Seed(modelBuilder);
         }
     }
+        
 }

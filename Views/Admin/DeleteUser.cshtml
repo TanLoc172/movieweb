@@ -1,0 +1,36 @@
+@model DeleteUserViewModel
+@{
+    ViewData["Title"] = "Xóa Người dùng";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Cảnh báo!</h4>
+            <p>Bạn sắp xóa người dùng: <strong>@Model.UserName</strong> (@Model.Email).</p>
+            <p>Hành động này không thể hoàn tác.</p>
+        </div>
+
+        <section>
+            <form asp-controller="Admin" asp-action="DeleteUser" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-group mb-3 form-check">
+                    <input asp-for="ConfirmDelete" class="form-check-input" />
+                    <label asp-for="ConfirmDelete" class="form-check-label"></label>
+                    <span asp-validation-for="ConfirmDelete" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-danger">Xác nhận Xóa</button>
+                <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Hủy</a>
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

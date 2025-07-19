@@ -186,6 +186,8 @@ body {
 /* Genre Card Styles (adapted for grid) */
 .genre-card {
     position: relative;
+    flex: 0 0 280px;
+
     /* Removed flex properties as it's now a grid item */
     width: 100%; /* Important: Make card fill its grid cell */
     height: 180px; /* Fixed height for uniform cards */

@@ -1,0 +1,104 @@
+@model ScheduleViewModelForAdmin
+@{
+    ViewData["Title"] = "Lên lịch chiếu";
+    Layout = "_LayoutAdmin";
+}
+
+<div class="schedule-form-container">
+    <h1>@ViewData["Title"]</h1>
+    <p class="text-muted">Chọn loại lịch chiếu. Nếu là "EpisodeRelease", các trường thông tin cho tập phim mới sẽ xuất
+        hiện.</p>
+    <hr />
+
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="MovieId" class="control-label">Phim</label>
+                    <select asp-for="MovieId" class="form-control"
+                        asp-items="@(new SelectList(Model.Movies, "Id", "Title"))">
+                        <option value="">-- Chọn phim --</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="EntryType" class="control-label">Loại lịch chiếu</label>
+                    <select asp-for="EntryType" id="EntryType" class="form-control"
+                        asp-items="Html.GetEnumSelectList<ScheduleType>()"></select>
+                </div>
+            </div>
+        </div>
+
+        <!-- SỬA Ở ĐÂY: Thêm class section-hidden và h5 -->
+        <div id="new-episode-section" class="section-hidden">
+            <h5 class="text-white mb-3"><i class="fas fa-plus-circle me-2"></i>Thông tin tập phim mới</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="NewEpisodeNumber" class="control-label"></label>
+                        <input asp-for="NewEpisodeNumber" type="number" class="form-control" placeholder="Ví dụ: 15" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="NewEpisodeTitle" class="control-label"></label>
+                        <input asp-for="NewEpisodeTitle" class="form-control"
+                            placeholder="Ví dụ: Cuộc chiến cuối cùng" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="ScheduledTime" class="control-label">Thời gian chiếu</label>
+                    <input asp-for="ScheduledTime" class="form-control" type="datetime-local" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Description" class="control-label">Mô tả chung (Tùy chọn)</label>
+            <textarea asp-for="Description" class="form-control" rows="3"
+                placeholder="Thêm mô tả cho lịch chiếu hoặc tập phim..."></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-submit">
+                <i class="fas fa-calendar-plus"></i> Lên lịch
+            </button>
+            <a asp-action="AdminIndex" class="btn btn-back">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <!-- SỬA Ở ĐÂY: Cập nhật JavaScript để dùng class -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const entryTypeSelect = document.getElementById('EntryType');
+            const newEpisodeSection = document.getElementById('new-episode-section');
+
+            function toggleEpisodeSection() {
+                // Giá trị của enum ScheduleType.EpisodeRelease là 0
+                if (entryTypeSelect.value === '0') {
+                    newEpisodeSection.classList.add('section-visible');
+                    newEpisodeSection.classList.remove('section-hidden');
+                } else {
+                    newEpisodeSection.classList.add('section-hidden');
+                    newEpisodeSection.classList.remove('section-visible');
+                }
+            }
+
+            toggleEpisodeSection();
+            entryTypeSelect.addEventListener('change', toggleEpisodeSection);
+        });
+    </script>
+}

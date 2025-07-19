@@ -1,0 +1,47 @@
+
+      /* Toàn bộ CSS từ file tĩnh của bạn có thể được dán vào đây */
+      /* hoặc giữ nguyên trong file CSS riêng và link vào _Layout */
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow-x: hidden; }
+      .movie-banner-container { position: relative; height: 100vh; width: 100%; overflow: hidden; }
+      .banner-carousel { position: relative; width: 100%; height: 100%; display: flex; transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+      .banner-item { position: relative; flex: 0 0 100%; height: 100%; width: 100%; overflow: hidden; }
+      .banner-poster, .banner-trailer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+      .banner-poster { z-index: 1; transition: opacity 0.8s ease-in-out; }
+      .banner-poster img, .banner-trailer video { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+      .banner-trailer { z-index: 2; opacity: 0; transition: opacity 0.8s ease-in-out; }
+      .banner-trailer.active { opacity: 1; }
+      .banner-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; display: flex; align-items: center; background: linear-gradient(77deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%); padding: 0 5%; }
+      .banner-info { max-width: 50%; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+      .movie-title11 { font-size: 3.5rem; font-weight: 700; margin-bottom: 15px; }
+      .movie-meta { display: flex; flex-wrap: wrap; gap: 10px 15px; margin-bottom: 20px; font-size: 0.95rem; }
+      .genre-badge { background: rgba(255,255,255,0.15); backdrop-filter: blur(5px); padding: 6px 12px; border-radius: 20px; font-weight: 500; border: 1px solid rgba(255,255,255,0.2); }
+      .movie-description { font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px; max-width: 550px; text-shadow: 0 1px 2px rgba(0,0,0,0.7); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+      .banner-actions { display: flex; gap: 15px; align-items: center; }
+      .btn-banner { padding: 12px 30px; border: none; border-radius: 8px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; transition: all 0.3s ease; font-size: 1rem; }
+      .btn-banner:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+      .btn-play { background: #E50914; color: white; }
+      .btn-play:hover { background: #f6121d; }
+      .btn-info { background: rgba(109, 109, 110, 0.7); color: white; backdrop-filter: blur(10px); }
+      .btn-info:hover { background: rgba(109, 109, 110, 0.4); }
+      .banner-nav { position: absolute; top: 50%; transform: translateY(-50%); z-index: 15; background: rgba(0,0,0,0.3); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(5px); opacity: 0; }
+      .banner-nav:hover { background: rgba(0,0,0,0.5); transform: translateY(-50%) scale(1.1); }
+      .banner-nav-prev { left: 30px; }
+      .banner-nav-next { right: 30px; }
+      .banner-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.6)); padding: 50px 5% 30px; z-index: 12; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
+      .movie-banner-container:hover .banner-overlay, .movie-banner-container:hover .banner-nav { opacity: 1; }
+      .banner-indicators { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; pointer-events: all; }
+      .indicator-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.4); border: none; cursor: pointer; transition: all 0.3s ease; padding: 0; }
+      .indicator-dot.active { background: white; width: 30px; border-radius: 5px; }
+      .volume-control { position: absolute; bottom: 30px; left: 5%; z-index: 15; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.3); color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(5px); }
+      .volume-control:hover { background: rgba(0,0,0,0.5); transform: scale(1.1); }
+      /* Responsive design adjustments... */
+      @media (max-width: 768px) {
+          .banner-info { max-width: 80%; }
+          .movie-title { font-size: 2.5rem; }
+          .movie-description { font-size: 1rem; -webkit-line-clamp: 2; }
+          .banner-actions { flex-direction: column; align-items: flex-start; gap: 10px; }
+          .btn-banner { width: 100%; max-width: 200px; justify-content: center; }
+          .banner-nav { opacity: 0.7; }
+      }
+  

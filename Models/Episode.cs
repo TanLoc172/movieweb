@@ -17,7 +17,7 @@ namespace MovieWebsite.Models
         [MaxLength(200)]
         public string Title { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Required]
         public string VideoPath { get; set; }
@@ -28,5 +28,12 @@ namespace MovieWebsite.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
+
+
+           [Display(Name = "Đã công khai")]
+        public bool IsPublished { get; set; } = true; 
+
+
+        public ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
     }
 }

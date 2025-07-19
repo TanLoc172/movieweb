@@ -1,0 +1,453 @@
+@model TopMoviesByViewsViewModel
+@{
+    ViewData["Title"] = "Top 10 phim lẻ hôm nay";
+}
+
+<div class="effect-fade-in" style="background: #0f0f0f;">
+    <div id="collection-top-views">
+        <div class="cards-row cards-slide wide">
+            <div class="row-header">
+                <h2 class="category-name">Top 10 phim lẻ hôm nay</h2>
+            </div>
+            <div class="row-content">
+                <div class="cards-slide-wrapper top-up">
+                    <div class="sw-navigation">
+                        <button type="button" class="sw-button sw-prev">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16" fill="none">
+                                <path d="M10.3335 12.6667L5.66683 8.00004L10.3335 3.33337" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                        </button>
+                        <button type="button" class="sw-button sw-next">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16" fill="none">
+                                <path d="M5.66675 3.33341L10.3334 8.00008L5.66675 12.6667" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="swiper swiper-initialized swiper-horizontal swiper-backface-hidden">
+                        <div class="swiper-wrapper">
+                            @if (Model.Movies != null && Model.Movies.Any())
+                            {
+                                @for (int i = 0; i < Model.Movies.Count; i++)
+                                {
+                                    var movieItem = Model.Movies[i];
+                                    var movie = movieItem.Movie;
+                                    var rank = i + 1;
+                                    
+                                    <div class="swiper-slide">
+                                        <div class="sw-item">
+                                            <div class="rank-number">@rank</div>
+                                            <a class="v-thumbnail" href="@Url.Action("Details", "Movie", new { id = movie.Id })">
+                                                <div class="poster-overlay"></div>
+                                                <img alt="@movie.Title" loading="lazy" src="@Url.Content(movie.PosterBanner ?? movie.Poster ?? "/images/placeholder.jpg")" />
+                                                <div class="quality-badges">
+                                                    @* @if (!string.IsNullOrEmpty(movie.Quality))
+                                                    {
+                                                        <div class="quality-badge">@movie.Quality</div>
+                                                    }
+                                                    @if (!string.IsNullOrEmpty(movie.Language))
+                                                    {
+                                                        <div class="language-badge">@movie.Language</div>
+                                                    } *@
+                                                </div>
+                                            </a>
+                                            <div class="movie-info">
+                                                <h4 class="movie-title">
+                                                    <a title="@movie.Title" href="@Url.Action("Details", "Movie", new { id = movie.Id })">@movie.Title</a>
+                                                </h4>
+                                                @if (!string.IsNullOrEmpty(movie.EnglishTitle))
+                                                {
+                                                    <div class="movie-subtitle">@movie.EnglishTitle</div>
+                                                }
+                                                <div class="movie-meta">
+                                                    <span class="meta-item">@movie.ReleaseYear</span>
+                                                    @* @if (!string.IsNullOrEmpty(movie.Duration))
+                                                    {
+                                                        <span class="meta-item">@movie.Duration</span>
+                                                    }
+                                                    @if (!string.IsNullOrEmpty(movie.AgeRating))
+                                                    {
+                                                        <span class="meta-item rating">@movie.AgeRating</span>
+                                                    } *@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="col-12">
+                                    <p class="text-center no-movies">Không có phim nào để hiển thị.</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+<style>
+    body,
+    .effect-fade-in,
+    #collection-top-views {
+        background: #0f0f0f !important;
+    }
+
+    .category-name {
+        color: #ffffff;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 24px;
+        padding-left: 20px;
+    }
+
+    .cards-slide-wrapper {
+        position: relative;
+        padding: 0 20px;
+    }
+
+    .sw-item {
+        background: transparent;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        position: relative;
+        cursor: pointer;
+        height: 100%;
+    }
+
+    .sw-item:hover {
+        transform: scale(1.05);
+    }
+
+    .rank-number {
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        background: linear-gradient(45deg, #e50914, #ff6b6b);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: 900;
+        z-index: 10;
+        box-shadow: 0 4px 12px rgba(229, 9, 20, 0.4);
+    }
+
+    .v-thumbnail {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: 320px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    }
+
+    .v-thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .sw-item:hover .v-thumbnail img {
+        transform: scale(1.1);
+    }
+
+    .poster-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+        z-index: 2;
+    }
+
+    .quality-badges {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        display: flex;
+        gap: 8px;
+        z-index: 3;
+    }
+
+    .quality-badge,
+    .language-badge {
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        backdrop-filter: blur(10px);
+    }
+
+    .quality-badge {
+        background: rgba(59, 130, 246, 0.9);
+    }
+
+    .language-badge {
+        background: rgba(16, 185, 129, 0.9);
+    }
+
+    .movie-info {
+        padding: 16px 12px 12px 12px;
+        background: rgba(21, 21, 21, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 0 0 12px 12px;
+        margin-top: -4px;
+    }
+
+    .movie-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 6px;
+        line-height: 1.3;
+    }
+
+    .movie-title a {
+        color: inherit;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .movie-title a:hover {
+        color: #e50914;
+    }
+
+    .movie-subtitle {
+        font-size: 14px;
+        color: #b3b3b3;
+        margin-bottom: 10px;
+        line-height: 1.2;
+    }
+
+    .movie-meta {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .meta-item {
+        font-size: 13px;
+        color: #999999;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: 500;
+    }
+
+    .meta-item.rating {
+        background: rgba(229, 9, 20, 0.2);
+        color: #ff6b6b;
+    }
+
+    .sw-navigation {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        z-index: 10;
+    }
+
+    .sw-button {
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .sw-button:hover {
+        background: rgba(229, 9, 20, 0.9);
+        transform: scale(1.1);
+    }
+
+    .sw-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: rgba(0, 0, 0, 0.4);
+    }
+
+    .swiper-slide {
+        margin-right: 20px !important;
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
+    }
+
+    .swiper-wrapper {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: stretch;
+    }
+
+    .no-movies {
+        color: #b3b3b3;
+        font-size: 16px;
+        text-align: center;
+        padding: 40px;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 1400px) {
+        .swiper-slide {
+            width: calc(16.66% - 20px) !important;
+        }
+    }
+
+    @@media (max-width: 1200px) {
+        .swiper-slide {
+            width: calc(25% - 20px) !important;
+        }
+        
+        .category-name {
+            font-size: 24px;
+        }
+    }
+
+    @@media (max-width: 992px) {
+        .swiper-slide {
+            width: calc(33.33% - 20px) !important;
+        }
+        
+        .v-thumbnail {
+            height: 280px;
+        }
+        
+        .sw-button {
+            width: 42px;
+            height: 42px;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .swiper-slide {
+            width: calc(50% - 20px) !important;
+        }
+        
+        .category-name {
+            font-size: 20px;
+            padding-left: 16px;
+        }
+        
+        .cards-slide-wrapper {
+            padding: 0 16px;
+        }
+        
+        .v-thumbnail {
+            height: 260px;
+        }
+        
+        .sw-button {
+            width: 38px;
+            height: 38px;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .swiper-slide {
+            width: calc(100% - 20px) !important;
+        }
+        
+        .category-name {
+            font-size: 18px;
+            padding-left: 12px;
+        }
+        
+        .cards-slide-wrapper {
+            padding: 0 12px;
+        }
+        
+        .v-thumbnail {
+            height: 400px;
+        }
+        
+        .sw-button {
+            width: 36px;
+            height: 36px;
+        }
+        
+        .rank-number {
+            width: 36px;
+            height: 36px;
+            font-size: 16px;
+        }
+    }
+</style>
+}
+
+@section Scripts {
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    if (typeof Swiper !== 'undefined') {
+        var swiper = new Swiper('.swiper', {
+            slidesPerView: 6,
+            slidesPerGroup: 1,
+            spaceBetween: 20,
+            navigation: {
+                nextEl: '.sw-next',
+                prevEl: '.sw-prev',
+            },
+            loop: false,
+            observer: true,
+            observeParents: true,
+            speed: 400,
+            breakpoints: {
+                1400: { 
+                    slidesPerView: 6, 
+                    slidesPerGroup: 1,
+                    spaceBetween: 20
+                },
+                1200: { 
+                    slidesPerView: 4, 
+                    slidesPerGroup: 1,
+                    spaceBetween: 20
+                },
+                992: { 
+                    slidesPerView: 3, 
+                    slidesPerGroup: 1,
+                    spaceBetween: 20
+                },
+                768: { 
+                    slidesPerView: 2, 
+                    slidesPerGroup: 1,
+                    spaceBetween: 20
+                },
+                0: { 
+                    slidesPerView: 1, 
+                    slidesPerGroup: 1,
+                    spaceBetween: 20
+                }
+            }
+        });
+    } else {
+        console.error("Swiper.js is not loaded. Navigation buttons may not work.");
+    }
+});
+</script>
+}

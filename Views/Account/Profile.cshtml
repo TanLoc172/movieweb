@@ -1,0 +1,1357 @@
+@model UserProfileViewModel
+@{
+    ViewData["Title"] = "Trang cá nhân";
+    
+    string currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "Profile";
+    string activeSectionClass = "active";
+    
+    string activeSidebarItem = "";
+    if (currentAction == "Profile") { activeSidebarItem = "Favorites"; }
+    else if (currentAction == "Notifications") { activeSidebarItem = "Notifications"; }
+    else if (currentAction == "ContinueWatching") { activeSidebarItem = "ContinueWatching"; }
+    else if (currentAction == "Watchlist") { activeSidebarItem = "Watchlist"; }
+    else if (currentAction == "AccountSettings") { activeSidebarItem = "AccountSettings"; }
+}
+
+<div class="profile-container">
+    <!-- Header Section -->
+    <div class="profile-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="user-avatar">
+                    <img src="https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg" alt="User Avatar" class="avatar-image">
+                    <div class="avatar-overlay">
+                        <i class="bi bi-camera-fill"></i>
+                    </div>
+                </div>
+                <div class="user-info">
+                    <h1 class="user-name">@Model.User.FullName</h1>
+                    <p class="user-email">@Model.User.Email</p>
+                    <div class="user-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">@(Model.FavoriteMovies?.Count ?? 0)</span>
+                            <span class="stat-label">Yêu thích</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">@(Model.ContinueWatchingMovies?.Count ?? 0)</span>
+                            <span class="stat-label">Đang xem</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">@(Model.UserNotifications?.Count(n => !n.IsRead) ?? 0)</span>
+                            <span class="stat-label">Thông báo</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <form asp-controller="Account" asp-action="Logout" method="post">
+                        <button type="submit" class="btn btn-outline-light btn-logout">
+                            <i class="bi bi-box-arrow-right"></i>
+                            Đăng xuất
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="profile-nav">
+        <div class="container">
+            <nav class="nav-tabs-container">
+                <a class="nav-tab @(activeSidebarItem == "Favorites" ? "active" : "")" 
+                   asp-controller="Account" asp-action="Profile">
+                    <i class="bi bi-heart-fill"></i>
+                    <span>Yêu thích</span>
+                </a>
+                <a class="nav-tab @(activeSidebarItem == "ContinueWatching" ? "active" : "")" 
+                   asp-controller="Account" asp-action="ContinueWatching">
+                    <i class="bi bi-play-circle-fill"></i>
+                    <span>Xem tiếp</span>
+                </a>
+                <a class="nav-tab @(activeSidebarItem == "Watchlist" ? "active" : "")" 
+                   asp-controller="Account" asp-action="Watchlist">
+                    <i class="bi bi-bookmark-fill"></i>
+                    <span>Danh sách</span>
+                </a>
+                <a class="nav-tab @(activeSidebarItem == "Notifications" ? "active" : "")" 
+                   asp-controller="Account" asp-action="Notifications">
+                    <i class="bi bi-bell-fill"></i>
+                    <span>Thông báo</span>
+                    @if (Model.UserNotifications?.Any(n => !n.IsRead) == true)
+                    {
+                        <span class="notification-badge">@Model.UserNotifications.Count(n => !n.IsRead)</span>
+                    }
+                </a>
+                <a class="nav-tab @(activeSidebarItem == "AccountSettings" ? "active" : "")" 
+                   asp-controller="Account" asp-action="AccountSettings">
+                    <i class="bi bi-gear-fill"></i>
+                    <span>Cài đặt</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="profile-content">
+        <div class="container">
+            @if (activeSidebarItem == "Favorites")
+            {
+                <div class="content-section">
+                    <div class="section-header">
+                        <h2><i class="bi bi-heart-fill"></i> Phim yêu thích</h2>
+                        <p class="section-subtitle">Những bộ phim bạn đã đánh dấu yêu thích</p>
+                    </div>
+                    
+                    @if (Model.FavoriteMovies != null && Model.FavoriteMovies.Any())
+                    {
+                        <div class="movies-grid">
+                            @foreach (var movie in Model.FavoriteMovies)
+                            {
+                                <div class="movie-card">
+                                    <div class="movie-poster">
+                                        <img src="@movie.PosterPath" alt="@movie.Title" loading="lazy">
+                                        <div class="movie-overlay">
+                                            <div class="movie-actions">
+                                                <a asp-controller="Movies" asp-action="Details" asp-route-id="@movie.Id" 
+                                                   class="btn btn-primary btn-sm">
+                                                    <i class="bi bi-play-fill"></i> Xem
+                                                </a>
+                                                <button class="btn btn-secondary btn-sm" onclick="removeFromFavorites(@movie.Id)">
+                                                    <i class="bi bi-heart-fill">❌</i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="movie-info">
+                                        <h3 class="movie-title">@movie.Title</h3>
+                                        <div class="movie-meta">
+                                            <span class="movie-year">@movie.ReleaseYear</span>
+                                            <span class="movie-genre">@(movie.Genre?.Name ?? "N/A")</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <i class="bi bi-heart"></i>
+                            <h3>Chưa có phim yêu thích</h3>
+                            <p>Hãy khám phá và thêm những bộ phim bạn thích vào danh sách này</p>
+                            <a asp-controller="Movies" asp-action="Index" class="btn btn-primary">
+                                Khám phá phim
+                            </a>
+                        </div>
+                    }
+                </div>
+            }
+            else if (activeSidebarItem == "ContinueWatching")
+            {
+                <div class="content-section">
+                    <div class="section-header">
+                        <h2><i class="bi bi-play-circle-fill"></i> Xem tiếp</h2>
+                        <p class="section-subtitle">Tiếp tục những bộ phim bạn đã bắt đầu</p>
+                    </div>
+                    
+                    @if (Model.ContinueWatchingMovies != null && Model.ContinueWatchingMovies.Any())
+                    {
+                        <div class="continue-watching-list">
+                            @foreach (var movie in Model.ContinueWatchingMovies)
+                            {
+                                <div class="continue-watching-item">
+                                    <div class="movie-thumbnail">
+                                        <img src="@movie.PosterPath" alt="@movie.Title">
+                                        <div class="progress-overlay">
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" style="width: 65%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="movie-details">
+                                        <h4 class="movie-title">@movie.Title</h4>
+                                        <p class="movie-info">@movie.ReleaseYear • @(movie.Genre?.Name ?? "N/A")</p>
+                                        <div class="watch-progress">
+                                            <span class="progress-text">Đã xem 65%</span>
+                                            <span class="time-remaining">Còn lại 45 phút</span>
+                                        </div>
+                                    </div>
+                                    <div class="movie-actions">
+                                        <a asp-controller="Movies" asp-action="Details" asp-route-id="@movie.Id" 
+                                           class="btn btn-primary">
+                                            <i class="bi bi-play-fill"></i> Tiếp tục
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <i class="bi bi-play-circle"></i>
+                            <h3>Chưa có phim đang xem</h3>
+                            <p>Bắt đầu xem phim để chúng xuất hiện trong danh sách này</p>
+                            <a asp-controller="Movies" asp-action="Index" class="btn btn-primary">
+                                Tìm phim để xem
+                            </a>
+                        </div>
+                    }
+                </div>
+            }
+            else if (activeSidebarItem == "Notifications")
+            {
+                <div class="content-section">
+                    <div class="section-header">
+                        <h2><i class="bi bi-bell-fill"></i> Thông báo</h2>
+                        <p class="section-subtitle">Cập nhật mới nhất từ hệ thống</p>
+                    </div>
+                    
+                    @if (Model.UserNotifications != null && Model.UserNotifications.Any())
+                    {
+                        <div class="notifications-list">
+                            @foreach (var notification in Model.UserNotifications)
+                            {
+                                <div class="notification-item @(notification.IsRead ? "read" : "unread")">
+                                    <div class="notification-icon">
+                                        <i class="bi bi-film"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <p class="notification-message">@notification.Message</p>
+                                        <span class="notification-time">@notification.CreatedAt.ToString("HH:mm dd/MM/yyyy")</span>
+                                    </div>
+                                    @if (!notification.IsRead)
+                                    {
+                                        <div class="notification-badge"></div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <i class="bi bi-bell-slash"></i>
+                            <h3>Không có thông báo</h3>
+                            <p>Bạn đã xem hết tất cả thông báo</p>
+                        </div>
+                    }
+                </div>
+            }
+            else if (activeSidebarItem == "AccountSettings")
+            {
+                <div class="content-section">
+                    <div class="section-header">
+                        <h2><i class="bi bi-gear-fill"></i> Cài đặt tài khoản</h2>
+                        <p class="section-subtitle">Quản lý thông tin cá nhân và tùy chọn</p>
+                    </div>
+                    
+                    <div class="settings-grid">
+                        <div class="setting-card">
+                            <h3>Thông tin cá nhân</h3>
+                            <p>Cập nhật tên, email và avatar</p>
+                            <button class="btn btn-outline-primary">Chỉnh sửa</button>
+                        </div>
+                        <div class="setting-card">
+                            <h3>Đổi mật khẩu</h3>
+                            <p>Thay đổi mật khẩu đăng nhập</p>
+                            <button class="btn btn-outline-primary">Đổi mật khẩu</button>
+                        </div>
+                        <div class="setting-card">
+                            <h3>Thông báo</h3>
+                            <p>Cài đặt thông báo qua email</p>
+                            <button class="btn btn-outline-primary">Cài đặt</button>
+                        </div>
+                        <div class="setting-card">
+                            <h3>Quyền riêng tư</h3>
+                            <p>Quản lý quyền riêng tư tài khoản</p>
+                            <button class="btn btn-outline-primary">Cài đặt</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        /* Base Styles */
+        body {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: #ffffff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .profile-container {
+            min-height: 100vh;
+        }
+
+        /* Header Section */
+        .profile-header {
+            background: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
+            padding: 5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .user-avatar {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .avatar-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid #00d4ff;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .avatar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 212, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .user-avatar:hover .avatar-overlay {
+            opacity: 1;
+        }
+
+        .user-avatar:hover .avatar-image {
+            transform: scale(1.05);
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(45deg, #00d4ff, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .user-email {
+            font-size: 1.1rem;
+            color: #b0b0b0;
+            margin: 0.5rem 0 1.5rem 0;
+        }
+
+        .user-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #00d4ff;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #b0b0b0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-logout {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Navigation Tabs */
+        .profile-nav {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-tabs-container {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 0 1rem;
+        }
+
+        .nav-tab {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            color: #b0b0b0;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .nav-tab:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-tab.active {
+            color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        /* Content Section */
+        .profile-content {
+            padding: 3rem 0;
+        }
+
+        .content-section {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            color: #ffffff;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #b0b0b0;
+            margin: 1rem 0 0 0;
+        }
+
+        /* Movies Grid */
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .movie-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .movie-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .movie-poster {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .movie-poster img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .movie-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .movie-card:hover .movie-overlay {
+            opacity: 1;
+        }
+
+        .movie-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .movie-info {
+            padding: 1.5rem;
+        }
+
+        .movie-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+            color: #ffffff;
+        }
+
+        .movie-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #b0b0b0;
+        }
+
+        /* Continue Watching */
+        .continue-watching-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .continue-watching-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .continue-watching-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .movie-thumbnail {
+            position: relative;
+            width: 120px;
+            height: 160px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .movie-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .progress-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #ff6b6b);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .movie-details {
+            flex: 1;
+        }
+
+        .movie-details h4 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+            color: #ffffff;
+        }
+
+        .movie-details .movie-info {
+            color: #b0b0b0;
+            margin: 0 0 1rem 0;
+            padding: 0;
+        }
+
+        .watch-progress {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+
+        .progress-text {
+            color: #00d4ff;
+            font-weight: 500;
+        }
+
+        .time-remaining {
+            color: #b0b0b0;
+        }
+
+        /* Notifications */
+        .notifications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .notification-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .notification-item.unread {
+            border-left: 4px solid #00d4ff;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 212, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00d4ff;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-message {
+            margin: 0 0 0.5rem 0;
+            color: #ffffff;
+        }
+
+        .notification-time {
+            font-size: 0.9rem;
+            color: #b0b0b0;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ff6b6b;
+        }
+
+        /* Settings */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .setting-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .setting-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+        }
+
+        .setting-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0 0 1rem 0;
+            color: #ffffff;
+        }
+
+        .setting-card p {
+            color: #b0b0b0;
+            margin: 0 0 1.5rem 0;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #b0b0b0;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0 0 1rem 0;
+            color: #ffffff;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            margin: 0 0 2rem 0;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #0099cc, #00d4ff);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-outline-primary {
+            background: transparent;
+            color: #00d4ff;
+            border: 2px solid #00d4ff;
+        }
+
+        .btn-outline-primary:hover {
+            background: #00d4ff;
+            color: #ffffff;
+        }
+
+        .btn-outline-light {
+            background: transparent;
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        /* Responsive Design */
+        @@media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .user-name {
+                font-size: 2rem;
+            }
+
+            .user-stats {
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .nav-tabs-container {
+                justify-content: center;
+            }
+
+            .nav-tab {
+                font-size: 0.9rem;
+                padding: 0.6rem 1rem;
+            }
+
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+
+            .continue-watching-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .movie-thumbnail {
+                width: 100px;
+                height: 140px;
+            }
+
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-content {
+                padding: 2rem 0;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .profile-header {
+                padding: 1rem 0;
+            }
+
+            .avatar-image {
+                width: 80px;
+                height: 80px;
+            }
+
+            .user-name {
+                font-size: 1.5rem;
+            }
+
+            .user-stats {
+                gap: 0.5rem;
+            }
+
+            .stat-number {
+                font-size: 1.4rem;
+            }
+
+            .nav-tab {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+            }
+
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+
+            .movie-poster img {
+                height: 160px;
+            }
+
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .section-subtitle {
+                font-size: 1rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #00d4ff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @@keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Scroll Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        @@keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Custom Scrollbar */
+        .nav-tabs-container::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .nav-tabs-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+        }
+
+        .nav-tabs-container::-webkit-scrollbar-thumb {
+            background: #00d4ff;
+            border-radius: 2px;
+        }
+
+        .nav-tabs-container::-webkit-scrollbar-thumb:hover {
+            background: #0099cc;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Progress Ring Animation */
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-circle {
+            stroke: #00d4ff;
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            transition: stroke-dashoffset 0.5s ease-in-out;
+        }
+
+        /* Glassmorphism Effect */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Hover Effects */
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+
+        /* Text Effects */
+        .gradient-text {
+            background: linear-gradient(45deg, #00d4ff, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+
+        /* Container Utilities */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Flexbox Utilities */
+        .d-flex {
+            display: flex;
+        }
+
+        .align-items-center {
+            align-items: center;
+        }
+
+        .justify-content-center {
+            justify-content: center;
+        }
+
+        .justify-content-between {
+            justify-content: space-between;
+        }
+
+        .flex-column {
+            flex-direction: column;
+        }
+
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+
+        /* Spacing Utilities */
+        .m-0 { margin: 0; }
+        .mb-1 { margin-bottom: 0.25rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-3 { margin-bottom: 1rem; }
+        .mb-4 { margin-bottom: 1.5rem; }
+        .mb-5 { margin-bottom: 3rem; }
+
+        .mt-1 { margin-top: 0.25rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-3 { margin-top: 1rem; }
+        .mt-4 { margin-top: 1.5rem; }
+        .mt-5 { margin-top: 3rem; }
+
+        .p-0 { padding: 0; }
+        .p-1 { padding: 0.25rem; }
+        .p-2 { padding: 0.5rem; }
+        .p-3 { padding: 1rem; }
+        .p-4 { padding: 1.5rem; }
+        .p-5 { padding: 3rem; }
+
+        /* Text Utilities */
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+
+        .text-white { color: #ffffff; }
+        .text-muted { color: #b0b0b0; }
+        .text-primary { color: #00d4ff; }
+        .text-danger { color: #ff6b6b; }
+
+        .font-weight-bold { font-weight: 700; }
+        .font-weight-normal { font-weight: 400; }
+
+        /* Display Utilities */
+        .d-none { display: none; }
+        .d-block { display: block; }
+        .d-inline { display: inline; }
+        .d-inline-block { display: inline-block; }
+
+        /* Position Utilities */
+        .position-relative { position: relative; }
+        .position-absolute { position: absolute; }
+        .position-fixed { position: fixed; }
+        .position-sticky { position: sticky; }
+
+        /* Width and Height Utilities */
+        .w-100 { width: 100%; }
+        .h-100 { height: 100%; }
+
+        /* Overflow Utilities */
+        .overflow-hidden { overflow: hidden; }
+        .overflow-auto { overflow: auto; }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Active tab highlighting
+            var currentUrl = window.location.href;
+            $('.nav-tab').each(function() {
+                if (this.href === currentUrl) {
+                    $(this).addClass('active');
+                } else {
+                    $(this).removeClass('active');
+                }
+            });
+
+            // Smooth scrolling for navigation
+            $('.nav-tab').on('click', function(e) {
+                if ($(this).attr('href').startsWith('#')) {
+                    e.preventDefault();
+                    var target = $($(this).attr('href'));
+                    if (target.length) {
+                        $('html, body').animate({
+                            scrollTop: target.offset().top - 100
+                        }, 600);
+                    }
+                }
+            });
+
+            // Fade in animations
+            $('.movie-card, .continue-watching-item, .notification-item, .setting-card').addClass('fade-in');
+
+            // Remove from favorites function
+            window.removeFromFavorites = function(movieId) {
+                if (confirm('Bạn có chắc muốn xóa phim này khỏi danh sách yêu thích?')) {
+                    $.ajax({
+                        url: '/Account/RemoveFromFavorites',
+                        type: 'POST',
+                        data: { movieId: movieId },
+                        success: function(response) {
+                            if (response.success) {
+                                // Remove the movie card with animation
+                                $('[data-movie-id="' + movieId + '"]').fadeOut(300, function() {
+                                    $(this).remove();
+                                    
+                                    // Check if no movies left
+                                    if ($('.movies-grid .movie-card').length === 0) {
+                                        $('.movies-grid').html(`
+                                            <div class="empty-state">
+                                                <i class="bi bi-heart"></i>
+                                                <h3>Chưa có phim yêu thích</h3>
+                                                <p>Hãy khám phá và thêm những bộ phim bạn thích vào danh sách này</p>
+                                                <a href="/Movies" class="btn btn-primary">Khám phá phim</a>
+                                            </div>
+                                        `);
+                                    }
+                                });
+                                
+                                // Update stats
+                                updateStats();
+                            }
+                        },
+                        error: function() {
+                            alert('Có lỗi xảy ra. Vui lòng thử lại.');
+                        }
+                    });
+                }
+            };
+
+            // Update statistics
+            function updateStats() {
+                $.get('/Account/GetUserStats', function(data) {
+                    $('.user-stats .stat-item').each(function() {
+                        var label = $(this).find('.stat-label').text().toLowerCase();
+                        if (label.includes('yêu thích')) {
+                            $(this).find('.stat-number').text(data.favoritesCount);
+                        } else if (label.includes('đang xem')) {
+                            $(this).find('.stat-number').text(data.continueWatchingCount);
+                        } else if (label.includes('thông báo')) {
+                            $(this).find('.stat-number').text(data.unreadNotificationsCount);
+                        }
+                    });
+                });
+            }
+
+            // Mark notifications as read when clicked
+            $('.notification-item').on('click', function() {
+                var notificationId = $(this).data('notification-id');
+                if ($(this).hasClass('unread')) {
+                    $.post('/Account/MarkNotificationAsRead', { notificationId: notificationId }, function() {
+                        $(this).removeClass('unread').addClass('read');
+                        $(this).find('.notification-badge').fadeOut();
+                        updateStats();
+                    }.bind(this));
+                }
+            });
+
+            // Infinite scroll for movies (if needed)
+            var loading = false;
+            var page = 1;
+            
+            $(window).scroll(function() {
+                if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+                    if (!loading) {
+                        loading = true;
+                        loadMoreMovies();
+                    }
+                }
+            });
+
+            function loadMoreMovies() {
+                // Implementation for loading more movies
+                // This would call your controller action to get more movies
+                page++;
+                // After loading, set loading = false
+            }
+
+            // Search functionality (if search box is added)
+            $('#movieSearch').on('input', function() {
+                var searchTerm = $(this).val().toLowerCase();
+                $('.movie-card').each(function() {
+                    var movieTitle = $(this).find('.movie-title').text().toLowerCase();
+                    if (movieTitle.includes(searchTerm)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+
+            // Progress bar animations
+            $('.progress-fill').each(function() {
+                var width = $(this).css('width');
+                $(this).css('width', '0%');
+                $(this).animate({ width: width }, 1000);
+            });
+
+            // Tooltip initialization
+            $('[data-toggle="tooltip"]').tooltip();
+
+            // Profile image upload (if avatar editing is enabled)
+            $('.user-avatar').on('click', function() {
+                // Trigger file input for avatar upload
+                $('#avatarInput').click();
+            });
+
+            $('#avatarInput').on('change', function(e) {
+                var file = e.target.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('.avatar-image').attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                    
+                    // Upload to server
+                    uploadAvatar(file);
+                }
+            });
+
+            function uploadAvatar(file) {
+                var formData = new FormData();
+                formData.append('avatar', file);
+                
+                $.ajax({
+                    url: '/Account/UploadAvatar',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.success) {
+                            // Avatar updated successfully
+                            console.log('Avatar updated successfully');
+                        }
+                    },
+                    error: function() {
+                        alert('Có lỗi xảy ra khi tải ảnh lên.');
+                    }
+                });
+            }
+
+            // Theme toggle (if dark/light mode is supported)
+            $('#themeToggle').on('click', function() {
+                $('body').toggleClass('light-theme');
+                localStorage.setItem('theme', $('body').hasClass('light-theme') ? 'light' : 'dark');
+            });
+
+            // Load saved theme
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                $('body').addClass('light-theme');
+            }
+
+            // Keyboard shortcuts
+            $(document).keydown(function(e) {
+                // Ctrl/Cmd + K for search
+                if ((e.ctrlKey || e.metaKey) && e.keyCode === 75) {
+                    e.preventDefault();
+                    $('#movieSearch').focus();
+                }
+                
+                // Escape to close modals
+                if (e.keyCode === 27) {
+                    $('.modal').modal('hide');
+                }
+            });
+        });
+    </script>
+}

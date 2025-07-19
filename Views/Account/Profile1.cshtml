@@ -1,0 +1,394 @@
+@model UserProfileViewModel
+@{
+    ViewData["Title"] = "Trang cá nhân";
+
+    // Determine which section is active for highlighting in the sidebar.
+    // In a real app, you'd get this from routing or a parameter.
+    // For simplicity, we'll base it on the current action name or a passed parameter.
+    string currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "Profile"; // Default to Profile/ContinueWatching
+    string activeSectionClass = "active"; // CSS class for active link
+
+    // You might want to pass a "section" parameter from your controller actions
+    // if you reuse the Profile.cshtml view for multiple sections.
+    // For this example, we'll assume 'Profile' action shows 'ContinueWatching' and
+    // 'Favorites' action shows 'Favorites'.
+    string activeSidebarItem = "";
+    if (currentAction == "Profile") { activeSidebarItem = "Favorites"; }
+    @* else if (currentAction == "Favorites") { activeSidebarItem = "Favorites"; } *@
+    else if (currentAction == "Notifications") { activeSidebarItem = "Notifications"; }
+    else if (currentAction == "ContinueWatching") { activeSidebarItem = "ContinueWatching"; }
+     // << THÊM DÒNG NÀY
+    // Add more cases for other actions like "Watchlist", "Notifications", "AccountSettings"
+
+}
+
+<div class="container-fluid profile-page-container">
+    <div class="row">
+        <!-- Sidebar Column -->
+        <div class="col-md-3 sidebar-col">
+            <div class="sidebar-content">
+                <h3>Quản lý tài khoản</h3>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link @(activeSidebarItem == "Favorites" ? activeSectionClass : "")"
+                           asp-controller="Account"
+                           asp-action="Profile">
+                            <i class="bi bi-heart-fill"></i> Yêu thích
+                        </a>
+                    </li>
+                     <li class="nav-item">
+                        @* Assuming you'll create a Notifications action and view *@
+                        <a class="nav-link @(activeSidebarItem == "Notifications" ? activeSectionClass : "")"
+                           asp-controller="Account"
+                           asp-action="Notifications"> @* Replace with actual action if it exists *@
+                            <i class="bi bi-bell-fill"></i> Thông báo
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        @* Assuming you'll create a Watchlist action and view, or reuse Profile *@
+                        <a class="nav-link @(activeSidebarItem == "Watchlist" ? activeSectionClass : "")"
+                           asp-controller="Account"
+                           asp-action="Watchlist"> @* Replace with actual action if it exists *@
+                            <i class="bi bi-plus-circle-fill"></i> Danh sách
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(activeSidebarItem == "ContinueWatching" ? activeSectionClass : "")"
+                           asp-controller="Account"
+                           asp-action="ContinueWatching"> @* This action displays the Continue Watching list *@
+                            <i class="bi bi-clock-history"></i> Xem tiếp
+                        </a>
+                    </li>
+                   
+                    <li class="nav-item">
+                        <a class="nav-link @(activeSidebarItem == "AccountSettings" ? activeSectionClass : "")"
+                           asp-controller="Account"
+                           asp-action="AccountSettings">
+                            <i class="bi bi-person-fill"></i> Tài khoản
+                        </a>
+                    </li>
+                </ul>
+
+                <hr class="sidebar-divider">
+
+                <div class="user-info text-center">
+                    @* Placeholder for user avatar. In a real app, this would be dynamically loaded. *@
+                    @* Make sure the path to the image is correct in your wwwroot folder *@
+                    <img src="~/images/default-avatar.png" alt="User Avatar" class="avatar-img mb-2">
+                    <h5>@Model.User.FullName</h5>
+                    <p>@Model.User.Email</p>
+                </div>
+
+                <div class="logout-button-container">
+                    @* Logout form, ensure it's a POST request *@
+                    <form asp-controller="Account" asp-action="Logout" method="post">
+                        <button type="submit" class="btn btn-danger btn-block">
+                            <i class="bi bi-box-arrow-right"></i> Thoát
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Column -->
+        <div class="col-md-9 main-content-col">
+            <div class="main-content-wrapper">
+                @* Content for the selected section *@
+                @if (activeSidebarItem == "ContinueWatching")
+                {
+                    <h2>Danh sách xem tiếp</h2>
+                    <div class="continue-watching-list">
+                        @if (Model.ContinueWatchingMovies != null && Model.ContinueWatchingMovies.Any())
+                        {
+                            <div class="row">
+                                @foreach (var movie in Model.ContinueWatchingMovies)
+                                {
+                                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                                        <div class="card movie-card">
+                                            @* Ensure PosterPath is a valid URL or path *@
+                                            <img src="@movie.PosterPath" class="card-img-top" alt="@movie.Title">
+                                            <div class="card-body">
+                                                <h5 class="card-title">@movie.Title</h5>
+                                                <p class="card-text">
+                                                    Năm: @movie.ReleaseYear <br />
+                                                    @* Assuming Genre is loaded and has a Name property *@
+                                                    Thể loại: @(movie.Genre?.Name ?? "N/A")
+                                                </p>
+                                                @* Link to the movie details page to resume watching *@
+                                                <a asp-controller="Movies" asp-action="Details" asp-route-id="@movie.Id" class="btn btn-primary btn-sm">Xem tiếp</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p>Bạn chưa có phim nào trong danh sách xem tiếp.</p>
+                        }
+                    </div>
+                }
+                else if (activeSidebarItem == "Favorites")
+                {
+                    <h2>Yêu thích</h2>
+                    <div class="favorite-movies-list">
+                        @if (Model.FavoriteMovies != null && Model.FavoriteMovies.Any())
+                        {
+                            <div class="row">
+                                @foreach (var movie in Model.FavoriteMovies)
+                                {
+                                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                                        <div class="card movie-card">
+                                            <img src="@movie.PosterPath" class="card-img-top" alt="@movie.Title">
+                                            <div class="card-body">
+                                                <h5 class="card-title">@movie.Title</h5>
+                                                <p class="card-text">
+                                                    Năm: @movie.ReleaseYear <br />
+                                                    Thể loại: @(movie.Genre?.Name ?? "N/A")
+                                                </p>
+                                                <a asp-controller="Movies" asp-action="Details" asp-route-id="@movie.Id" class="btn btn-info btn-sm">Xem chi tiết</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p>Bạn chưa có phim nào trong danh sách yêu thích.</p>
+                        }
+                    </div>
+                }
+                // === THÊM KHỐI CODE NÀY ĐỂ HIỂN THỊ THÔNG BÁO ===
+        // ============================================================
+        else if (activeSidebarItem == "Notifications")
+        {
+            <h2><i class="bi bi-bell-fill"></i> Thông báo</h2>
+            <div class="notification-list-container">
+                @if (Model.UserNotifications != null && Model.UserNotifications.Any())
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var notification in Model.UserNotifications)
+                        {
+                            <li class="list-group-item notification-page-item @(notification.IsRead ? "read" : "unread")">
+                                <a href="@notification.Url" class="notification-link">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <p class="mb-1 notification-message">
+                                            @* Icon có thể thay đổi tùy loại thông báo trong tương lai *@
+                                            <i class="bi bi-film text-info"></i> 
+                                            @notification.Message
+                                        </p>
+                                        <small class="text-muted">@notification.CreatedAt.ToString("HH:mm dd/MM/yyyy")</small>
+                                    </div>
+                                    @* <small>Click để xem chi tiết.</small> *@
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <div class="text-center p-5">
+                        <i class="bi bi-bell-slash" style="font-size: 3rem; color: #555;"></i>
+                        <p class="mt-3">Bạn không có thông báo nào.</p>
+                    </div>
+                }
+            </div>
+        }
+                else if (activeSidebarItem == "AccountSettings")
+                {
+                    <h2>Cài đặt tài khoản</h2>
+                    @* Render account settings form here. You might have a separate view for this. *@
+                    <p>Nội dung cài đặt tài khoản sẽ hiển thị ở đây.</p>
+                    @* You can include parts of your _Layout.cshtml or a specific partial view for settings *@
+                }
+                @* Add other sections here (@if (activeSidebarItem == "YourSection")) *@
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @* Inject custom styles for the profile page. You'd likely put this in a separate CSS file *@
+    <style>
+        /* Basic styling to mimic the screenshot. You'll integrate this with your existing CSS. */
+        body {
+            background-color: #1a1a2e; /* Dark background from screenshot */
+            color: #e0e0e0; /* Light text */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .profile-page-container {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        .sidebar-col {
+            background-color: #2a2a3e; /* Slightly lighter dark for sidebar */
+            padding: 20px;
+            border-radius: 8px;
+            height: 100vh; /* Make sidebar take full viewport height */
+            position: sticky; /* Keep sidebar visible when scrolling */
+            top: 0;
+            overflow-y: auto; /* Add scroll if content exceeds height */
+        }
+
+        .sidebar-col h3 {
+            color: #00bcd4; /* Accent color for title */
+            margin-bottom: 20px;
+        }
+
+        .sidebar-col .nav-item .nav-link {
+            color: #e0e0e0;
+            padding: 10px 15px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+        }
+
+        .sidebar-col .nav-item .nav-link i {
+            margin-right: 10px;
+            color: #00bcd4; /* Icon color */
+        }
+
+        .sidebar-col .nav-item .nav-link.active {
+            background-color: #00bcd4; /* Active link background */
+            color: #1a1a2e; /* Active link text color */
+        }
+
+        .sidebar-col .nav-item .nav-link.active i {
+            color: #1a1a2e; /* Active link icon color */
+        }
+
+        .sidebar-col .nav-item .nav-link:hover {
+            background-color: #3a3a4e;
+            color: #ffffff;
+        }
+
+        .sidebar-divider {
+            border-top: 1px solid #4a4a5e;
+            margin: 20px 0;
+        }
+
+        .user-info {
+            margin-top: 30px;
+        }
+
+        .user-info h5 {
+            color: #00bcd4; /* Accent for username */
+        }
+
+        .user-info p {
+            font-size: 0.9em;
+            color: #bbb;
+        }
+
+        .avatar-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #00bcd4;
+        }
+
+        .logout-button-container {
+            margin-top: 40px;
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+        }
+
+        .logout-button-container .btn {
+            background-color: #e74c3c; /* Red for logout */
+            color: white;
+            border: none;
+            font-weight: bold;
+            padding: 10px 15px;
+            font-size: 1.1em;
+        }
+
+        .logout-button-container .btn:hover {
+            background-color: #c0392b;
+        }
+
+        .main-content-col {
+            padding: 20px;
+        }
+
+        .main-content-wrapper h2 {
+            color: #00bcd4;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #00bcd4;
+            padding-bottom: 10px;
+        }
+
+        /* Styling for Movie Cards */
+        .movie-card {
+            background-color: #2a2a3e;
+            border: none;
+            border-radius: 8px;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* Ensure cards have equal height */
+        }
+
+        .movie-card img {
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            height: 220px; /* Fixed height for posters */
+            object-fit: cover; /* Cover the area without distortion */
+        }
+
+        .movie-card .card-body {
+            padding: 15px;
+            flex-grow: 1; /* Allow body to grow to fill space */
+        }
+
+        .movie-card .card-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #00bcd4;
+            margin-bottom: 10px;
+            white-space: nowrap; /* Prevent title wrapping */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Add ellipsis if title is too long */
+        }
+
+        .movie-card .card-text {
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .movie-card .btn-primary, .movie-card .btn-info {
+            background-color: #00bcd4;
+            border-color: #00bcd4;
+            font-weight: bold;
+            width: 100%; /* Make buttons full width */
+        }
+
+        .movie-card .btn-primary:hover, .movie-card .btn-info:hover {
+            background-color: #00a8b8;
+            border-color: #00a8b8;
+        }
+    </style>
+}
+
+@section Scripts {
+    @* Add any necessary JavaScript here. For example, if you need dynamic active state based on URL. *@
+    <script>
+        $(document).ready(function() {
+            // Example: Highlight the active link based on the current URL
+            var currentUrl = window.location.href;
+            $('.sidebar-col .nav-link').each(function() {
+                if (this.href === currentUrl) {
+                    $(this).addClass('@activeSectionClass');
+                    // If you want only one item to be active, uncomment below:
+                    // $(this).parent().siblings().find('.nav-link').removeClass('@activeSectionClass');
+                }
+            });
+        });
+    </script>
+}

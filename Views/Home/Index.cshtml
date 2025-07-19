@@ -1,8 +1,299 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model HomeViewModel
+
+<!-- Container chính cho banner -->
+<div class="movie-banner-container">
+    @if (Model.BannerMovies != null && Model.BannerMovies.Any())
+    {
+        <!-- Carousel chứa tất cả các banner item -->
+        <div class="banner-carousel" id="bannerCarousel">
+            @foreach (var movie in Model.BannerMovies)
+            {
+                <!-- Mỗi banner-item chứa thông tin của một phim -->
+                <div class="banner-item" data-trailer-path="@Url.Content(movie.TrailerPath)">
+                    <!-- Lớp poster nền -->
+                    <div class="banner-poster">
+                        <img src="@Url.Content(movie.PosterBanner)" alt="@movie.Title Poster">
+                    </div>
+                    <!-- Lớp video trailer (ban đầu ẩn) -->
+                    <div class="banner-trailer">
+                        <video muted loop playsinline>
+                            @if (!string.IsNullOrEmpty(movie.TrailerPath))
+                            {
+                                <source src="@Url.Content(movie.TrailerPath)" type="video/mp4">
+                            }
+                        </video>
+                    </div>
+                    <!-- Lớp nội dung chữ và nút bấm -->
+                    <div class="banner-content">
+                        <div class="banner-info">
+                            <!-- Logo có thể thay bằng tên phim nếu không có logo -->
+                            <h1 class="movie-title">@movie.Title</h1>
+                            <div class="movie-meta">
+                                <span class="genre-badge">@movie.ReleaseYear</span>
+                                @if (!string.IsNullOrEmpty(movie.MainGenreName))
+                                {
+                                    <span class="genre-badge">@movie.MainGenreName</span>
+                                }
+                                @if (!string.IsNullOrEmpty(movie.CountryName))
+                                {
+                                    <span class="genre-badge">@movie.CountryName</span>
+                                }
+                                else
+                                {
+                                    @* Có thể thêm một dòng để biết tại sao nó không hiển thị *@
+                                    <span class="genre-badge" style="color: yellow;">CountryName_IS_NULL_OR_EMPTY</span>
+                                }
+                                @if (movie.TotalEpisodes > 1)
+                                {
+                                    <span class="genre-badge">@movie.TotalEpisodes Tập</span>
+                                }
+                            </div>
+                            <p class="movie-description">@movie.Description</p>
+                            <div class="banner-actions">
+                                <a href="@Url.Action("Watch", "Movies", new { movieId = movie.MovieId, episodeNumber = 1 })" class="btn-banner btn-play">
+                                    <i class="fas fa-play"></i>
+                                    Xem ngay
+                                </a>
+                                <a href="@Url.Action("Details", "Movies", new { id = movie.MovieId })" class="btn-banner btn-info">
+                                    <i class="fas fa-info-circle"></i>
+                                    Chi tiết
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Các nút điều khiển Carousel -->
+        <button class="banner-nav banner-nav-prev" id="prevBtn">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="banner-nav banner-nav-next" id="nextBtn">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <!-- Nút điều khiển âm lượng cho video trailer nền -->
+        <button class="volume-control" id="volumeBtn">
+            <i class="fas fa-volume-xmark"></i>
+        </button>
+
+        <!-- Lớp phủ dưới cùng chứa các chấm chỉ báo -->
+        <div class="banner-overlay">
+            <div class="banner-indicators" id="indicators">
+                @for (int i = 0; i < Model.BannerMovies.Count; i++)
+                {
+                    <button class="indicator-dot @(i == 0 ? "active" : "")" data-slide="@i"></button>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Hiển thị khi không có phim nào trong banner -->
+        <div class="d-flex justify-content-center align-items-center h-100">
+            <p class="text-white">Không có phim nào để hiển thị trong banner.</p>
+        </div>
+    }
+</div>
+
+@section Styles {
+    <!-- Thêm CSS vào section Styles để nó được render ở <head> -->
+    <style>
+        /* Toàn bộ CSS từ file tĩnh của bạn có thể được dán vào đây */
+        /* hoặc giữ nguyên trong file CSS riêng và link vào _Layout */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow-x: hidden; }
+        .movie-banner-container { position: relative; height: 100vh; width: 100%; overflow: hidden; }
+        .banner-carousel { position: relative; width: 100%; height: 100%; display: flex; transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .banner-item { position: relative; flex: 0 0 100%; height: 100%; width: 100%; overflow: hidden; }
+        .banner-poster, .banner-trailer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .banner-poster { z-index: 1; transition: opacity 0.8s ease-in-out; }
+        .banner-poster img, .banner-trailer video { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+        .banner-trailer { z-index: 2; opacity: 0; transition: opacity 0.8s ease-in-out; }
+        .banner-trailer.active { opacity: 1; }
+        .banner-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; display: flex; align-items: center; background: linear-gradient(77deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%); padding: 0 5%; }
+        .banner-info { max-width: 50%; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .movie-title { font-size: 3.5rem; font-weight: 700; margin-bottom: 15px; }
+        .movie-meta { display: flex; flex-wrap: wrap; gap: 10px 15px; margin-bottom: 20px; font-size: 0.95rem; }
+        .genre-badge { background: rgba(255,255,255,0.15); backdrop-filter: blur(5px); padding: 6px 12px; border-radius: 20px; font-weight: 500; border: 1px solid rgba(255,255,255,0.2); }
+        .movie-description { font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px; max-width: 550px; text-shadow: 0 1px 2px rgba(0,0,0,0.7); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .banner-actions { display: flex; gap: 15px; align-items: center; }
+        .btn-banner { padding: 12px 30px; border: none; border-radius: 8px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; transition: all 0.3s ease; font-size: 1rem; }
+        .btn-banner:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        .btn-play { background: #E50914; color: white; }
+        .btn-play:hover { background: #f6121d; }
+        .btn-info { background: rgba(109, 109, 110, 0.7); color: white; backdrop-filter: blur(10px); }
+        .btn-info:hover { background: rgba(109, 109, 110, 0.4); }
+        .banner-nav { position: absolute; top: 50%; transform: translateY(-50%); z-index: 15; background: rgba(0,0,0,0.3); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(5px); opacity: 0; }
+        .banner-nav:hover { background: rgba(0,0,0,0.5); transform: translateY(-50%) scale(1.1); }
+        .banner-nav-prev { left: 30px; }
+        .banner-nav-next { right: 30px; }
+        .banner-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.6)); padding: 50px 5% 30px; z-index: 12; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
+        .movie-banner-container:hover .banner-overlay, .movie-banner-container:hover .banner-nav { opacity: 1; }
+        .banner-indicators { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; pointer-events: all; }
+        .indicator-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.4); border: none; cursor: pointer; transition: all 0.3s ease; padding: 0; }
+        .indicator-dot.active { background: white; width: 30px; border-radius: 5px; }
+        .volume-control { position: absolute; bottom: 30px; left: 5%; z-index: 15; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.3); color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(5px); }
+        .volume-control:hover { background: rgba(0,0,0,0.5); transform: scale(1.1); }
+        /* Responsive design adjustments... */
+        @@media (max-width: 768px) {
+            .banner-info { max-width: 80%; }
+            .movie-title { font-size: 2.5rem; }
+            .movie-description { font-size: 1rem; -webkit-line-clamp: 2; }
+            .banner-actions { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .btn-banner { width: 100%; max-width: 200px; justify-content: center; }
+            .banner-nav { opacity: 0.7; }
+        }
+    </style>
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@section Scripts {
+    <!-- Thêm JavaScript vào section Scripts -->
+    <script>
+        // Class MovieBanner giữ nguyên như file tĩnh của bạn
+        class MovieBanner {
+            constructor() {
+                this.carousel = document.getElementById('bannerCarousel');
+                if (!this.carousel) return; // Thoát nếu không có banner
+
+                this.indicatorsContainer = document.getElementById('indicators');
+                this.bannerItems = document.querySelectorAll('.banner-item');
+                this.indicators = document.querySelectorAll('.indicator-dot');
+                
+                this.currentSlide = 0;
+                this.isMuted = true;
+                this.autoPlayTimer = null;
+                this.trailerTimer = null;
+                
+                this.init();
+            }
+
+            init() {
+                if (this.bannerItems.length <= 1) {
+                    // Nếu chỉ có 1 hoặc không có banner, ẩn các nút điều khiển
+                    const navs = document.querySelectorAll('.banner-nav, .banner-indicators');
+                    navs.forEach(nav => nav.style.display = 'none');
+                }
+                this.setupEventListeners();
+                this.startAutoPlay();
+                this.startTrailerTimer();
+            }
+
+            setupEventListeners() {
+                document.getElementById('prevBtn')?.addEventListener('click', () => this.previousSlide());
+                document.getElementById('nextBtn')?.addEventListener('click', () => this.nextSlide());
+                document.getElementById('volumeBtn')?.addEventListener('click', () => this.toggleVolume());
+                
+                this.indicators.forEach((indicator, index) => {
+                    indicator.addEventListener('click', () => this.goToSlide(index));
+                });
+
+                this.carousel.addEventListener('mouseenter', () => this.pauseAutoPlay());
+                this.carousel.addEventListener('mouseleave', () => this.resumeAutoPlay());
+            }
+
+            startTrailerTimer() {
+                clearTimeout(this.trailerTimer); // Xóa timer cũ
+                this.trailerTimer = setTimeout(() => {
+                    this.showTrailer();
+                }, 3000); // Hiện trailer sau 3 giây
+            }
+
+            showTrailer() {
+                const currentItem = this.bannerItems[this.currentSlide];
+                if (!currentItem) return;
+                
+                const trailerDiv = currentItem.querySelector('.banner-trailer');
+                const video = trailerDiv.querySelector('video');
+                
+                if (video && video.querySelector('source')?.getAttribute('src')) {
+                    trailerDiv.classList.add('active');
+                    video.currentTime = 0;
+                    video.play().catch(e => console.log('Autoplay bị trình duyệt chặn:', e));
+                }
+            }
+
+            hideTrailer() {
+                const currentItem = this.bannerItems[this.currentSlide];
+                 if (!currentItem) return;
+
+                const trailerDiv = currentItem.querySelector('.banner-trailer');
+                const video = trailerDiv.querySelector('video');
+                
+                if (video) {
+                    trailerDiv.classList.remove('active');
+                    video.pause();
+                }
+            }
+
+            goToSlide(index) {
+                if (index === this.currentSlide && this.bannerItems.length > 1) return;
+                
+                this.hideTrailer();
+                this.currentSlide = index;
+                this.updateCarousel();
+                this.updateIndicators();
+                this.startTrailerTimer();
+            }
+
+            nextSlide() {
+                const nextIndex = (this.currentSlide + 1) % this.bannerItems.length;
+                this.goToSlide(nextIndex);
+            }
+
+            previousSlide() {
+                const prevIndex = (this.currentSlide - 1 + this.bannerItems.length) % this.bannerItems.length;
+                this.goToSlide(prevIndex);
+            }
+
+            updateCarousel() {
+                const translateX = -this.currentSlide * 100;
+                this.carousel.style.transform = `translateX(${translateX}%)`;
+            }
+
+            updateIndicators() {
+                this.indicators.forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === this.currentSlide);
+                });
+            }
+
+            toggleVolume() {
+                this.isMuted = !this.isMuted;
+                const volumeBtn = document.getElementById('volumeBtn');
+                const currentItem = this.bannerItems[this.currentSlide];
+                if (!currentItem) return;
+
+                const video = currentItem.querySelector('video');
+                
+                if (video) {
+                    video.muted = this.isMuted;
+                }
+                
+                volumeBtn.innerHTML = this.isMuted ? 
+                    '<i class="fas fa-volume-xmark"></i>' : 
+                    '<i class="fas fa-volume-high"></i>';
+            }
+
+            startAutoPlay() {
+                clearInterval(this.autoPlayTimer);
+                this.autoPlayTimer = setInterval(() => {
+                    this.nextSlide();
+                }, 8000); // Tự động chuyển slide sau 8 giây
+            }
+
+            pauseAutoPlay() {
+                clearInterval(this.autoPlayTimer);
+            }
+
+            resumeAutoPlay() {
+                this.startAutoPlay();
+            }
+        }
+
+        // Khởi tạo banner khi DOM đã tải xong
+        document.addEventListener('DOMContentLoaded', () => {
+            new MovieBanner();
+        });
+    </script>
+}

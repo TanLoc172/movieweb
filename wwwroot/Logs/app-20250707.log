@@ -1,0 +1,713 @@
+2025-07-07 12:41:46.595 +07:00 [INF] Đã áp dụng migrations cho AppDbContext.
+2025-07-07 12:41:46.620 +07:00 [INF] Đã áp dụng migrations cho ApplicationDbContext (Identity).
+2025-07-07 12:41:46.621 +07:00 [INF] Thư mục Uploads đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Uploads
+2025-07-07 12:41:46.622 +07:00 [INF] Thư mục Logs đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Logs
+2025-07-07 12:42:11.881 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-07-07 12:56:52.647 +07:00 [INF] Đã áp dụng migrations cho AppDbContext.
+2025-07-07 12:56:52.670 +07:00 [INF] Đã áp dụng migrations cho ApplicationDbContext (Identity).
+2025-07-07 12:56:52.672 +07:00 [INF] Thư mục Uploads đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Uploads
+2025-07-07 12:56:52.672 +07:00 [INF] Thư mục Logs đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Logs
+2025-07-07 12:59:17.994 +07:00 [INF] Đã áp dụng migrations cho AppDbContext.
+2025-07-07 12:59:18.017 +07:00 [INF] Đã áp dụng migrations cho ApplicationDbContext (Identity).
+2025-07-07 12:59:18.019 +07:00 [INF] Thư mục Uploads đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Uploads
+2025-07-07 12:59:18.019 +07:00 [INF] Thư mục Logs đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Logs
+2025-07-07 13:06:21.786 +07:00 [INF] Đã áp dụng migrations cho AppDbContext.
+2025-07-07 13:06:21.820 +07:00 [INF] Đã áp dụng migrations cho ApplicationDbContext (Identity).
+2025-07-07 13:06:21.823 +07:00 [INF] Thư mục Uploads đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Uploads
+2025-07-07 13:06:21.823 +07:00 [INF] Thư mục Logs đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Logs
+2025-07-07 13:07:53.278 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-07-07 13:10:06.374 +07:00 [ERR] The view 'Index' was not found. Searched locations: ["/Views/ListMovies/Index.vi-VN.cshtml","/Views/ListMovies/Index.vi.cshtml","/Views/ListMovies/Index.cshtml","/Views/Shared/Index.vi-VN.cshtml","/Views/Shared/Index.vi.cshtml","/Views/Shared/Index.cshtml"]
+2025-07-07 13:10:06.381 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The view 'Index' was not found. The following locations were searched:
+/Views/ListMovies/Index.vi-VN.cshtml
+/Views/ListMovies/Index.vi.cshtml
+/Views/ListMovies/Index.cshtml
+/Views/Shared/Index.vi-VN.cshtml
+/Views/Shared/Index.vi.cshtml
+/Views/Shared/Index.cshtml
+   at Microsoft.AspNetCore.Mvc.ViewEngines.ViewEngineResult.EnsureSuccessful(IEnumerable`1 originalLocations)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewResultExecutor.ExecuteAsync(ActionContext context, ViewResult result)
+   at Microsoft.AspNetCore.Mvc.ViewResult.ExecuteResultAsync(ActionContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResultFilterAsync>g__Awaited|30_0[TFilter,TFilterAsync](ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-07 13:10:14.643 +07:00 [ERR] The view 'Index' was not found. Searched locations: ["/Views/ListMovies/Index.vi-VN.cshtml","/Views/ListMovies/Index.vi.cshtml","/Views/ListMovies/Index.cshtml","/Views/Shared/Index.vi-VN.cshtml","/Views/Shared/Index.vi.cshtml","/Views/Shared/Index.cshtml"]
+2025-07-07 13:10:14.645 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The view 'Index' was not found. The following locations were searched:
+/Views/ListMovies/Index.vi-VN.cshtml
+/Views/ListMovies/Index.vi.cshtml
+/Views/ListMovies/Index.cshtml
+/Views/Shared/Index.vi-VN.cshtml
+/Views/Shared/Index.vi.cshtml
+/Views/Shared/Index.cshtml
+   at Microsoft.AspNetCore.Mvc.ViewEngines.ViewEngineResult.EnsureSuccessful(IEnumerable`1 originalLocations)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewResultExecutor.ExecuteAsync(ActionContext context, ViewResult result)
+   at Microsoft.AspNetCore.Mvc.ViewResult.ExecuteResultAsync(ActionContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResultFilterAsync>g__Awaited|30_0[TFilter,TFilterAsync](ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-07 13:10:43.619 +07:00 [INF] Đã áp dụng migrations cho AppDbContext.
+2025-07-07 13:10:43.641 +07:00 [INF] Đã áp dụng migrations cho ApplicationDbContext (Identity).
+2025-07-07 13:10:43.643 +07:00 [INF] Thư mục Uploads đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Uploads
+2025-07-07 13:10:43.643 +07:00 [INF] Thư mục Logs đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Logs
+2025-07-07 13:10:52.805 +07:00 [INF] Đã áp dụng migrations cho AppDbContext.
+2025-07-07 13:10:52.829 +07:00 [INF] Đã áp dụng migrations cho ApplicationDbContext (Identity).
+2025-07-07 13:10:52.831 +07:00 [INF] Thư mục Uploads đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Uploads
+2025-07-07 13:10:52.831 +07:00 [INF] Thư mục Logs đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Logs
+2025-07-07 13:10:54.302 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-07-07 13:17:57.326 +07:00 [ERR] The view 'Details' was not found. Searched locations: ["/Views/ListMovies/Details.vi-VN.cshtml","/Views/ListMovies/Details.vi.cshtml","/Views/ListMovies/Details.cshtml","/Views/Shared/Details.vi-VN.cshtml","/Views/Shared/Details.vi.cshtml","/Views/Shared/Details.cshtml"]
+2025-07-07 13:17:57.331 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The view 'Details' was not found. The following locations were searched:
+/Views/ListMovies/Details.vi-VN.cshtml
+/Views/ListMovies/Details.vi.cshtml
+/Views/ListMovies/Details.cshtml
+/Views/Shared/Details.vi-VN.cshtml
+/Views/Shared/Details.vi.cshtml
+/Views/Shared/Details.cshtml
+   at Microsoft.AspNetCore.Mvc.ViewEngines.ViewEngineResult.EnsureSuccessful(IEnumerable`1 originalLocations)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewResultExecutor.ExecuteAsync(ActionContext context, ViewResult result)
+   at Microsoft.AspNetCore.Mvc.ViewResult.ExecuteResultAsync(ActionContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResultFilterAsync>g__Awaited|30_0[TFilter,TFilterAsync](ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-07 13:18:21.166 +07:00 [INF] Đã áp dụng migrations cho AppDbContext.
+2025-07-07 13:18:21.190 +07:00 [INF] Đã áp dụng migrations cho ApplicationDbContext (Identity).
+2025-07-07 13:18:21.192 +07:00 [INF] Thư mục Uploads đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Uploads
+2025-07-07 13:18:21.192 +07:00 [INF] Thư mục Logs đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Logs
+2025-07-07 13:18:50.698 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-07-07 13:18:50.729 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.MissingMethodException: Attempted to invoke a deleted method implementation. This can happen when a method is deleted or its name or signature is changed while the application is running.
+   at MovieWebsite.Controllers.ListMoviesController.Index()
+   at lambda_method140(Closure, Object, Object[])
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-07 13:19:00.526 +07:00 [ERR] The view 'List' was not found. Searched locations: ["/Views/Movies/List.vi-VN.cshtml","/Views/Movies/List.vi.cshtml","/Views/Movies/List.cshtml","/Views/Shared/List.vi-VN.cshtml","/Views/Shared/List.vi.cshtml","/Views/Shared/List.cshtml"]
+2025-07-07 13:19:00.530 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The view 'List' was not found. The following locations were searched:
+/Views/Movies/List.vi-VN.cshtml
+/Views/Movies/List.vi.cshtml
+/Views/Movies/List.cshtml
+/Views/Shared/List.vi-VN.cshtml
+/Views/Shared/List.vi.cshtml
+/Views/Shared/List.cshtml
+   at Microsoft.AspNetCore.Mvc.ViewEngines.ViewEngineResult.EnsureSuccessful(IEnumerable`1 originalLocations)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewResultExecutor.ExecuteAsync(ActionContext context, ViewResult result)
+   at Microsoft.AspNetCore.Mvc.ViewResult.ExecuteResultAsync(ActionContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResultFilterAsync>g__Awaited|30_0[TFilter,TFilterAsync](ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-07 13:20:10.269 +07:00 [ERR] The view 'List' was not found. Searched locations: ["/Views/Movies/List.vi-VN.cshtml","/Views/Movies/List.vi.cshtml","/Views/Movies/List.cshtml","/Views/Shared/List.vi-VN.cshtml","/Views/Shared/List.vi.cshtml","/Views/Shared/List.cshtml"]
+2025-07-07 13:20:10.271 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The view 'List' was not found. The following locations were searched:
+/Views/Movies/List.vi-VN.cshtml
+/Views/Movies/List.vi.cshtml
+/Views/Movies/List.cshtml
+/Views/Shared/List.vi-VN.cshtml
+/Views/Shared/List.vi.cshtml
+/Views/Shared/List.cshtml
+   at Microsoft.AspNetCore.Mvc.ViewEngines.ViewEngineResult.EnsureSuccessful(IEnumerable`1 originalLocations)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewResultExecutor.ExecuteAsync(ActionContext context, ViewResult result)
+   at Microsoft.AspNetCore.Mvc.ViewResult.ExecuteResultAsync(ActionContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResultFilterAsync>g__Awaited|30_0[TFilter,TFilterAsync](ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-07 13:20:13.861 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.MissingMethodException: Attempted to invoke a deleted method implementation. This can happen when a method is deleted or its name or signature is changed while the application is running.
+   at MovieWebsite.Controllers.ListMoviesController.Index()
+   at lambda_method140(Closure, Object, Object[])
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-07 13:58:26.809 +07:00 [INF] Đã áp dụng migrations cho AppDbContext.
+2025-07-07 13:58:26.835 +07:00 [INF] Đã áp dụng migrations cho ApplicationDbContext (Identity).
+2025-07-07 13:58:26.837 +07:00 [INF] Thư mục Uploads đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Uploads
+2025-07-07 13:58:26.837 +07:00 [INF] Thư mục Logs đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Logs
+2025-07-07 13:58:28.499 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-07-07 14:02:13.513 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.MissingMethodException: Attempted to invoke a deleted method implementation. This can happen when a method is deleted or its name or signature is changed while the application is running.
+   at MovieWebsite.Controllers.MoviesController.List(MovieSearchViewModel searchVM)
+   at lambda_method499(Closure, Object, Object[])
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-07 14:04:05.195 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.AspNetCore.Routing.Matching.AmbiguousMatchException: The request matched multiple endpoints. Matches: 
+
+MovieWebsite.Controllers.MoviesController.List (MovieWebsite)
+MovieWebsite.Controllers.MoviesController.List (MovieWebsite)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ReportAmbiguity(Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ProcessFinalCandidates(HttpContext httpContext, Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.Select(HttpContext httpContext, Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcher.MatchAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-07 14:04:06.896 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.AspNetCore.Routing.Matching.AmbiguousMatchException: The request matched multiple endpoints. Matches: 
+
+MovieWebsite.Controllers.MoviesController.List (MovieWebsite)
+MovieWebsite.Controllers.MoviesController.List (MovieWebsite)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ReportAmbiguity(Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ProcessFinalCandidates(HttpContext httpContext, Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.Select(HttpContext httpContext, Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcher.MatchAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-07 14:05:35.705 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.AspNetCore.Routing.Matching.AmbiguousMatchException: The request matched multiple endpoints. Matches: 
+
+MovieWebsite.Controllers.MoviesController.List (MovieWebsite)
+MovieWebsite.Controllers.MoviesController.List (MovieWebsite)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ReportAmbiguity(Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ProcessFinalCandidates(HttpContext httpContext, Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.Select(HttpContext httpContext, Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcher.MatchAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-07 14:05:37.460 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.AspNetCore.Routing.Matching.AmbiguousMatchException: The request matched multiple endpoints. Matches: 
+
+MovieWebsite.Controllers.MoviesController.List (MovieWebsite)
+MovieWebsite.Controllers.MoviesController.List (MovieWebsite)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ReportAmbiguity(Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ProcessFinalCandidates(HttpContext httpContext, Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.Select(HttpContext httpContext, Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcher.MatchAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-07 14:08:08.819 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.AspNetCore.Routing.Matching.AmbiguousMatchException: The request matched multiple endpoints. Matches: 
+
+MovieWebsite.Controllers.MoviesController.List (MovieWebsite)
+MovieWebsite.Controllers.MoviesController.List (MovieWebsite)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ReportAmbiguity(Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ProcessFinalCandidates(HttpContext httpContext, Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.Select(HttpContext httpContext, Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcher.MatchAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-07 14:08:10.353 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.AspNetCore.Routing.Matching.AmbiguousMatchException: The request matched multiple endpoints. Matches: 
+
+MovieWebsite.Controllers.MoviesController.List (MovieWebsite)
+MovieWebsite.Controllers.MoviesController.List (MovieWebsite)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ReportAmbiguity(Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ProcessFinalCandidates(HttpContext httpContext, Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.Select(HttpContext httpContext, Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcher.MatchAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-07 14:08:14.722 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.AspNetCore.Routing.Matching.AmbiguousMatchException: The request matched multiple endpoints. Matches: 
+
+MovieWebsite.Controllers.MoviesController.List (MovieWebsite)
+MovieWebsite.Controllers.MoviesController.List (MovieWebsite)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ReportAmbiguity(Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ProcessFinalCandidates(HttpContext httpContext, Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.Select(HttpContext httpContext, Span`1 candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcher.MatchAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-07 14:11:21.738 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.MissingMethodException: Attempted to invoke a deleted method implementation. This can happen when a method is deleted or its name or signature is changed while the application is running.
+   at MovieWebsite.Controllers.MoviesController.List(MovieSearchViewModel model)
+   at lambda_method508(Closure, Object, Object[])
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-07 14:11:23.188 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.MissingMethodException: Attempted to invoke a deleted method implementation. This can happen when a method is deleted or its name or signature is changed while the application is running.
+   at MovieWebsite.Controllers.MoviesController.List(MovieSearchViewModel model)
+   at lambda_method508(Closure, Object, Object[])
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-07 14:16:26.308 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.MissingMethodException: Attempted to invoke a deleted method implementation. This can happen when a method is deleted or its name or signature is changed while the application is running.
+   at MovieWebsite.Controllers.MoviesController.List(MovieSearchViewModel model)
+   at lambda_method517(Closure, Object, Object[])
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-07 14:17:19.670 +07:00 [INF] Đã áp dụng migrations cho AppDbContext.
+2025-07-07 14:17:19.851 +07:00 [INF] Đã áp dụng migrations cho ApplicationDbContext (Identity).
+2025-07-07 14:17:19.857 +07:00 [INF] Thư mục Uploads đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Uploads
+2025-07-07 14:17:19.858 +07:00 [INF] Thư mục Logs đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Logs
+2025-07-07 14:17:25.879 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-07-07 14:17:40.018 +07:00 [INF] Đã lấy danh sách 3 phim của quốc gia Việt Nam.
+2025-07-07 14:18:34.325 +07:00 [INF] Đã áp dụng migrations cho AppDbContext.
+2025-07-07 14:18:34.362 +07:00 [INF] Đã áp dụng migrations cho ApplicationDbContext (Identity).
+2025-07-07 14:18:34.365 +07:00 [INF] Thư mục Uploads đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Uploads
+2025-07-07 14:18:34.365 +07:00 [INF] Thư mục Logs đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Logs
+2025-07-07 14:18:39.130 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-07-07 14:18:39.441 +07:00 [INF] Đã lấy danh sách 4 phim của quốc gia Hàn Quốc.
+2025-07-07 14:19:36.729 +07:00 [INF] Đã áp dụng migrations cho AppDbContext.
+2025-07-07 14:19:36.752 +07:00 [INF] Đã áp dụng migrations cho ApplicationDbContext (Identity).
+2025-07-07 14:19:36.754 +07:00 [INF] Thư mục Uploads đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Uploads
+2025-07-07 14:19:36.754 +07:00 [INF] Thư mục Logs đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Logs
+2025-07-07 14:19:40.168 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-07-07 14:19:40.386 +07:00 [WRN] Quốc gia với ID 0 không tồn tại.
+2025-07-07 14:20:22.325 +07:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2025-07-07 14:21:03.799 +07:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2025-07-07 14:21:03.893 +07:00 [INF] Đã cập nhật phim: Bố Già (ID: 3)
+2025-07-07 14:21:22.251 +07:00 [INF] Đã cập nhật phim: Tiệc Trăng Máu (ID: 2)
+2025-07-07 14:21:39.428 +07:00 [INF] Đã cập nhật phim: Mắt Biếc (ID: 1)
+2025-07-07 14:22:13.732 +07:00 [WRN] Quốc gia với ID 0 không tồn tại.
+2025-07-07 14:22:45.668 +07:00 [INF] Đã áp dụng migrations cho AppDbContext.
+2025-07-07 14:22:45.691 +07:00 [INF] Đã áp dụng migrations cho ApplicationDbContext (Identity).
+2025-07-07 14:22:45.693 +07:00 [INF] Thư mục Uploads đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Uploads
+2025-07-07 14:22:45.693 +07:00 [INF] Thư mục Logs đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Logs
+2025-07-07 14:22:49.090 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-07-07 14:23:06.092 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 14:24:14.554 +07:00 [INF] Đã áp dụng migrations cho AppDbContext.
+2025-07-07 14:24:14.577 +07:00 [INF] Đã áp dụng migrations cho ApplicationDbContext (Identity).
+2025-07-07 14:24:14.579 +07:00 [INF] Thư mục Uploads đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Uploads
+2025-07-07 14:24:14.579 +07:00 [INF] Thư mục Logs đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Logs
+2025-07-07 14:24:15.046 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-07-07 14:24:15.358 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 14:24:27.340 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 14:24:30.497 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 14:24:34.977 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 14:24:43.963 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 14:26:01.744 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 14:26:04.680 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 14:26:08.977 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 14:31:50.007 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 14:32:14.102 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 14:37:14.740 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 14:38:23.063 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 14:38:49.367 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 14:38:50.925 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 14:39:03.029 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 14:40:47.093 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 14:41:54.205 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 14:41:57.547 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 14:42:10.476 +07:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2025-07-07 14:42:10.589 +07:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2025-07-07 17:28:33.285 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:30:12.880 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:33:53.317 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:34:07.009 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:34:13.440 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:34:14.518 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:34:39.436 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:37:02.691 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:37:09.326 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:41:36.502 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:42:05.570 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:42:11.302 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:42:17.232 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:42:20.546 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:43:02.203 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:43:30.155 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:44:46.011 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:44:55.330 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:46:01.577 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:46:19.840 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:46:25.951 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:46:30.645 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:46:38.764 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:46:40.545 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:47:19.071 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:47:31.311 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:47:32.200 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:47:32.796 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:48:45.005 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:48:48.289 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:48:54.980 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:49:26.967 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:49:30.339 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:49:36.537 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:49:42.156 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:49:46.207 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:49:50.815 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:50:01.276 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:50:03.851 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:50:09.016 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:50:13.874 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:50:20.716 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:51:29.762 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:51:44.638 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:52:45.236 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:52:49.368 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:52:51.674 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:53:03.865 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:55:11.669 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:55:24.044 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:55:26.159 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:55:33.017 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:55:38.986 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:55:41.960 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:55:47.613 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:55:48.770 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:55:51.016 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:56:02.183 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:56:03.325 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:56:05.274 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:56:07.629 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:57:22.975 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:57:29.339 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:57:33.236 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:57:38.716 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:57:46.574 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:57:54.955 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:58:00.160 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:58:01.987 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:58:07.986 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:58:12.798 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:58:56.206 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:59:39.662 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:59:49.844 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:59:53.321 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 17:59:58.989 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:00:06.001 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:00:16.514 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:00:24.027 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:00:29.424 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:00:41.928 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:00:43.453 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:00:53.747 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:01:03.004 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:01:14.260 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:01:18.407 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:01:30.853 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:01:40.749 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:02:02.331 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:02:06.967 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:02:14.044 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:02:24.386 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:02:40.944 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:02:43.555 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:02:56.258 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:03:04.104 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:03:07.544 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:03:36.033 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:07:17.793 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:08:46.735 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:08:59.539 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:11:33.595 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:15:38.427 +07:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2025-07-07 18:15:49.883 +07:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2025-07-07 18:15:49.931 +07:00 [INF] Đã cập nhật phim: Diệp Vấn (ID: 5)
+2025-07-07 18:16:29.094 +07:00 [INF] Đang tải file poster_doc_3: 111.jpg lên /Users/tanloc/MovieWebsite/wwwroot/Uploads/poster_doc_3_4271dcbf-b4a0-450d-bb55-36c5cab49836.jpg
+2025-07-07 18:16:29.104 +07:00 [INF] Đã cập nhật phim: Bố Già (ID: 3)
+2025-07-07 18:16:32.460 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:16:42.886 +07:00 [INF] Đã cập nhật phim: Bố Già (ID: 3)
+2025-07-07 18:16:56.154 +07:00 [INF] Đã cập nhật phim: Bố Già (ID: 3)
+2025-07-07 18:17:07.803 +07:00 [INF] Đang tải file poster_doc_2: 111.jpg lên /Users/tanloc/MovieWebsite/wwwroot/Uploads/poster_doc_2_c2dfabd6-18f3-47de-9806-665d42a976b9.jpg
+2025-07-07 18:17:07.807 +07:00 [INF] Đã cập nhật phim: Tiệc Trăng Máu (ID: 2)
+2025-07-07 18:17:16.578 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:17:55.850 +07:00 [INF] Đang tải file poster_doc_10: 111.jpg lên /Users/tanloc/MovieWebsite/wwwroot/Uploads/poster_doc_10_69c70e22-b6c5-47d7-9b0f-83ff587b2ba9.jpg
+2025-07-07 18:17:55.855 +07:00 [INF] Đã cập nhật phim: Chuyến Tàu Sinh Tử (ID: 10)
+2025-07-07 18:18:35.913 +07:00 [INF] Đang tải file poster_doc_9: 111.jpg lên /Users/tanloc/MovieWebsite/wwwroot/Uploads/poster_doc_9_b0b624d9-b69d-42a1-ab0a-e8d8e408f3e2.jpg
+2025-07-07 18:18:35.927 +07:00 [INF] Đã cập nhật phim: Goblin (ID: 9)
+2025-07-07 18:18:39.541 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:20:25.384 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:20:35.143 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:20:48.685 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:21:10.787 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:21:28.841 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:21:41.014 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:21:42.580 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:21:44.922 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:21:50.805 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:22:13.993 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:22:17.343 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:23:12.232 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:23:14.832 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:23:23.056 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:23:26.949 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:23:29.527 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:23:59.059 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:24:13.105 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:25:06.345 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:25:23.186 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:26:08.231 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:26:51.970 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:26:54.495 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:27:30.979 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:27:35.467 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:27:37.183 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:27:40.782 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:27:43.884 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:27:49.051 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:28:01.632 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:28:04.570 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:28:17.153 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:28:21.050 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:28:27.506 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:28:31.588 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:28:40.732 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:28:43.376 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:28:44.133 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:28:58.717 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:29:00.297 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:29:12.088 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:29:22.592 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:29:25.501 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:32:08.119 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:32:15.002 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:32:17.463 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:32:19.086 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:32:48.549 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:34:16.810 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:34:19.391 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:36:01.629 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:36:31.943 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:36:38.544 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:36:50.210 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:36:54.810 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:38:24.689 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:38:27.023 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:38:49.641 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:38:55.219 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:39:24.086 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:39:27.669 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:39:31.742 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:39:34.603 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:39:38.829 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:39:50.654 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:39:52.458 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:39:56.424 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:39:58.488 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:40:04.774 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:40:11.976 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:44:22.006 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:44:32.462 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:48:11.604 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:48:20.544 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:48:23.195 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:48:28.746 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:49:20.394 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:49:29.360 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:49:31.268 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:49:38.764 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:50:40.174 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:51:10.643 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:51:19.026 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:51:46.145 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:51:48.812 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:51:59.080 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:54:19.800 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:54:22.969 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:57:03.421 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:57:07.578 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:57:16.984 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:57:38.054 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:57:39.265 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:57:45.302 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:57:48.959 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:57:50.474 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:57:51.788 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:57:52.910 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:57:52.929 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:58:04.705 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:58:09.480 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:58:14.632 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:58:58.533 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:58:59.852 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:59:01.987 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:59:05.036 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:59:06.243 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:59:19.244 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 18:59:21.798 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 19:00:00.572 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.
+2025-07-07 19:00:02.982 +07:00 [INF] Đã lấy danh sách 7 phim của quốc gia Hàn Quốc.

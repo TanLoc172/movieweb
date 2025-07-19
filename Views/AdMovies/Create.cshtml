@@ -53,7 +53,8 @@
             <!-- Release Year -->
             <div class="col-md-4 mb-3">
                 <label asp-for="ReleaseYear" class="form-label">Năm phát hành</label>
-                <input asp-for="ReleaseYear" type="number" class="form-control" min="1900" max="@DateTime.Now.Year" required />
+                <input asp-for="ReleaseYear" type="number" class="form-control" min="1900" max="@DateTime.Now.Year"
+                    required />
                 <span asp-validation-for="ReleaseYear" class="text-danger"></span>
             </div>
 
@@ -134,21 +135,46 @@
         <!-- Poster Upload -->
         <div class="mb-3">
             <label asp-for="PosterFile" class="form-label">Poster (JPEG, PNG, JPG, GIF, tối đa 5MB)</label>
-            <input asp-for="PosterFile" type="file" class="form-control" accept="image/jpeg,image/png,image/jpg,image/gif" required />
+            <input asp-for="PosterFile" type="file" class="form-control"
+                accept="image/jpeg,image/png,image/jpg,image/gif" required />
             <span asp-validation-for="PosterFile" class="text-danger"></span>
         </div>
+        <!-- Poster Dọc Upload -->
+        <div class="mb-3">
+            <label asp-for="PosterDocFile" class="form-label"></label>
+            <input asp-for="PosterDocFile" type="file" class="form-control"
+                accept="image/jpeg,image/png,image/jpg,image/gif" />
+            <span asp-validation-for="PosterDocFile" class="text-danger"></span>
+        </div>
 
+        <!-- Poster Banner Upload -->
+        <div class="mb-3">
+            <label asp-for="PosterBannerFile" class="form-label"></label>
+            <input asp-for="PosterBannerFile" type="file" class="form-control"
+                accept="image/jpeg,image/png,image/jpg,image/gif" />
+            <span asp-validation-for="PosterBannerFile" class="text-danger"></span>
+        </div>
+
+        <!-- Poster Phụ Upload -->
+        <div class="mb-3">
+            <label asp-for="PosterImageFile" class="form-label"></label>
+            <input asp-for="PosterImageFile" type="file" class="form-control"
+                accept="image/jpeg,image/png,image/jpg,image/gif" />
+            <span asp-validation-for="PosterImageFile" class="text-danger"></span>
+        </div>
         <!-- Trailer Upload -->
         <div class="mb-3">
             <label asp-for="TrailerFile" class="form-label">Trailer (MP4, MOV, AVI, tối đa 100MB, tùy chọn)</label>
-            <input asp-for="TrailerFile" type="file" class="form-control" accept="video/mp4,video/quicktime,video/x-msvideo" />
+            <input asp-for="TrailerFile" type="file" class="form-control"
+                accept="video/mp4,video/quicktime,video/x-msvideo" />
             <span asp-validation-for="TrailerFile" class="text-danger"></span>
         </div>
 
         <!-- Episode Uploads -->
         <div class="mb-3">
             <h4>Tập phim</h4>
-            <p class="text-muted">Tải lên video và thông tin cho từng tập phim (MP4, MOV, AVI, tối đa 100MB mỗi tập). Để trống nếu là phim lẻ.</p>
+            <p class="text-muted">Tải lên video và thông tin cho từng tập phim (MP4, MOV, AVI, tối đa 100MB mỗi tập). Để
+                trống nếu là phim lẻ.</p>
             <div id="episode-container">
                 <!-- Episodes will be dynamically added via JavaScript -->
             </div>
@@ -185,47 +211,65 @@
             const container = document.getElementById('episode-container');
             const index = container.children.length;
             const episodeHtml = `
-                <div class="card mb-3 episode-item">
-                    <div class="card-body">
-                        <h5>Tập ${index + 1}</h5>
-                        <input type="hidden" name="Episodes[${index}].MovieId" value="0" />
-                        <div class="mb-3">
-                            <label class="form-label" for="Episodes_${index}__EpisodeNumber">Số tập</label>
-                            <input type="number" class="form-control" name="Episodes[${index}].EpisodeNumber" value="${index + 1}" min="1" required />
-                            <span class="text-danger field-validation-valid" data-valmsg-for="Episodes[${index}].EpisodeNumber" data-valmsg-replace="true"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="Episodes_${index}__Title">Tên tập</label>
-                            <input type="text" class="form-control" name="Episodes[${index}].Title" required />
-                            <span class="text-danger field-validation-valid" data-valmsg-for="Episodes[${index}].Title" data-valmsg-replace="true"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="Episodes_${index}__Description">Mô tả</label>
-                            <textarea class="form-control" name="Episodes[${index}].Description" rows="3"></textarea>
-                            <span class="text-danger field-validation-valid" data-valmsg-for="Episodes[${index}].Description" data-valmsg-replace="true"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="Episodes_${index}__Duration">Thời lượng (phút)</label>
-                            <input type="number" class="form-control" name="Episodes[${index}].Duration" min="1" max="600" required />
-                            <span class="text-danger field-validation-valid" data-valmsg-for="Episodes[${index}].Duration" data-valmsg-replace="true"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="Episodes_${index}__ReleaseDate">Ngày phát hành</label>
-                            <input type="date" class="form-control" name="Episodes[${index}].ReleaseDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
-                            <span class="text-danger field-validation-valid" data-valmsg-for="Episodes[${index}].ReleaseDate" data-valmsg-replace="true"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="Episodes_${index}__VideoFile">Video tập (MP4, MOV, AVI, tối đa 100MB)</label>
-                            <input type="file" class="form-control" name="Episodes[${index}].VideoFile" accept="video/mp4,video/quicktime,video/x-msvideo" required />
-                            <span class="text-danger field-validation-valid" data-valmsg-for="Episodes[${index}].VideoFile" data-valmsg-replace="true"></span>
-                        </div>
-                        <button type="button" class="btn btn-danger btn-sm remove-episode">Xóa tập</button>
+            <div class="card mb-3 episode-item">
+                <div class="card-body">
+                    <h5>Tập ${index + 1}</h5>
+                    <div class="mb-3">
+                        <label class="form-label" for="Episodes_${index}__EpisodeNumber">Tập số</label>
+                        <input type="number" class="form-control" name="Episodes[${index}].EpisodeNumber" value="${index + 1}" min="1" required />
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="Episodes_${index}__Title">Tên tập</label>
+                        <input type="text" class="form-control" name="Episodes[${index}].Title" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="Episodes_${index}__Description">Mô tả</label>
+                        <textarea class="form-control" name="Episodes[${index}].Description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="Episodes_${index}__Duration">Thời lượng (phút)</label>
+                        <input type="number" class="form-control" name="Episodes[${index}].Duration" min="1" max="600" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="Episodes_${index}__ReleaseDate">Ngày phát hành</label>
+                        <input type="date" class="form-control" name="Episodes[${index}].ReleaseDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="Episodes_${index}__VideoFile">Video tập (Bắt buộc)</label>
+                        <input type="file" class="form-control" name="Episodes[${index}].VideoFile" accept="video/*" required />
+                    </div>
+
+                    <!-- ===== PHẦN LÊN LỊCH CHIẾU MỚI THÊM VÀO ĐÂY ===== -->
+                    <div class="mt-3 pt-3 border-top">
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input create-schedule-toggle" type="checkbox" role="switch" name="Episodes[${index}].CreateSchedule" value="true" id="scheduleCheck${index}">
+                            <label class="form-check-label" for="scheduleCheck${index}">Tự động lên lịch chiếu cho tập này</label>
+                        </div>
+                        <div class="schedule-time-input" style="display: none;">
+                            <label class="form-label" for="Episodes_${index}__ScheduledTime">Thời gian chiếu dự kiến</label>
+                            <input type="datetime-local" class="form-control" name="Episodes[${index}].ScheduledTime" />
+                        </div>
+                    </div>
+                    <!-- ================================================= -->
+
+                    <button type="button" class="btn btn-danger btn-sm mt-3 remove-episode">Xóa tập</button>
                 </div>
-            `;
+            </div>
+        `;
             container.insertAdjacentHTML('beforeend', episodeHtml);
         });
 
+        // Thêm đoạn script này để xử lý việc ẩn/hiện ô nhập thời gian
+        document.addEventListener('change', function (e) {
+            if (e.target.classList.contains('create-schedule-toggle')) {
+                const scheduleTimeInput = e.target.closest('.border-top').querySelector('.schedule-time-input');
+                if (e.target.checked) {
+                    scheduleTimeInput.style.display = 'block';
+                } else {
+                    scheduleTimeInput.style.display = 'none';
+                }
+            }
+        });
         // Remove episode
         document.addEventListener('click', function (e) {
             if (e.target.classList.contains('remove-episode')) {

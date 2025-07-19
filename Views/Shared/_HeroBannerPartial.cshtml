@@ -1,0 +1,101 @@
+
+@model HomeViewModel
+
+<section class="movie-banner-container">
+    @if (Model.BannerMovies != null && Model.BannerMovies.Any())
+    {
+        <!-- Banner Carousel -->
+        <div class="banner-carousel">
+            @foreach (var movie in Model.BannerMovies)
+            {
+                <!-- Quan trọng: Thêm data-movie-id và data-trailer-path vào banner-item -->
+                <div class="banner-item" data-movie-id="@movie.MovieId" data-trailer-path="@movie.TrailerPath">
+                    <!-- Poster ban đầu -->
+                    <div class="banner-poster">
+                        <img src="@movie.PosterBanner" alt="@movie.Title Poster">
+                        <div class="banner-overlay-info">
+                            <h2 class="banner-title">@movie.Title</h2>
+                            @if (!string.IsNullOrEmpty(movie.EnglishTitle))
+                            {
+                                <h3 class="banner-english-title">@movie.EnglishTitle</h3>
+                            }
+                            <div class="banner-meta">
+                                <span>@movie.MainGenreName</span>
+                                @if (movie.GenreNames != null && movie.GenreNames.Count > 1)
+                                {
+                                    <span>• @string.Join(", ", movie.GenreNames.Skip(1))</span>
+                                }
+                                <span>• @movie.ReleaseYear</span>
+                                @if (movie.TotalEpisodes > 1)
+                                {
+                                    <span>• @movie.TotalEpisodes Tập</span>
+                                }
+                            </div>
+                            <p class="banner-description">@movie.Description</p>
+                            <div class="banner-actions">
+                                <!-- THAY ĐỔI: Chữ "Xem Ngay" và bỏ onclick -->
+                                @* <a href="#" class="btn btn-play">
+                                    <i class="fas fa-play"></i> Xem Ngay
+                                </a>
+                                <a href="@Url.Action("Details", "Movie", new { id = movie.MovieId })" class="btn btn-info">
+                                    <i class="fas fa-info-circle"></i> Chi tiết
+                                </a> *@
+                                <a href="@Url.Action("Details", "Movies", new { id = movie.MovieId })" class="btn btn-play">
+        <i class="fas fa-play"></i> Xem Ngay
+    </a>
+    <a href="@Url.Action("Details", "Movies", new { id = movie.MovieId })" class="btn btn-info">
+        <i class="fas fa-info-circle"></i> Chi tiết
+    </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Trailer (ban đầu ẩn) -->
+                    @* <div class="banner-trailer" style="display: none;">
+                         <!-- THAY ĐỔI: Bỏ `autoplay muted` để JS kiểm soát hoàn toàn -->
+                        <video width="100%" height="100%" controls>
+                            <source src="@movie.TrailerPath" type="video/mp4">
+                            Trình duyệt của bạn không hỗ trợ video.
+                        </video> *@
+
+                        <div class="banner-trailer" style="display: none;">
+    <!-- THAY ĐỔI: Bỏ thuộc tính "controls" -->
+    <video width="100%" height="100%">
+        <source src="@movie.TrailerPath" type="video/mp4">
+        Trình duyệt của bạn không hỗ trợ video.
+    </video>
+    
+    <!-- THAY ĐỔI: Thêm nút bật/tắt âm lượng -->
+    <div class="trailer-controls">
+        <button class="btn-toggle-volume">
+            <i class="fas fa-volume-xmark"></i> <!-- Mặc định là tắt tiếng -->
+        </button>
+    </div>
+                        <!-- THAY ĐỔI: Bỏ onclick -->
+                        <button class="btn-close-trailer">×</button>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Navigation controls -->
+        <button class="banner-nav-prev"><i class="fas fa-chevron-left"></i></button>
+        <button class="banner-nav-next"><i class="fas fa-chevron-right"></i></button>
+
+        <!-- Carousel Indicators -->
+        <div class="banner-indicators">
+            @for (int i = 0; i < Model.BannerMovies.Count(); i++)
+            {
+                <button class="indicator-dot @(i == 0 ? "active" : "")" data-slide-to="@i"></button>
+            }
+        </div>
+    }
+    else
+    {
+        <p>Không có phim nào để hiển thị.</p>
+    }
+</section>
+
+<!-- Các link và script section khác giữ nguyên -->
+
+<!-- Thêm Font Awesome cho icons nếu bạn chưa có -->

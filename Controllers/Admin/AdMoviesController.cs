@@ -1,7 +1,9 @@
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieWebsite.Data;
+using MovieWebsite.Interfaces;
 using MovieWebsite.Models;
 using System.IO;
 using System.Linq;
@@ -15,10 +17,24 @@ namespace MovieWebsite.Areas.Admin.Controllers
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _environment;
         private readonly ILogger<AdMoviesController> _logger;
+        private readonly INotificationService _notificationService;
+
+
+        public AdMoviesController(
+        AppDbContext context,
+        ILogger<AdMoviesController> logger,
+        IWebHostEnvironment environment,
+        INotificationService notificationService) // << THÊM THAM SỐ NÀY
+        {
+            _context = context;
+            _logger = logger;
+            _environment = environment;
+            _notificationService = notificationService; // << THÊM DÒNG NÀY
+        }
 
         // Tái sử dụng các phương thức xử lý file upload
 
-        
+
         private async Task<string> ProcessFileUpload1(IFormFile file, string fileType)
         {
             if (file == null || file.Length == 0) return null;
@@ -40,25 +56,44 @@ namespace MovieWebsite.Areas.Admin.Controllers
             return $"/uploads/{uniqueFileName}"; // Trả về đường dẫn tương đối
         }
 
-        private void DeleteFile(string filePath)
-        {
-            if (string.IsNullOrEmpty(filePath)) return;
 
-            // Chuyển đổi đường dẫn tương đối thành đường dẫn vật lý
-            var fullPath = Path.Combine(_environment.WebRootPath, filePath.TrimStart('/'));
-            if (System.IO.File.Exists(fullPath))
+        private void DeleteFile(string relativePath)
+        {
+            // Bước 1: Luôn kiểm tra xem đường dẫn có rỗng hay không
+            if (string.IsNullOrEmpty(relativePath))
             {
-                System.IO.File.Delete(fullPath);
+                return; // Nếu không có đường dẫn, không làm gì cả
+            }
+
+            try
+            {
+                // Bước 2: Xây dựng đường dẫn vật lý đầy đủ từ gốc wwwroot
+                // _environment.WebRootPath sẽ trỏ đến 'D:\...\MovieWebsite\wwwroot'
+                // relativePath là 'Uploads/poster_...jpg'
+                // kết quả fullPath sẽ là 'D:\...\MovieWebsite\wwwroot\Uploads\poster_...jpg'
+                var fullPath = Path.Combine(_environment.WebRootPath, relativePath);
+
+                // Bước 3: Kiểm tra xem file có thực sự tồn tại tại đường dẫn đó không
+                if (System.IO.File.Exists(fullPath))
+                {
+                    // Bước 4: Nếu có, thì mới xóa
+                    System.IO.File.Delete(fullPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Ghi lại log lỗi nếu cần, nhưng không để ứng dụng bị crash
+                _logger.LogError(ex, "Lỗi khi cố gắng xóa file tại đường dẫn tương đối: {Relative_Path}", relativePath);
             }
         }
 
 
-        public AdMoviesController(AppDbContext context, IWebHostEnvironment environment, ILogger<AdMoviesController> logger)
-        {
-            _context = context;
-            _environment = environment;
-            _logger = logger;
-        }
+        // public AdMoviesController(AppDbContext context, IWebHostEnvironment environment, ILogger<AdMoviesController> logger)
+        // {
+        //     _context = context;
+        //     _environment = environment;
+        //     _logger = logger;
+        // }
 
         // GET: Admin/Movies
         public async Task<IActionResult> ListMovies()
@@ -220,13 +255,18 @@ namespace MovieWebsite.Areas.Admin.Controllers
                     movie.PosterPath = await ProcessFileUpload(movieVM.PosterFile, uploadsFolder, "poster");
                     movie.TrailerPath = await ProcessFileUpload(movieVM.TrailerFile, uploadsFolder, "trailer");
 
+                    // Xử lý 3 file ảnh mới
+                    movie.PosterDoc = await ProcessFileUpload(movieVM.PosterDocFile, uploadsFolder, "poster_doc");
+                    movie.PosterBanner = await ProcessFileUpload(movieVM.PosterBannerFile, uploadsFolder, "poster_banner");
+                    movie.Poster = await ProcessFileUpload(movieVM.PosterImageFile, uploadsFolder, "poster_phu");
+
                     if (movieVM.Episodes != null && movieVM.Episodes.Any())
                     {
                         foreach (var episodeVM in movieVM.Episodes)
                         {
                             _logger.LogInformation("Xử lý tập phim: EpisodeNumber={EpisodeNumber}, VideoFile={VideoFile}",
                                 episodeVM.EpisodeNumber, episodeVM.VideoFile?.FileName ?? "null");
-                            var videoPath = await ProcessFileUpload(episodeVM.VideoFile, uploadsFolder, $"episode_{episodeVM.EpisodeNumber}");
+                            var videoPath = await ProcessFileUpload(episodeVM.VideoFile, uploadsFolder, $"episode_{Guid.NewGuid()}");
                             movie.Episodes.Add(new Episode
                             {
                                 EpisodeNumber = episodeVM.EpisodeNumber,
@@ -236,7 +276,8 @@ namespace MovieWebsite.Areas.Admin.Controllers
                                 ReleaseDate = episodeVM.ReleaseDate,
                                 VideoPath = videoPath,
                                 CreatedAt = DateTime.Now,
-                                UpdatedAt = DateTime.Now
+                                UpdatedAt = DateTime.Now,
+                                IsPublished = !(episodeVM.CreateSchedule && episodeVM.ScheduledTime.HasValue && episodeVM.ScheduledTime.Value > DateTime.UtcNow)
                             });
                         }
                     }
@@ -251,6 +292,55 @@ namespace MovieWebsite.Areas.Admin.Controllers
                     _context.Add(movie);
                     await _context.SaveChangesAsync();
 
+                    // === GỌI NOTIFICATION SERVICE SAU KHI TẬP PHIM ĐÃ CÓ ID ===
+                    // ===================================================================
+                    if (movie.Episodes != null && movie.Episodes.Any())
+                    {
+                        foreach (var newEpisode in movie.Episodes)
+                        {
+                            // Chỉ gửi thông báo cho các tập phim được công khai ngay lập tức
+                            if (newEpisode.IsPublished)
+                            {
+                                // Gọi service cho mỗi tập phim mới được tạo
+                                await _notificationService.CreateNewEpisodeNotificationAsync(newEpisode);
+                                _logger.LogInformation("Đã yêu cầu tạo thông báo cho Tập {EpisodeNumber} của Phim ID {MovieId}", newEpisode.EpisodeNumber, movie.Id);
+                            }
+                        }
+                    }
+
+
+                    // === BƯỚC QUAN TRỌNG: TẠO LỊCH CHIẾU SAU KHI PHIM VÀ TẬP PHIM ĐÃ CÓ ID ===
+                    if (movie.Episodes.Any())
+                    {
+                        // Lấy lại danh sách episodeVM ban đầu để truy cập các thuộc tính CreateSchedule, ScheduledTime
+                        var episodeVMsWithSchedule = movieVM.Episodes
+                            .Where(evm => evm.CreateSchedule && evm.ScheduledTime.HasValue)
+                            .ToList();
+
+                        foreach (var episodeVM in episodeVMsWithSchedule)
+                        {
+                            // Tìm tập phim tương ứng vừa được tạo trong database bằng số tập
+                            var createdEpisode = movie.Episodes.FirstOrDefault(e => e.EpisodeNumber == episodeVM.EpisodeNumber);
+                            if (createdEpisode != null)
+                            {
+                                var newSchedule = new Schedule
+                                {
+                                    MovieId = movie.Id,
+                                    EpisodeId = createdEpisode.Id, // Dùng ID của tập phim vừa được tạo
+                                    ScheduledTime = episodeVM.ScheduledTime.Value,
+                                    Description = $"Ra mắt: {createdEpisode.Title}",
+                                    EntryType = ScheduleType.EpisodeRelease
+                                };
+                                _context.Schedules.Add(newSchedule);
+                            }
+                        }
+
+                        // Nếu có lịch chiếu được thêm, lưu lại lần nữa
+                        if (episodeVMsWithSchedule.Any())
+                        {
+                            await _context.SaveChangesAsync(); // <-- LƯU LẦN 2 ĐỂ LƯU LỊCH CHIẾU
+                        }
+                    }
                     _logger.LogInformation($"Đã thêm phim: {movie.Title} (ID: {movie.Id})");
                     TempData["SuccessMessage"] = $"Đã thêm phim '{movie.Title}' thành công!";
                     // return RedirectToAction(nameof(Index));
@@ -457,6 +547,9 @@ namespace MovieWebsite.Areas.Admin.Controllers
                         }
                     }
                 }
+                DeleteFile(movie.PosterDoc);
+                DeleteFile(movie.PosterBanner);
+                DeleteFile(movie.Poster);
             }
             catch (Exception ex)
             {
@@ -466,168 +559,186 @@ namespace MovieWebsite.Areas.Admin.Controllers
 
         // GET: Admin/Movies/Edit/5
         // GET: Movie/Edit/{id}
-    public async Task<IActionResult> Edit(int id)
-    {
-        var movie = await _context.Movies
-            .Include(m => m.Country)
-            .Include(m => m.MovieGenres)
-                .ThenInclude(mg => mg.Genre)
-            .Include(m => m.Episodes)
-            .FirstOrDefaultAsync(m => m.Id == id);
-
-        if (movie == null)
+        public async Task<IActionResult> Edit(int id)
         {
-            return NotFound();
-        }
+            var movie = await _context.Movies
+                .Include(m => m.Country)
+                .Include(m => m.MovieGenres)
+                    .ThenInclude(mg => mg.Genre)
+                .Include(m => m.Episodes)
+                .FirstOrDefaultAsync(m => m.Id == id);
 
-        var viewModel = new MovieViewModel
-        {
-            Id = movie.Id,
-            Title = movie.Title,
-            EnglishTitle = movie.EnglishTitle,
-            Description = movie.Description,
-            ReleaseYear = movie.ReleaseYear,
-            CountryId = movie.CountryId,
-            Director = movie.Director,
-            Cast = movie.Cast,
-            TotalEpisodes = movie.TotalEpisodes,
-            IsCompleted = movie.IsCompleted,
-            PosterPath = movie.PosterPath,
-            TrailerPath = movie.TrailerPath,
-            SelectedGenreIds = movie.MovieGenres.Select(mg => mg.GenreId).ToList(),
-            Countries = await _context.Countries.OrderBy(c => c.Name).ToListAsync(),
-            Genres = await _context.Genres.OrderBy(g => g.Name).ToListAsync(),
-            ExistingEpisodes = movie.Episodes.Select(e => new EpisodeViewModel
+            if (movie == null)
             {
-                Id = e.Id,
-                MovieId = e.MovieId,
-                EpisodeNumber = e.EpisodeNumber,
-                Title = e.Title,
-                Description = e.Description,
-                Duration = e.Duration,
-                ReleaseDate = e.ReleaseDate,
-                VideoPath = e.VideoPath // Giữ đường dẫn video cũ
-            }).OrderBy(e => e.EpisodeNumber).ToList(),
-            NewEpisodesToAdd = new List<EpisodeViewModel>() // Khởi tạo danh sách tập phim mới trống
-        };
+                return NotFound();
+            }
 
-        return View(viewModel);
-    }
-
-    // POST: Movie/Edit/{id}
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    [RequestSizeLimit(524_288_000)] // Giới hạn kích thước request (ví dụ: 500MB)
-    public async Task<IActionResult> Edit(int id, MovieViewModel movieVM)
-    {
-        if (id != movieVM.Id)
-        {
-            return NotFound();
-        }
-
-        // Lấy bộ phim gốc từ DB để so sánh và cập nhật
-        var existingMovie = await _context.Movies
-            .Include(m => m.MovieGenres)
-            .Include(m => m.Episodes)
-            .FirstOrDefaultAsync(m => m.Id == id);
-
-        if (existingMovie == null)
-        {
-            return NotFound();
-        }
-
-        // Xóa các lỗi Model State liên quan đến các tập phim (ExistingEpisodes, NewEpisodesToAdd)
-        // để ModelState.IsValid chỉ còn kiểm tra các trường của phim chính.
-        // Chúng ta sẽ validate các tập phim một cách thủ công sau.
-        var keysToRemove = ModelState.Keys.Where(k => k.StartsWith("ExistingEpisodes[") || k.StartsWith("NewEpisodesToAdd[")).ToList();
-        foreach (var key in keysToRemove)
-        {
-            ModelState.Remove(key);
-        }
-
-        // Validate file tải lên riêng lẻ trước khi kiểm tra ModelState chính
-        if (!ValidateUploadedFiles(movieVM, out string fileErrorMessage))
-        {
-            _logger.LogWarning("Xác thực file thất bại khi chỉnh sửa phim ID: {MovieId}. Lỗi: {ErrorMessage}", id, fileErrorMessage);
-            ModelState.AddModelError("", fileErrorMessage);
-            // Tải lại danh sách Countries và Genres để hiển thị trong dropdown
-            movieVM.Countries = await _context.Countries.OrderBy(c => c.Name).ToListAsync();
-            movieVM.Genres = await _context.Genres.OrderBy(g => g.Name).ToListAsync();
-            // Tải lại ExistingEpisodes để form hiển thị đúng
-            movieVM.ExistingEpisodes = existingMovie.Episodes.Select(e => new EpisodeViewModel
+            var viewModel = new MovieViewModel
             {
-                Id = e.Id, MovieId = e.MovieId, EpisodeNumber = e.EpisodeNumber, Title = e.Title, Description = e.Description, Duration = e.Duration, ReleaseDate = e.ReleaseDate, VideoPath = e.VideoPath
-            }).OrderBy(e => e.EpisodeNumber).ToList();
-            return View(movieVM);
-        }
-
-        // Kiểm tra hợp lệ cho các tập phim mới đã được người dùng nhập liệu (chỉ khi có file video)
-        // Chúng ta thực hiện validation thủ công ở đây.
-        if (movieVM.NewEpisodesToAdd != null)
-        {
-            for (int i = 0; i < movieVM.NewEpisodesToAdd.Count; i++)
-            {
-                var episodeVM = movieVM.NewEpisodesToAdd[i];
-                // Chỉ validate nếu người dùng đã chọn file video cho tập phim mới này
-                if (episodeVM.VideoFile != null)
+                Id = movie.Id,
+                Title = movie.Title,
+                EnglishTitle = movie.EnglishTitle,
+                Description = movie.Description,
+                ReleaseYear = movie.ReleaseYear,
+                CountryId = movie.CountryId,
+                Director = movie.Director,
+                Cast = movie.Cast,
+                TotalEpisodes = movie.TotalEpisodes,
+                IsCompleted = movie.IsCompleted,
+                PosterPath = movie.PosterPath,
+                TrailerPath = movie.TrailerPath,
+                // Lấy đường dẫn của 3 ảnh mới
+                PosterDoc = movie.PosterDoc,
+                PosterBanner = movie.PosterBanner,
+                Poster = movie.Poster,
+                SelectedGenreIds = movie.MovieGenres.Select(mg => mg.GenreId).ToList(),
+                Countries = await _context.Countries.OrderBy(c => c.Name).ToListAsync(),
+                Genres = await _context.Genres.OrderBy(g => g.Name).ToListAsync(),
+                ExistingEpisodes = movie.Episodes.Select(e => new EpisodeViewModel
                 {
-                    var episodePrefix = $"NewEpisodesToAdd[{i}]";
-                    if (string.IsNullOrEmpty(episodeVM.Title))
+                    Id = e.Id,
+                    MovieId = e.MovieId,
+                    EpisodeNumber = e.EpisodeNumber,
+                    Title = e.Title,
+                    Description = e.Description,
+                    Duration = e.Duration,
+                    ReleaseDate = e.ReleaseDate,
+                    VideoPath = e.VideoPath // Giữ đường dẫn video cũ
+                }).OrderBy(e => e.EpisodeNumber).ToList(),
+                NewEpisodesToAdd = new List<EpisodeViewModel>() // Khởi tạo danh sách tập phim mới trống
+            };
+
+            return View(viewModel);
+        }
+
+        // POST: Movie/Edit/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [RequestSizeLimit(524_288_000)] // Giới hạn kích thước request (ví dụ: 500MB)
+        public async Task<IActionResult> Edit(int id, MovieViewModel movieVM)
+        {
+            if (id != movieVM.Id)
+            {
+                return NotFound();
+            }
+
+            // Lấy bộ phim gốc từ DB để so sánh và cập nhật
+            var existingMovie = await _context.Movies
+                .Include(m => m.MovieGenres)
+                .Include(m => m.Episodes)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (existingMovie == null)
+            {
+                return NotFound();
+            }
+
+            // Xóa các lỗi Model State liên quan đến các tập phim (ExistingEpisodes, NewEpisodesToAdd)
+            // để ModelState.IsValid chỉ còn kiểm tra các trường của phim chính.
+            // Chúng ta sẽ validate các tập phim một cách thủ công sau.
+            var keysToRemove = ModelState.Keys.Where(k => k.StartsWith("ExistingEpisodes[") || k.StartsWith("NewEpisodesToAdd[")).ToList();
+            foreach (var key in keysToRemove)
+            {
+                ModelState.Remove(key);
+            }
+
+            // Validate file tải lên riêng lẻ trước khi kiểm tra ModelState chính
+            if (!ValidateUploadedFiles(movieVM, out string fileErrorMessage))
+            {
+                _logger.LogWarning("Xác thực file thất bại khi chỉnh sửa phim ID: {MovieId}. Lỗi: {ErrorMessage}", id, fileErrorMessage);
+                ModelState.AddModelError("", fileErrorMessage);
+                // Tải lại danh sách Countries và Genres để hiển thị trong dropdown
+                movieVM.Countries = await _context.Countries.OrderBy(c => c.Name).ToListAsync();
+                movieVM.Genres = await _context.Genres.OrderBy(g => g.Name).ToListAsync();
+                // Tải lại ExistingEpisodes để form hiển thị đúng
+                movieVM.ExistingEpisodes = existingMovie.Episodes.Select(e => new EpisodeViewModel
+                {
+                    Id = e.Id,
+                    MovieId = e.MovieId,
+                    EpisodeNumber = e.EpisodeNumber,
+                    Title = e.Title,
+                    Description = e.Description,
+                    Duration = e.Duration,
+                    ReleaseDate = e.ReleaseDate,
+                    VideoPath = e.VideoPath
+                }).OrderBy(e => e.EpisodeNumber).ToList();
+                return View(movieVM);
+            }
+
+            // Kiểm tra hợp lệ cho các tập phim mới đã được người dùng nhập liệu (chỉ khi có file video)
+            // Chúng ta thực hiện validation thủ công ở đây.
+            if (movieVM.NewEpisodesToAdd != null)
+            {
+                for (int i = 0; i < movieVM.NewEpisodesToAdd.Count; i++)
+                {
+                    var episodeVM = movieVM.NewEpisodesToAdd[i];
+                    // Chỉ validate nếu người dùng đã chọn file video cho tập phim mới này
+                    if (episodeVM.VideoFile != null)
                     {
-                        ModelState.AddModelError($"{episodePrefix}.Title", "Tên tập phim mới là bắt buộc.");
+                        var episodePrefix = $"NewEpisodesToAdd[{i}]";
+                        if (string.IsNullOrEmpty(episodeVM.Title))
+                        {
+                            ModelState.AddModelError($"{episodePrefix}.Title", "Tên tập phim mới là bắt buộc.");
+                        }
+                        if (episodeVM.EpisodeNumber < 1)
+                        {
+                            ModelState.AddModelError($"{episodePrefix}.EpisodeNumber", "Số tập phim mới phải lớn hơn 0.");
+                        }
+                        // // Thêm các validation khác cho tập phim mới nếu cần (ví dụ: duration, releaseDate)
+                        // if (episodeVM.Duration.HasValue && (episodeVM.Duration.Value < 1 || episodeVM.Duration.Value > 600))
+                        // {
+                        //     ModelState.AddModelError($"{episodePrefix}.Duration", "Thời lượng phải từ 1-600 phút.");
+                        // }
+                        // if (episodeVM.ReleaseDate.HasValue && episodeVM.ReleaseDate.Value.Year < 1900) // Ví dụ validation date
+                        // {
+                        //     ModelState.AddModelError($"{episodePrefix}.ReleaseDate", "Ngày phát hành không hợp lệ.");
+                        // }
                     }
-                    if (episodeVM.EpisodeNumber < 1)
-                    {
-                        ModelState.AddModelError($"{episodePrefix}.EpisodeNumber", "Số tập phim mới phải lớn hơn 0.");
-                    }
-                    // // Thêm các validation khác cho tập phim mới nếu cần (ví dụ: duration, releaseDate)
-                    // if (episodeVM.Duration.HasValue && (episodeVM.Duration.Value < 1 || episodeVM.Duration.Value > 600))
-                    // {
-                    //     ModelState.AddModelError($"{episodePrefix}.Duration", "Thời lượng phải từ 1-600 phút.");
-                    // }
-                    // if (episodeVM.ReleaseDate.HasValue && episodeVM.ReleaseDate.Value.Year < 1900) // Ví dụ validation date
-                    // {
-                    //     ModelState.AddModelError($"{episodePrefix}.ReleaseDate", "Ngày phát hành không hợp lệ.");
-                    // }
                 }
             }
-        }
 
-        // Kiểm tra trùng lặp số tập phim trước khi thực sự kiểm tra ModelState chính
-        // Điều này để tránh hiển thị lỗi validation chung chung từModelState
-        var allExistingEpisodeNumbers = existingMovie.Episodes.Select(e => e.EpisodeNumber).ToList();
-        var newEpisodeNumbers = movieVM.NewEpisodesToAdd?.Where(evm => evm.VideoFile != null).Select(evm => evm.EpisodeNumber).ToList() ?? new List<int>();
+            // Kiểm tra trùng lặp số tập phim trước khi thực sự kiểm tra ModelState chính
+            // Điều này để tránh hiển thị lỗi validation chung chung từModelState
+            var allExistingEpisodeNumbers = existingMovie.Episodes.Select(e => e.EpisodeNumber).ToList();
+            var newEpisodeNumbers = movieVM.NewEpisodesToAdd?.Where(evm => evm.VideoFile != null).Select(evm => evm.EpisodeNumber).ToList() ?? new List<int>();
 
-        // Kiểm tra trùng lặp trong các tập phim mới
-        if (newEpisodeNumbers.Count != newEpisodeNumbers.Distinct().Count())
-        {
-            ModelState.AddModelError("", "Có số tập phim mới bị trùng lặp trong danh sách các tập phim mới bạn nhập.");
-        }
-
-        // Kiểm tra trùng lặp giữa tập phim mới và tập phim hiện có
-        var mergedEpisodeNumbers = allExistingEpisodeNumbers.Concat(newEpisodeNumbers).ToList();
-        if (mergedEpisodeNumbers.Count != mergedEpisodeNumbers.Distinct().Count())
-        {
-            ModelState.AddModelError("", "Có số tập phim mới trùng với số tập phim hiện có.");
-        }
-
-        if (!ModelState.IsValid)
-        {
-            _logger.LogWarning("Xác thực ModelState thất bại khi chỉnh sửa phim ID: {MovieId}", id);
-            // Tải lại danh sách Countries và Genres để hiển thị trong dropdown
-            movieVM.Countries = await _context.Countries.OrderBy(c => c.Name).ToListAsync();
-            movieVM.Genres = await _context.Genres.OrderBy(g => g.Name).ToListAsync();
-            // Tải lại ExistingEpisodes để form hiển thị đúng
-            movieVM.ExistingEpisodes = existingMovie.Episodes.Select(e => new EpisodeViewModel
+            // Kiểm tra trùng lặp trong các tập phim mới
+            if (newEpisodeNumbers.Count != newEpisodeNumbers.Distinct().Count())
             {
-                Id = e.Id, MovieId = e.MovieId, EpisodeNumber = e.EpisodeNumber, Title = e.Title, Description = e.Description, Duration = e.Duration, ReleaseDate = e.ReleaseDate, VideoPath = e.VideoPath
-            }).OrderBy(e => e.EpisodeNumber).ToList();
-            return View(movieVM);
-        }
+                ModelState.AddModelError("", "Có số tập phim mới bị trùng lặp trong danh sách các tập phim mới bạn nhập.");
+            }
 
-        // --- Xử lý các file ---
-        string uploadsFolder = Path.Combine(_environment.WebRootPath, "Uploads");
-        Directory.CreateDirectory(uploadsFolder);
+            // Kiểm tra trùng lặp giữa tập phim mới và tập phim hiện có
+            var mergedEpisodeNumbers = allExistingEpisodeNumbers.Concat(newEpisodeNumbers).ToList();
+            if (mergedEpisodeNumbers.Count != mergedEpisodeNumbers.Distinct().Count())
+            {
+                ModelState.AddModelError("", "Có số tập phim mới trùng với số tập phim hiện có.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Xác thực ModelState thất bại khi chỉnh sửa phim ID: {MovieId}", id);
+                // Tải lại danh sách Countries và Genres để hiển thị trong dropdown
+                movieVM.Countries = await _context.Countries.OrderBy(c => c.Name).ToListAsync();
+                movieVM.Genres = await _context.Genres.OrderBy(g => g.Name).ToListAsync();
+                // Tải lại ExistingEpisodes để form hiển thị đúng
+                movieVM.ExistingEpisodes = existingMovie.Episodes.Select(e => new EpisodeViewModel
+                {
+                    Id = e.Id,
+                    MovieId = e.MovieId,
+                    EpisodeNumber = e.EpisodeNumber,
+                    Title = e.Title,
+                    Description = e.Description,
+                    Duration = e.Duration,
+                    ReleaseDate = e.ReleaseDate,
+                    VideoPath = e.VideoPath
+                }).OrderBy(e => e.EpisodeNumber).ToList();
+                return View(movieVM);
+            }
+
+            // --- Xử lý các file ---
+            string uploadsFolder = Path.Combine(_environment.WebRootPath, "Uploads");
+            Directory.CreateDirectory(uploadsFolder);
 
             try
             {
@@ -650,6 +761,24 @@ namespace MovieWebsite.Areas.Admin.Controllers
                     }
                     existingMovie.TrailerPath = await ProcessFileUpload(movieVM.TrailerFile, uploadsFolder, $"trailer_{id}");
                 }
+                // Xử lý 3 file ảnh mới
+                if (movieVM.PosterDocFile != null)
+                {
+                    DeleteFile(existingMovie.PosterDoc);
+                    existingMovie.PosterDoc = await ProcessFileUpload(movieVM.PosterDocFile, uploadsFolder, $"poster_doc_{id}");
+                }
+
+                if (movieVM.PosterBannerFile != null)
+                {
+                    DeleteFile(existingMovie.PosterBanner);
+                    existingMovie.PosterBanner = await ProcessFileUpload(movieVM.PosterBannerFile, uploadsFolder, $"poster_banner_{id}");
+                }
+
+                if (movieVM.PosterImageFile != null)
+                {
+                    DeleteFile(existingMovie.Poster);
+                    existingMovie.Poster = await ProcessFileUpload(movieVM.PosterImageFile, uploadsFolder, $"poster_phu_{id}");
+                }
 
                 // Cập nhật thông tin phim chính
                 existingMovie.Title = movieVM.Title;
@@ -661,7 +790,7 @@ namespace MovieWebsite.Areas.Admin.Controllers
                 existingMovie.Cast = movieVM.Cast;
                 existingMovie.TotalEpisodes = movieVM.TotalEpisodes;
                 existingMovie.IsCompleted = movieVM.IsCompleted;
-                existingMovie.UpdatedAt = DateTime.Now;
+                existingMovie.UpdatedAt = DateTime.UtcNow;
 
                 // Cập nhật Thể loại (MovieGenres)
                 _context.MovieGenres.RemoveRange(existingMovie.MovieGenres);
@@ -677,88 +806,106 @@ namespace MovieWebsite.Areas.Admin.Controllers
 
                 // 1. Xóa các tập phim đã bị xóa khỏi form
                 var existingEpisodeIds = existingMovie.Episodes.Select(e => e.Id).ToList();
-                var updatedEpisodeIdsInForm = movieVM.ExistingEpisodes.Where(evm => evm.Id > 0).Select(evm => evm.Id).ToList();
+                var updatedEpisodeIdsInForm = movieVM.ExistingEpisodes?.Where(evm => evm.Id > 0).Select(evm => evm.Id).ToList() ?? new List<int>();
                 var episodeIdsToDelete = existingEpisodeIds.Except(updatedEpisodeIdsInForm).ToList();
 
-                foreach (var episodeId in episodeIdsToDelete)
+                if (episodeIdsToDelete.Any())
                 {
-                    var episodeToDelete = await _context.Episodes.FindAsync(episodeId);
-                    if (episodeToDelete != null)
+                    var episodesToDelete = _context.Episodes.Where(e => episodeIdsToDelete.Contains(e.Id));
+                    foreach (var ep in episodesToDelete)
                     {
-                        if (!string.IsNullOrEmpty(episodeToDelete.VideoPath) && System.IO.File.Exists(Path.Combine(_environment.WebRootPath, episodeToDelete.VideoPath)))
-                        {
-                            System.IO.File.Delete(Path.Combine(_environment.WebRootPath, episodeToDelete.VideoPath));
-                        }
-                        _context.Episodes.Remove(episodeToDelete);
+                        DeleteFile(ep.VideoPath); // Xóa file video liên quan
                     }
+                    _context.Episodes.RemoveRange(episodesToDelete);
                 }
 
                 // 2. Cập nhật các tập phim hiện có
-                foreach (var episodeVM in movieVM.ExistingEpisodes)
+                if (movieVM.ExistingEpisodes != null)
                 {
-                    if (episodeVM.Id > 0) // Là tập phim hiện có
+                    foreach (var episodeVM in movieVM.ExistingEpisodes)
                     {
-                        var episodeToUpdate = await _context.Episodes.FindAsync(episodeVM.Id);
-                        if (episodeToUpdate != null)
+                        if (episodeVM.Id > 0)
                         {
-                            // Cập nhật file video nếu có file mới
-                            if (episodeVM.VideoFile != null)
+                            var episodeToUpdate = existingMovie.Episodes.FirstOrDefault(e => e.Id == episodeVM.Id);
+                            if (episodeToUpdate != null)
                             {
-                                if (!string.IsNullOrEmpty(episodeToUpdate.VideoPath) && System.IO.File.Exists(Path.Combine(_environment.WebRootPath, episodeToUpdate.VideoPath)))
+                                if (episodeVM.VideoFile != null)
                                 {
-                                    System.IO.File.Delete(Path.Combine(_environment.WebRootPath, episodeToUpdate.VideoPath));
+                                    DeleteFile(episodeToUpdate.VideoPath);
+                                    episodeToUpdate.VideoPath = await ProcessFileUpload(episodeVM.VideoFile, uploadsFolder, $"episode_{episodeVM.Id}_{episodeVM.EpisodeNumber}");
                                 }
-                                episodeToUpdate.VideoPath = await ProcessFileUpload(episodeVM.VideoFile, uploadsFolder, $"episode_{episodeVM.Id}_{episodeVM.EpisodeNumber}");
+                                episodeToUpdate.EpisodeNumber = episodeVM.EpisodeNumber;
+                                episodeToUpdate.Title = episodeVM.Title;
+                                episodeToUpdate.Description = episodeVM.Description;
+                                episodeToUpdate.Duration = episodeVM.Duration;
+                                episodeToUpdate.ReleaseDate = episodeVM.ReleaseDate;
+                                episodeToUpdate.UpdatedAt = DateTime.UtcNow;
+                                episodeToUpdate.IsPublished = (episodeVM.ReleaseDate <= DateTime.UtcNow);
                             }
-                            // Cập nhật các thông tin khác
-                            episodeToUpdate.EpisodeNumber = episodeVM.EpisodeNumber;
-                            episodeToUpdate.Title = episodeVM.Title;
-                            episodeToUpdate.Description = episodeVM.Description;
-                            episodeToUpdate.Duration = episodeVM.Duration;
-                            episodeToUpdate.ReleaseDate = episodeVM.ReleaseDate;
-                            episodeToUpdate.UpdatedAt = DateTime.Now;
-                            _context.Episodes.Update(episodeToUpdate);
                         }
                     }
-                    // Nếu episodeVM.Id == 0, chúng ta sẽ bỏ qua nó ở đây vì nó sẽ được xử lý trong phần NewEpisodesToAdd
                 }
 
-                // 3. Thêm các tập phim mới từ danh sách NewEpisodesToAdd
+                // 3. Thêm các tập phim mới và tạo lịch chiếu (nếu có)
                 if (movieVM.NewEpisodesToAdd != null)
                 {
-                    // Lọc ra chỉ những tập phim thực sự có file video được tải lên
                     var actualNewEpisodes = movieVM.NewEpisodesToAdd.Where(evm => evm.VideoFile != null).ToList();
 
-                    foreach (var episodeVM in actualNewEpisodes)
+                    foreach (var episodeVM in actualNewEpisodes) // <-- BẮT ĐẦU VÒNG LẶP
                     {
-                        // Kiểm tra lại xem số tập này có thực sự được chọn để thêm không
-                        if (episodeVM.VideoFile != null)
+                        var videoPath = await ProcessFileUpload(episodeVM.VideoFile, uploadsFolder, $"episode_{id}_{episodeVM.EpisodeNumber}");
+                        var newEpisode = new Episode
                         {
-                            var videoPath = await ProcessFileUpload(episodeVM.VideoFile, uploadsFolder, $"episode_{id}_{episodeVM.EpisodeNumber}");
-                            var newEpisode = new Episode
+                            MovieId = id,
+                            EpisodeNumber = episodeVM.EpisodeNumber,
+                            Title = episodeVM.Title,
+                            Description = episodeVM.Description,
+                            Duration = episodeVM.Duration,
+                            ReleaseDate = episodeVM.ReleaseDate,
+                            VideoPath = videoPath,
+                            CreatedAt = DateTime.UtcNow,
+                            UpdatedAt = DateTime.UtcNow,
+                            IsPublished = !(episodeVM.CreateSchedule && episodeVM.ScheduledTime.HasValue && episodeVM.ScheduledTime.Value > DateTime.UtcNow)
+                        };
+                        _context.Episodes.Add(newEpisode);
+
+                        // --- ĐOẠN CODE TẠO LỊCH CHIẾU ĐƯỢC ĐẶT Ở ĐÂY (BÊN TRONG VÒNG LẶP) ---
+                        // Chúng ta cần lưu lại để lấy ID của tập phim mới
+                        await _context.SaveChangesAsync();
+
+
+                        // === GỌI NOTIFICATION SERVICE NGAY SAU KHI TẬP PHIM MỚI CÓ ID ===
+                        // ===================================================================
+                        if (newEpisode.IsPublished)
+                        {
+                            await _notificationService.CreateNewEpisodeNotificationAsync(newEpisode);
+                            _logger.LogInformation("Đã yêu cầu tạo thông báo cho Tập MỚI {EpisodeNumber} của Phim ID {MovieId}", newEpisode.EpisodeNumber, id);
+                        }
+
+
+                        // Bây giờ newEpisode.Id đã có giá trị
+                        if (episodeVM.CreateSchedule && episodeVM.ScheduledTime.HasValue)
+                        {
+                            var newSchedule = new Schedule
                             {
                                 MovieId = id,
-                                EpisodeNumber = episodeVM.EpisodeNumber,
-                                Title = episodeVM.Title,
-                                Description = episodeVM.Description,
-                                Duration = episodeVM.Duration,
-                                ReleaseDate = episodeVM.ReleaseDate,
-                                VideoPath = videoPath,
-                                CreatedAt = DateTime.Now,
-                                UpdatedAt = DateTime.Now
+                                EpisodeId = newEpisode.Id, // Dùng ID của tập phim vừa được tạo
+                                ScheduledTime = episodeVM.ScheduledTime.Value,
+                                Description = $"Ra mắt: {newEpisode.Title}", // Mô tả tự động
+                                EntryType = ScheduleType.EpisodeRelease
                             };
-                            _context.Episodes.Add(newEpisode);
+                            _context.Schedules.Add(newSchedule);
                         }
-                    }
+                    } // <--- KẾT THÚC VÒNG LẶP
                 }
 
+                // Lưu tất cả các thay đổi cuối cùng (bao gồm cả lịch chiếu)
                 await _context.SaveChangesAsync();
 
                 _logger.LogInformation($"Đã cập nhật phim: {existingMovie.Title} (ID: {id})");
                 TempData["SuccessMessage"] = $"Đã cập nhật phim '{existingMovie.Title}' thành công!";
-                // return RedirectToAction(nameof(Index)); // Hoặc redirect tới trang chi tiết phim
-            return RedirectToAction(nameof(ListMovies));
-        }
+                return RedirectToAction(nameof(ListMovies));
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Lỗi khi chỉnh sửa phim ID: {MovieId}", id);
@@ -805,7 +952,7 @@ namespace MovieWebsite.Areas.Admin.Controllers
                 }).OrderBy(e => e.EpisodeNumber).ToList();
                 return View(movieVM);
             }
-    }
+        }
 
 
 
@@ -835,6 +982,10 @@ namespace MovieWebsite.Areas.Admin.Controllers
                 // Xóa file poster và trailer
                 DeleteFile(movie.PosterPath);
                 DeleteFile(movie.TrailerPath);
+
+                DeleteFile(movie.PosterDoc);
+                DeleteFile(movie.PosterBanner);
+                DeleteFile(movie.Poster);
 
                 // Xóa file video của các tập phim
                 foreach (var episode in movie.Episodes)

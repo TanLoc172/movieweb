@@ -1,0 +1,134 @@
+/* Gradient chữ tím-hồng */
+.text-gradient-pink {
+  background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+.text-pink {
+  color: #d72660 !important;
+}
+
+/* Tabs ngày tím-hồng */
+.pink-tabs .nav-link {
+  color: #a18cd1;
+  background: #fff0fa;
+  border: none;
+  margin: 0 6px;
+  border-radius: 18px 18px 0 0;
+  transition: background 0.3s, color 0.3s, transform 0.2s;
+  font-size: 1.1rem;
+  padding: 12px 28px 10px 28px;
+  position: relative;
+  font-weight: 500;
+}
+.pink-tabs .nav-link.active,
+.pink-tabs .nav-link:hover {
+  background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%);
+  color: #fff;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 4px 16px rgba(161, 140, 209, 0.15);
+}
+
+/* Timeline dọc màu hồng nhạt */
+.timeline-pink {
+  position: relative;
+  margin-left: 32px;
+  padding-left: 24px;
+  border-left: 3px solid #fbc2eb;
+}
+.timeline-item {
+  position: relative;
+  min-height: 100px;
+}
+.timeline-time {
+  width: 60px;
+  margin-right: 16px;
+  color: #d72660;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+.timeline-dot-pink {
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 4px #fbc2eb55;
+  margin-right: 20px;
+  position: relative;
+  left: -32px;
+  z-index: 2;
+}
+.timeline-content {
+  flex: 1;
+}
+
+/* Card phim trắng, bo góc, shadow nhẹ */
+.movie-card-pink {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px #fbc2eb33;
+  transition: box-shadow 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+}
+.movie-card-pink:hover {
+  box-shadow: 0 8px 32px #a18cd155;
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* Badge pastel */
+.badge-pastel-pink {
+  background: #f8bbd0 !important;
+  color: #d72660 !important;
+  font-weight: 500;
+  font-size: 0.95em;
+}
+.badge-pastel-purple {
+  background: #e0c3fc !important;
+  color: #6a0572 !important;
+  font-weight: 500;
+  font-size: 0.95em;
+}
+
+/* Responsive timeline */
+@media (max-width: 767px) {
+  .timeline-pink {
+    margin-left: 0;
+    padding-left: 10px;
+  }
+  .timeline-time {
+    width: 44px;
+    font-size: 1rem;
+    margin-right: 8px;
+  }
+  .timeline-dot-pink {
+    width: 12px;
+    height: 12px;
+    left: -16px;
+    margin-right: 10px;
+  }
+  .movie-card-pink {
+    padding: 8px 10px;
+  }
+}
+
+/* Tab icon tím-hồng */
+.tab-icon {
+  font-size: 1.2em;
+  vertical-align: middle;
+  color: #a18cd1;
+}
+
+/* Typography hiện đại */
+.card-title a,
+.movie-card-pink a {
+  letter-spacing: 0.5px;
+}
+
+/* Ẩn border tab mặc định */
+.nav-tabs {
+  border-bottom: none;
+}

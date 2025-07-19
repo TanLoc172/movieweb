@@ -1,0 +1,360 @@
+﻿@* @using static HomeController
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+@model HomeViewModel
+
+<section class="movie-banner-section">
+    <h2>Phim Nổi Bật</h2>
+    <div class="banner-carousel">
+        @foreach (var movie in Model.BannerMovies)
+        {
+            <div class="banner-item">
+                <a href="@Url.Action("Details", "Movie", new { id = movie.MovieId })">
+                    <img src="@movie.PosterPath" alt="@movie.Title Poster">
+                    <div class="banner-info">
+                        <h3>@movie.Title</h3>
+                        <p>@movie.Description</p>
+                        <p>Thể loại: @(string.Join(", ", movie.GenreNames))</p>
+                        <p>Năm: @movie.ReleaseYear</p>
+                        <p>Tập: @movie.TotalEpisodes</p>
+                        @if (!string.IsNullOrEmpty(movie.TrailerPath))
+                        {
+                            <a href="@movie.TrailerPath" class="btn btn-primary">Xem Trailer</a>
+                        }
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</section> *@
+
+
+@model HomeViewModel
+
+<section class="movie-banner-container">
+    @if (Model.BannerMovies != null && Model.BannerMovies.Any())
+    {
+        <!-- Banner Carousel -->
+        <div class="banner-carousel">
+            @foreach (var movie in Model.BannerMovies)
+            {
+                <!-- Quan trọng: Thêm data-movie-id và data-trailer-path vào banner-item -->
+                <div class="banner-item" data-movie-id="@movie.MovieId" data-trailer-path="@movie.TrailerPath">
+                    <!-- Poster ban đầu -->
+                    <div class="banner-poster">
+                        <img src="@movie.PosterBanner" alt="@movie.Title Poster">
+                        <div class="banner-overlay-info">
+                            <h2 class="banner-title">@movie.Title</h2>
+                            @if (!string.IsNullOrEmpty(movie.EnglishTitle))
+                            {
+                                <h3 class="banner-english-title">@movie.EnglishTitle</h3>
+                            }
+                            <div class="banner-meta">
+                                <span>@movie.MainGenreName</span>
+                                @if (movie.GenreNames != null && movie.GenreNames.Count > 1)
+                                {
+                                    <span>• @string.Join(", ", movie.GenreNames.Skip(1))</span>
+                                }
+                                <span>• @movie.ReleaseYear</span>
+                                @if (movie.TotalEpisodes > 1)
+                                {
+                                    <span>• @movie.TotalEpisodes Tập</span>
+                                }
+                            </div>
+                            <p class="banner-description">@movie.Description</p>
+                            <div class="banner-actions">
+                                <!-- THAY ĐỔI: Chữ "Xem Ngay" và bỏ onclick -->
+                                @* <a href="#" class="btn btn-play">
+                                    <i class="fas fa-play"></i> Xem Ngay
+                                </a>
+                                <a href="@Url.Action("Details", "Movie", new { id = movie.MovieId })" class="btn btn-info">
+                                    <i class="fas fa-info-circle"></i> Chi tiết
+                                </a> *@
+                                <a href="@Url.Action("Details", "Movies", new { id = movie.MovieId })" class="btn btn-play">
+        <i class="fas fa-play"></i> Xem Ngay
+    </a>
+    <a href="@Url.Action("Details", "Movies", new { id = movie.MovieId })" class="btn btn-info">
+        <i class="fas fa-info-circle"></i> Chi tiết
+    </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Trailer (ban đầu ẩn) -->
+                    @* <div class="banner-trailer" style="display: none;">
+                         <!-- THAY ĐỔI: Bỏ `autoplay muted` để JS kiểm soát hoàn toàn -->
+                        <video width="100%" height="100%" controls>
+                            <source src="@movie.TrailerPath" type="video/mp4">
+                            Trình duyệt của bạn không hỗ trợ video.
+                        </video> *@
+
+                        <div class="banner-trailer" style="display: none;">
+    <!-- THAY ĐỔI: Bỏ thuộc tính "controls" -->
+    <video width="100%" height="100%">
+        <source src="@movie.TrailerPath" type="video/mp4">
+        Trình duyệt của bạn không hỗ trợ video.
+    </video>
+    
+    <!-- THAY ĐỔI: Thêm nút bật/tắt âm lượng -->
+    <div class="trailer-controls">
+        <button class="btn-toggle-volume">
+            <i class="fas fa-volume-xmark"></i> <!-- Mặc định là tắt tiếng -->
+        </button>
+    </div>
+                        <!-- THAY ĐỔI: Bỏ onclick -->
+                        <button class="btn-close-trailer">×</button>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Navigation controls -->
+        <button class="banner-nav-prev"><i class="fas fa-chevron-left"></i></button>
+        <button class="banner-nav-next"><i class="fas fa-chevron-right"></i></button>
+
+        <!-- Carousel Indicators -->
+        <div class="banner-indicators">
+            @for (int i = 0; i < Model.BannerMovies.Count(); i++)
+            {
+                <button class="indicator-dot @(i == 0 ? "active" : "")" data-slide-to="@i"></button>
+            }
+        </div>
+    }
+    else
+    {
+        <p>Không có phim nào để hiển thị.</p>
+    }
+</section>
+
+<!-- Các link và script section khác giữ nguyên -->
+
+<!-- Thêm Font Awesome cho icons nếu bạn chưa có -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="~/css/banner.css" asp-append-version="true" />
+<script src="~/js/banner.js" asp-append-version="true"></script>
+ 
+@* @section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const bannerContainer = document.querySelector('.movie-banner-container');
+            if (!bannerContainer) return;
+
+            const carousel = {
+                // ... các thuộc tính khác giữ nguyên ...
+                items: bannerContainer.querySelectorAll('.banner-item'),
+                prevBtn: bannerContainer.querySelector('.banner-nav-prev'),
+                nextBtn: bannerContainer.querySelector('.banner-nav-next'),
+                indicatorDots: bannerContainer.querySelectorAll('.indicator-dot'),
+
+                // ... các thuộc tính state và constants giữ nguyên ...
+                currentSlide: 0,
+                autoPlayTimer: null,
+                isPlaying: false,
+                IMAGE_DISPLAY_TIME: 2000,
+                VIDEO_PLAY_DURATION: 60000,
+
+                // ... các hàm init, showSlide, startAutoPlay, stopAutoPlay, playTrailer, stopTrailer, next, prev giữ nguyên ...
+                init() {
+                    if (this.items.length <= 1) {
+                       this.prevBtn.style.display = 'none';
+                       this.nextBtn.style.display = 'none';
+                       this.indicatorDots.forEach(d => d.style.display = 'none');
+                    }
+                    if (!this.items.length) return;
+                    
+                    this.showSlide(0);
+                    this.bindEvents();
+                    this.startAutoPlay();
+                },
+                
+                showSlide(index, stopAuto = true) {
+                    if (stopAuto) this.stopAutoPlay();
+                    
+                    this.currentSlide = index;
+
+                    this.items.forEach((item, i) => {
+                        item.classList.toggle('active', i === index);
+                        this.stopTrailer(item, false); 
+                    });
+
+                    this.indicatorDots.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === index);
+                    });
+                },
+
+                startAutoPlay() {
+                    this.stopAutoPlay(); 
+                    this.isPlaying = true;
+
+                    const currentItem = this.items[this.currentSlide];
+                    const trailerPath = currentItem.dataset.trailerPath;
+                    
+                    if (!trailerPath) {
+                        this.autoPlayTimer = setTimeout(() => {
+                            this.next();
+                        }, this.IMAGE_DISPLAY_TIME + 3000); 
+                        return;
+                    }
+                    
+                    this.autoPlayTimer = setTimeout(() => {
+                        const video = this.playTrailer(currentItem);
+
+                        if (video) {
+                            const onVideoEnd = () => {
+                                this.next(); 
+                                video.removeEventListener('ended', onVideoEnd);
+                            };
+                            video.addEventListener('ended', onVideoEnd);
+
+                            this.autoPlayTimer = setTimeout(() => {
+                                video.removeEventListener('ended', onVideoEnd);
+                                this.next();
+                            }, this.VIDEO_PLAY_DURATION);
+                        } else {
+                           this.autoPlayTimer = setTimeout(() => this.next(), 3000);
+                        }
+                    }, this.IMAGE_DISPLAY_TIME);
+                },
+
+                stopAutoPlay() {
+                    clearTimeout(this.autoPlayTimer);
+                    this.isPlaying = false;
+                },
+
+                playTrailer(item) {
+                    const poster = item.querySelector('.banner-poster');
+                    const trailerContainer = item.querySelector('.banner-trailer');
+                    const video = trailerContainer.querySelector('video');
+
+                    if (!poster || !trailerContainer || !video) return null;
+                    
+                    poster.style.display = 'none';
+                    trailerContainer.style.display = 'block';
+                    
+                    video.currentTime = 0;
+                    video.muted = true; 
+                    
+                    video.play().catch(err => {
+                        console.error("Autoplay bị chặn:", err);
+                        this.stopTrailer(item, false); 
+                    });
+                    
+                    // Reset icon về tắt tiếng mỗi khi play trailer
+                    const volumeIcon = item.querySelector('.btn-toggle-volume i');
+                    if (volumeIcon) {
+                        volumeIcon.classList.remove('fa-volume-high');
+                        volumeIcon.classList.add('fa-volume-xmark');
+                    }
+
+                    return video;
+                },
+
+                stopTrailer(item, restartAutoPlay = true) {
+                    const poster = item.querySelector('.banner-poster');
+                    const trailerContainer = item.querySelector('.banner-trailer');
+                    const video = trailerContainer.querySelector('video');
+
+                    if (poster) poster.style.display = 'flex';
+                    if (trailerContainer) trailerContainer.style.display = 'none';
+                    
+                    if (video) {
+                        video.pause();
+                        video.currentTime = 0;
+                    }
+
+                    if (restartAutoPlay) {
+                        this.startAutoPlay();
+                    }
+                },
+                
+                next() {
+                    const nextIndex = (this.currentSlide + 1) % this.items.length;
+                    this.showSlide(nextIndex, false);
+                    if (this.isPlaying) {
+                        this.startAutoPlay();
+                    }
+                },
+
+                prev() {
+                     const prevIndex = (this.currentSlide - 1 + this.items.length) % this.items.length;
+                     this.showSlide(prevIndex);
+                },
+                
+                // -----------------------------------------------------------
+                // ----- BẠN SẼ THAY THẾ TOÀN BỘ HÀM bindEvents() BÊN DƯỚI -----
+                // -----------------------------------------------------------
+                bindEvents() {
+                    this.nextBtn.addEventListener('click', () => this.next());
+                    this.prevBtn.addEventListener('click', () => this.prev());
+
+                    this.indicatorDots.forEach(dot => {
+                        dot.addEventListener('click', (e) => {
+                            const index = parseInt(e.target.dataset.slideTo, 10);
+                            this.showSlide(index);
+                        });
+                    });
+                    
+                    this.items.forEach(item => {
+                        const video = item.querySelector('video'); // Lấy video một lần để tái sử dụng
+                        if (!video) return;
+
+                        // Nút "Xem Ngay"
+                        
+                        
+                        // Nút đóng trailer
+                        item.querySelector('.btn-close-trailer').addEventListener('click', () => {
+                             this.stopTrailer(item, true); // Đóng và bắt đầu lại auto-play
+                        });
+
+                        // ----- THÊM MỚI BẮT ĐẦU TỪ ĐÂY -----
+                        // Logic cho nút bật/tắt âm lượng
+                        const volumeBtn = item.querySelector('.btn-toggle-volume');
+                        if (volumeBtn) {
+                            const volumeIcon = volumeBtn.querySelector('i');
+                            
+                            volumeBtn.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                e.stopPropagation(); // Ngăn sự kiện click lan ra ngoài
+
+                                video.muted = !video.muted; // Bật/Tắt tiếng
+
+                                // Cập nhật icon dựa trên trạng thái muted
+                                if (video.muted) {
+                                    volumeIcon.classList.remove('fa-volume-high');
+                                    volumeIcon.classList.add('fa-volume-xmark');
+                                } else {
+                                    volumeIcon.classList.remove('fa-volume-xmark');
+                                    volumeIcon.classList.add('fa-volume-high');
+                                }
+                            });
+                        }
+                        // ----- KẾT THÚC PHẦN THÊM MỚI -----
+                    });
+                
+                    // Tạm dừng autoplay khi người dùng không ở trên tab này
+                    document.addEventListener('visibilitychange', () => {
+                        if (document.hidden) {
+                            this.stopAutoPlay();
+                            // Dừng tất cả video đang chạy
+                            this.items.forEach(item => this.stopTrailer(item, false));
+                        } else {
+                            // Chỉ bắt đầu lại khi chưa có slide nào đang trong trạng thái phát video
+                            const currentTrailer = this.items[this.currentSlide].querySelector('.banner-trailer');
+                            if (currentTrailer.style.display === 'none') {
+                               this.startAutoPlay();
+                            }
+                        }
+                    });
+                }
+            };
+                    
+            carousel.init();
+        });
+    </script>
+} *@

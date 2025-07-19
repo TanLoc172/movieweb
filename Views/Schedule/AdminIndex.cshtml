@@ -1,0 +1,62 @@
+@model List<ScheduleAdminItemViewModel>
+@{
+    ViewData["Title"] = "Quản lý lịch chiếu";
+    Layout = "_LayoutAdmin";
+}
+
+<div class="schedule-management-container">
+    <div class="page-header-card">
+        <div class="page-header-card-content">
+            <h1 class="page-title">
+                <i class="bi bi-calendar2-week"></i>
+                <span>@ViewData["Title"]</span>
+            </h1>
+            <a asp-action="Create" class="btn-create-new">
+                <i class="bi bi-plus-circle"></i> Thêm lịch chiếu mới
+            </a>
+        </div>
+    </div>
+
+    <div class="schedule-table-wrapper">
+        <table class="table management-table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Thời gian chiếu</th>
+                    <th>Phim</th>
+                    <th>Thông tin tập</th>
+                    <th>Mô tả</th>
+                    <th>Loại</th>
+                    <th class="action-col">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var schedule in Model)
+                {
+                    <tr>
+                        <td class="text-nowrap">@schedule.ScheduledTime.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@schedule.MovieTitle</td>
+                        <td>@schedule.EpisodeInfo</td>
+                        <td>@schedule.Description</td>
+                        <td>@schedule.EntryType.ToString()</td>
+                        <td class="action-cell">
+                            <a asp-action="Edit" asp-route-id="@schedule.Id" class="action-btn edit" title="Sửa">
+                                <i class="bi bi-pencil-square"></i>Sửa
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@schedule.Id" class="action-btn delete" title="Xóa">
+                                <i class="bi bi-trash"></i>Xoá
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5 mt-4">
+            <i class="bi bi-calendar-x display-4 text-muted mb-3"></i>
+            <p class="fs-5 text-muted">Chưa có lịch chiếu nào.</p>
+        </div>
+    }
+</div>

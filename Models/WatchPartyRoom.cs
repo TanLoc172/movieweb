@@ -16,7 +16,6 @@
 //     }
 // }
 
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -56,7 +55,9 @@ namespace MovieWebsite.Models
         public bool AutoStart { get; set; }
 
         // Quyền riêng tư của phòng (chỉ bạn bè có link, hay công khai)
-        public bool Private { get; set; } // Tên thuộc tính trong DB có thể là Private hoặc IsPrivate
+        // public bool Private { get; set; } // Tên thuộc tính cũ
+        public bool IsPrivate { get; set; } // Đổi tên để rõ ràng hơn và thống nhất với ViewModel
+        public int? CurrentEpisodeId { get; set; } // ID của tập phim đang xem
 
         // --- Các thuộc tính khác có thể thêm ---
         // [StringLength(100)]
