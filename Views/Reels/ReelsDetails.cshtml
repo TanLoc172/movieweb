@@ -1,0 +1,32 @@
+@model MovieWebsite.Models.Reel
+
+@{
+    ViewData["Title"] = Model.Title;
+    // Layout = "_Layout"; // Layout chung của người dùng
+}
+
+<div class="reel-container" style="max-width: 540px; margin: 2rem auto; text-align: center;">
+
+    <h1 class="mb-3">@Model.Title</h1>
+
+    <video controls autoplay muted loop playsinline style="width: 100%; border-radius: 15px; background-color: #000;">
+        <source src="@Url.Content(Model.VideoPath)" type="video/mp4">
+        Trình duyệt của bạn không hỗ trợ thẻ video.
+    </video>
+
+    <div class="reel-info mt-3" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <span class="fw-bold">Lượt xem:</span> @Model.Views.ToString("N0")
+        </div>
+        <div>
+            <!-- Bạn có thể thêm chức năng like ở đây -->
+            <span class="fw-bold">Lượt thích:</span> @Model.Likes.ToString("N0")
+        </div>
+    </div>
+    
+    <hr/>
+    <p>
+        <a href="/">Quay về trang chủ</a>
+    </p>
+
+</div>

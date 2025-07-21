@@ -39,6 +39,8 @@ namespace MovieWebsite.Services
 
                 // Chờ 5 phút trước khi kiểm tra lại
                 await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
+                // await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken); // Kiểm tra mỗi 30 giây
+
             }
 
             _logger.LogInformation("Episode Publishing Service is stopping.");

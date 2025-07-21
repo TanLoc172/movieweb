@@ -22,6 +22,7 @@ namespace MovieWebsite.Data
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<UserFavoriteMovie> UserFavoriteMovies { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+         public DbSet<Reel> Reels { get; set; }
 
         
 

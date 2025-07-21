@@ -1,0 +1,1000 @@
+@model IEnumerable<MovieWebsite.Models.Reel>
+
+@{
+    ViewData["Title"] = "Xem Reels";
+}
+
+<style>
+    /* RESET & BASE STYLES */
+    * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    body,
+    html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        user-select: none;
+    }
+
+    /* MAIN CONTAINER */
+    .reels-container {
+        height: 100vh;
+        width: 100%;
+        overflow-y: auto;
+        scroll-snap-type: y mandatory;
+        scroll-behavior: smooth;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+        position: relative;
+        background: #000;
+        /* Thêm nền đen cho container */
+
+    }
+
+    .reels-container::-webkit-scrollbar {
+        display: none;
+    }
+
+    .reel-item {
+        height: 100vh;
+        width: 100%;
+        position: relative;
+        scroll-snap-align: start;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        padding: 0;
+
+        /* Loại bỏ padding để video chiếm toàn bộ chiều rộng */
+    }
+
+    /* VIDEO STYLING - OPTIMIZED FOR VERTICAL VIDEOS */
+    .reel-item video {
+        width: 100%;
+        /* Chiếm toàn bộ chiều rộng */
+        height: 100vh;
+        /* Chiếm toàn bộ chiều cao */
+        object-fit: cover;
+        /* Đảm bảo video cover toàn bộ khu vực */
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .reel-item video:active {
+        transform: scale(0.98);
+    }
+
+    /* GRADIENT OVERLAYS - ADJUSTED FOR VERTICAL VIDEO */
+    .gradient-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg,
+                rgba(0, 0, 0, 0.4) 0%,
+                transparent 20%,
+                transparent 70%,
+                rgba(0, 0, 0, 0.8) 100%);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    /* LOADING SPINNER */
+    .loading-spinner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50px;
+        height: 50px;
+        border: 3px solid rgba(255, 255, 255, 0.2);
+        border-top: 3px solid #fff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        z-index: 2;
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+
+        100% {
+            transform: translate(-50%, -50%) rotate(360deg);
+        }
+    }
+
+    /* PLAY/PAUSE CONTROL */
+    .play-pause-control {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80px;
+        height: 80px;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(10px);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        z-index: 10;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .play-pause-control.visible {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    .play-pause-control:hover {
+        background: rgba(0, 0, 0, 0.8);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .play-pause-control svg {
+        width: 28px;
+        height: 28px;
+        fill: white;
+        transition: transform 0.2s ease;
+    }
+
+    /* VIDEO INFO PANEL - POSITIONED FOR VERTICAL VIDEO */
+
+    .video-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        max-width: 100%;
+        /* THAY ĐỔI: Tăng padding-bottom để có không gian cho thanh thời lượng */
+        padding: 30px 20px 60px;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+        color: white;
+        z-index: 5;
+        box-sizing: border-box;
+    }
+
+    .video-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0 0 8px 0;
+        line-height: 1.3;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    }
+
+    .video-stats {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin: 0 0 16px 0;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .stat-icon {
+        width: 16px;
+        height: 16px;
+        opacity: 0.8;
+    }
+    
+    /* --- CSS THÊM MỚI CHO THANH THỜI LƯỢNG --- */
+    .progress-bar-container {
+        position: absolute;
+        bottom: 45px; /* Đặt vị trí ngay phía trên các nút điều khiển */
+        left: 20px;
+        right: 20px;
+        z-index: 6;
+        cursor: pointer;
+        /* Thêm padding để tăng vùng có thể nhấp chuột mà không làm thanh dày hơn */
+        padding: 8px 0;
+    }
+
+    .progress-bar-background {
+        height: 4px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 2px;
+        width: 100%;
+    }
+
+    .progress-bar-filled {
+        height: 100%;
+        width: 0%; /* Bắt đầu với 0% */
+        background: #fff;
+        border-radius: 2px;
+        transition: width 0.1s linear; /* Giúp thanh chạy mượt hơn */
+    }
+    /* --- KẾT THÚC CSS THÊM MỚI --- */
+
+
+    /* VOLUME CONTROL */
+    .volume-control {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 12px;
+    }
+
+    .volume-btn {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+
+    .volume-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: scale(1.1);
+    }
+
+    .volume-btn svg {
+        width: 20px;
+        height: 20px;
+        fill: white;
+    }
+
+    .volume-slider {
+        -webkit-appearance: none;
+        appearance: none;
+        height: 6px;
+        width: 120px;
+        border-radius: 3px;
+        background: rgba(255, 255, 255, 0.3);
+        outline: none;
+        cursor: pointer;
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #fff;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s ease;
+    }
+
+    .volume-slider::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+    }
+
+    /* NAVIGATION CONTROLS */
+    .nav-controls {
+        position: fixed;
+        right: 20px;
+        bottom: 100px;
+        /* Di chuyển xuống dưới */
+        transform: none;
+        /* Loại bỏ transform */
+        z-index: 20;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .nav-btn {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .nav-btn:active {
+        transform: scale(0.95);
+    }
+
+    .nav-btn svg {
+        width: 22px;
+        height: 22px;
+        transition: transform 0.2s ease;
+    }
+
+    /* PROGRESS INDICATOR */
+    .progress-indicators {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        z-index: 30;
+    }
+
+    .progress-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.4);
+        transition: all 0.3s ease;
+    }
+
+    .progress-dot.active {
+        background: white;
+        transform: scale(1.2);
+    }
+
+    /* TOP INFO BAR - ADJUSTED FOR VERTICAL VIDEO */
+    .top-info {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        max-width: 100%;
+        padding: 20px;
+        background: linear-gradient(rgba(0, 0, 0, 0.6), transparent);
+        color: white;
+        z-index: 10;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        box-sizing: border-box;
+    }
+
+    .creator-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .creator-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    .creator-name {
+        font-weight: 500;
+        font-size: 15px;
+    }
+
+    .time-indicator {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.8);
+        background: rgba(0, 0, 0, 0.4);
+        padding: 6px 12px;
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+    }
+
+    .global-mute-control {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 100;
+    }
+
+    .global-mute-control .nav-btn {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(20px);
+    }
+
+    /* MOBILE OPTIMIZATIONS FOR VERTICAL VIDEOS */
+    @@media (max-width: 768px) {
+        .reel-item {
+            padding: 0 10px;
+            /* Giảm padding trên mobile */
+        }
+
+        .reel-item video {
+            max-width: calc(100vw - 20px);
+            /* Sử dụng hầu hết chiều rộng màn hình trên mobile */
+            width: auto;
+        }
+
+        .gradient-overlay,
+        .video-info,
+        .top-info {
+            width: calc(100vw - 20px);
+            max-width: none;
+        }
+
+        .nav-controls {
+            right: 15px;
+        }
+
+        .nav-btn {
+            width: 42px;
+            height: 42px;
+        }
+
+        .nav-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .video-info {
+            padding: 20px 15px 50px;
+        }
+
+        .progress-bar-container {
+            bottom: 35px;
+            left: 15px;
+            right: 15px;
+        }
+
+        .volume-slider {
+            width: 100px;
+        }
+
+        .play-pause-control {
+            width: 70px;
+            height: 70px;
+        }
+
+        .play-pause-control svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .creator-info {
+            gap: 8px;
+        }
+
+        .creator-avatar {
+            width: 35px;
+            height: 35px;
+            font-size: 14px;
+        }
+
+        .creator-name {
+            font-size: 14px;
+        }
+
+        .time-indicator {
+            font-size: 12px;
+            padding: 4px 10px;
+        }
+    }
+
+    /* ULTRA-WIDE SCREEN OPTIMIZATION */
+    @@media (min-width: 1920px) {
+        .reel-item video {
+            max-width: 70vh;
+            /* Giảm kích thước trên màn hình rất rộng */
+        }
+
+        .gradient-overlay,
+        .video-info,
+        .top-info {
+            width: 40vh;
+        }
+    }
+
+    /* ANIMATIONS */
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .reel-item.active .video-info {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    /* BLUR EFFECT WHEN PAUSED */
+    .reel-item.paused video {
+        filter: blur(2px);
+        transform: scale(1.02);
+    }
+
+    /* DOUBLE TAP LIKE ANIMATION */
+    .like-animation {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 15;
+    }
+
+    .heart-burst {
+        color: #ff3040;
+        font-size: 80px;
+        animation: heartBurst 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        opacity: 0;
+    }
+
+    @@keyframes heartBurst {
+        0% {
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 1;
+        }
+
+        50% {
+            transform: translate(-50%, -50%) scale(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translate(-50%, -50%) scale(1.8);
+            opacity: 0;
+        }
+    }
+</style>
+
+<!-- Progress Indicators -->
+<div class="progress-indicators" id="progressIndicators"></div>
+
+<!-- Navigation Controls -->
+<div class="nav-controls">
+    <button id="btn-prev" class="nav-btn" aria-label="Reel trước">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+        </svg>
+    </button>
+    <button id="btn-next" class="nav-btn" aria-label="Reel tiếp theo">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+        </svg>
+    </button>
+</div>
+
+<div class="reels-container" id="reelsContainer">
+    @foreach (var reel in Model)
+    {
+        <div class="reel-item" data-reel-id="@reel.Id">
+            <!-- Gradient Overlay -->
+            <div class="gradient-overlay"></div>
+
+            <!-- Loading Spinner -->
+            <div class="loading-spinner"></div>
+
+            <!-- Video Element -->
+            <video class="reel-video" loop playsinline preload="metadata">
+                <source src="@Url.Content(reel.VideoPath)" type="video/mp4">
+                Trình duyệt của bạn không hỗ trợ video.
+            </video>
+
+            <!-- Play/Pause Control -->
+            <div class="play-pause-control">
+                <svg class="icon-play" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                </svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none;">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                </svg>
+            </div>
+
+            <!-- Like Animation -->
+            <div class="like-animation">
+                <div class="heart-burst">❤️</div>
+            </div>
+
+            <!-- Top Info -->
+            <div class="top-info">
+                <div class="creator-info">
+                    <div class="creator-avatar">@reel.Title.Substring(0, 1).ToUpper()</div>
+                    <div class="creator-name">@reel.Title</div>
+                </div>
+                <div class="time-indicator">
+                    <span id="currentTime-@reel.Id">00:00</span> / <span id="duration-@reel.Id">00:00</span>
+                </div>
+            </div>
+
+            <!-- --- HTML THÊM MỚI CHO THANH THỜI LƯỢNG --- -->
+            <div class="progress-bar-container">
+                <div class="progress-bar-background">
+                    <div class="progress-bar-filled"></div>
+                </div>
+            </div>
+            <!-- --- KẾT THÚC HTML THÊM MỚI --- -->
+
+            <!-- Video Info Panel -->
+            <div class="video-info">
+                <h3 class="video-title">@reel.Title</h3>
+                <div class="video-stats">
+                    <div class="stat-item">
+                        <svg class="stat-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                        </svg>
+                        <span>@reel.Views.ToString("N0")</span>
+                    </div>
+                    <div class="stat-item">
+                        <svg class="stat-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                        <span>@((reel.Views / 10).ToString("N0"))</span>
+                    </div>
+                </div>
+
+                <!-- Volume Control -->
+                <div class="volume-control">
+                    <button class="volume-btn">
+                        <svg class="icon-volume-off" viewBox="0 0 24 24">
+                            <path
+                                d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
+                        </svg>
+                        <svg class="icon-volume-on" viewBox="0 0 24 24" style="display:none;">
+                            <path
+                                d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-.78-3.34-2-4.43v8.86c1.22-1.09 2-2.66 2-4.43zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                        </svg>
+                    </button>
+                    <input type="range" min="0" max="1" step="0.01" value="0.5" class="volume-slider">
+                </div>
+
+                <!-- Global Mute Button -->
+                <div class="global-mute-control">
+                    <button id="btn-global-mute" class="nav-btn" aria-label="Tắt tiếng">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M3.63 3.63a.996.996 0 000 1.41L7.29 8.7 7 9H4c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h3l3.44 3.44c.49.49 1.28.32 1.63-.35.1-.24.16-.51.16-.79v-4.17l4.18 4.18c-.49.37-1.02.68-1.6.91-.36.15-.58.53-.58.92 0 .72.73 1.18 1.39.91.8-.33 1.55-.77 2.22-1.31l1.34 1.34a.996.996 0 101.41-1.41L5.05 3.63c-.39-.39-1.02-.39-1.42 0zM19 12c0 .82-.15 1.61-.41 2.34l1.53 1.53c.56-1.17.88-2.48.88-3.87 0-3.83-2.4-7.11-5.78-8.4-.59-.23-1.22.23-1.22.86v.19c0 .38.25.71.61.85C17.18 6.54 19 9.06 19 12zm-8.71-6.29l-.17.17L12 7.76V6.41c0-.89-1.08-1.33-1.71-.7zM16.5 12A4.5 4.5 0 0014 7.97v1.79l2.48 2.48c.01-.08.02-.16.02-.24z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const container = document.getElementById('reelsContainer');
+            const reelItems = document.querySelectorAll('.reel-item');
+            const progressIndicators = document.getElementById('progressIndicators');
+            let activeVideo = null;
+            let activeIndex = 0;
+            let playPauseTimer;
+            let lastTap = 0;
+
+            // Create progress indicators
+            reelItems.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'progress-dot';
+                if (index === 0) dot.classList.add('active');
+                progressIndicators.appendChild(dot);
+            });
+
+            // Utility functions
+            function showPlayPauseButton(btn) {
+                clearTimeout(playPauseTimer);
+                btn.classList.add('visible');
+                playPauseTimer = setTimeout(() => {
+                    btn.classList.remove('visible');
+                }, 1200);
+            }
+
+            function updatePlayPauseIcon(video, btn) {
+                const playIcon = btn.querySelector('.icon-play');
+                const pauseIcon = btn.querySelector('.icon-pause');
+                if (video.paused) {
+                    playIcon.style.display = 'block';
+                    pauseIcon.style.display = 'none';
+                } else {
+                    playIcon.style.display = 'none';
+                    pauseIcon.style.display = 'block';
+                }
+            }
+
+            function updateVolumeIcon(video, btn) {
+                const offIcon = btn.querySelector('.icon-volume-off');
+                const onIcon = btn.querySelector('.icon-volume-on');
+                if (video.muted || video.volume === 0) {
+                    offIcon.style.display = 'block';
+                    onIcon.style.display = 'none';
+                } else {
+                    offIcon.style.display = 'none';
+                    onIcon.style.display = 'block';
+                }
+            }
+
+            function formatTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+
+            function updateProgressIndicators(index) {
+                document.querySelectorAll('.progress-dot').forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+            }
+
+            function triggerLikeAnimation(item) {
+                const heartBurst = item.querySelector('.heart-burst');
+                heartBurst.style.animation = 'none';
+                heartBurst.offsetHeight; // Trigger reflow
+                heartBurst.style.animation = 'heartBurst 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards';
+            }
+
+            // Setup each reel item
+            reelItems.forEach((item, index) => {
+                const video = item.querySelector('.reel-video');
+                const playPauseBtn = item.querySelector('.play-pause-control');
+                const volumeBtn = item.querySelector('.volume-btn');
+                const volumeSlider = item.querySelector('.volume-slider');
+                const loadingSpinner = item.querySelector('.loading-spinner');
+                const currentTimeEl = item.querySelector(`#currentTime-${item.dataset.reelId}`);
+                const durationEl = item.querySelector(`#duration-${item.dataset.reelId}`);
+                
+                // --- JAVASCRIPT THÊM MỚI ---
+                const progressBarContainer = item.querySelector('.progress-bar-container');
+                const progressBarFilled = item.querySelector('.progress-bar-filled');
+                // --- KẾT THÚC JAVASCRIPT THÊM MỚI ---
+
+                // Hide loading spinner when video loads
+                video.addEventListener('loadeddata', () => {
+                    loadingSpinner.style.display = 'none';
+                    if (durationEl && video.duration) {
+                        durationEl.textContent = formatTime(video.duration);
+                    }
+                });
+
+                // Update time display and progress bar
+                video.addEventListener('timeupdate', () => {
+                    if (currentTimeEl) {
+                        currentTimeEl.textContent = formatTime(video.currentTime);
+                    }
+                    // --- JAVASCRIPT THÊM MỚI ---
+                    if (progressBarFilled && video.duration) {
+                        const progressPercent = (video.currentTime / video.duration) * 100;
+                        progressBarFilled.style.width = `${progressPercent}%`;
+                    }
+                    // --- KẾT THÚC JAVASCRIPT THÊM MỚI ---
+                });
+
+                // --- JAVASCRIPT THÊM MỚI: Cho phép tua video (seek) ---
+                progressBarContainer.addEventListener('click', (e) => {
+                    if(video.duration){
+                        const barWidth = progressBarContainer.clientWidth;
+                        const clickPositionX = e.offsetX;
+                        video.currentTime = (clickPositionX / barWidth) * video.duration;
+                    }
+                });
+                // --- KẾT THÚC JAVASCRIPT THÊM MỚI ---
+
+
+                // Double tap for like
+                video.addEventListener('click', (e) => {
+                    const currentTime = new Date().getTime();
+                    const tapLength = currentTime - lastTap;
+
+                    if (tapLength < 500 && tapLength > 0) {
+                        // Double tap detected
+                        triggerLikeAnimation(item);
+                        e.preventDefault();
+                    } else {
+                        // Single tap - play/pause
+                        setTimeout(() => {
+                            if (video.paused) {
+                                video.play();
+                            } else {
+                                video.pause();
+                            }
+                            updatePlayPauseIcon(video, playPauseBtn);
+                            showPlayPauseButton(playPauseBtn);
+
+                            // Toggle blur effect
+                            item.classList.toggle('paused', video.paused);
+                        }, 200);
+                    }
+                    lastTap = currentTime;
+                });
+
+                // Play/Pause button
+                playPauseBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (video.paused) {
+                        video.play();
+                    } else {
+                        video.pause();
+                    }
+                    updatePlayPauseIcon(video, playPauseBtn);
+                    item.classList.toggle('paused', video.paused);
+                });
+
+                // Volume control
+                volumeBtn.addEventListener('click', () => {
+                    video.muted = !video.muted;
+                    if (!video.muted && video.volume === 0) {
+                        video.volume = 0.5;
+                        volumeSlider.value = 0.5;
+                    }
+                    updateVolumeIcon(video, volumeBtn);
+                });
+
+                volumeSlider.addEventListener('input', (e) => {
+                    video.volume = e.target.value;
+                    video.muted = false;
+                    updateVolumeIcon(video, volumeBtn);
+                });
+
+                // Sync volume changes
+                video.addEventListener('volumechange', () => {
+                    volumeSlider.value = video.muted ? 0 : video.volume;
+                    updateVolumeIcon(video, volumeBtn);
+                });
+
+                // Sync play/pause
+                video.addEventListener('play', () => {
+                    updatePlayPauseIcon(video, playPauseBtn);
+                    item.classList.remove('paused');
+                });
+
+                video.addEventListener('pause', () => {
+                    updatePlayPauseIcon(video, playPauseBtn);
+                    item.classList.add('paused');
+                });
+
+                // Initialize volume
+                video.volume = 0.5;
+                volumeSlider.value = 0.5;
+                video.muted = true; // Start muted
+            });
+
+            // Intersection Observer for auto-play
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const video = entry.target;
+                    const item = video.closest('.reel-item');
+                    const index = Array.from(reelItems).indexOf(item);
+
+                    if (entry.isIntersecting) {
+                        activeVideo = video;
+                        activeIndex = index;
+
+                        // Update progress indicators
+                        updateProgressIndicators(index);
+
+                        // Add active class
+                        item.classList.add('active');
+
+                        // Auto-unmute first video
+                        if (!sessionStorage.getItem('hasUnmuted') && index === 0) {
+                            video.muted = false;
+                            sessionStorage.setItem('hasUnmuted', 'true');
+                            updateVolumeIcon(video, item.querySelector('.volume-btn'));
+                        }
+
+                        // Play video
+                        video.play().catch(e => console.log("Autoplay prevented:", e));
+                    } else {
+                        // Pause and reset video
+                        video.pause();
+                        video.currentTime = 0;
+                        item.classList.remove('active', 'paused');
+                    }
+                });
+            }, { threshold: 0.7 });
+
+            // Observe all videos
+            document.querySelectorAll('.reel-video').forEach(video => {
+                observer.observe(video);
+            });
+
+            // Navigation controls
+            document.getElementById('btn-next').addEventListener('click', () => {
+                if (activeIndex < reelItems.length - 1) {
+                    container.scrollTo({
+                        top: (activeIndex + 1) * container.clientHeight,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+
+            document.getElementById('btn-prev').addEventListener('click', () => {
+                if (activeIndex > 0) {
+                    container.scrollTo({
+                        top: (activeIndex - 1) * container.clientHeight,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowUp' && activeIndex > 0) {
+                    container.scrollTo({
+                        top: (activeIndex - 1) * container.clientHeight,
+                        behavior: 'smooth'
+                    });
+                    e.preventDefault();
+                } else if (e.key === 'ArrowDown' && activeIndex < reelItems.length - 1) {
+                    container.scrollTo({
+                        top: (activeIndex + 1) * container.clientHeight,
+                        behavior: 'smooth'
+                    });
+                    e.preventDefault();
+                } else if (e.key === ' ' && activeVideo) {
+                    e.preventDefault();
+                    if (activeVideo.paused) {
+                        activeVideo.play();
+                    } else {
+                        activeVideo.pause();
+                    }
+                }
+            });
+
+            // Thêm sự kiện vuốt cho điều hướng
+            let touchStartY = 0;
+            let touchEndY = 0;
+
+            container.addEventListener('touchstart', e => {
+                touchStartY = e.changedTouches[0].screenY;
+            }, false);
+
+            container.addEventListener('touchend', e => {
+                touchEndY = e.changedTouches[0].screenY;
+                handleSwipe();
+            }, false);
+
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const swipeDistance = touchStartY - touchEndY;
+
+                // Vuốt lên - next reel
+                if (swipeDistance > swipeThreshold && activeIndex < reelItems.length - 1) {
+                    container.scrollTo({
+                        top: (activeIndex + 1) * container.clientHeight,
+                        behavior: 'smooth'
+                    });
+                }
+                // Vuốt xuống - previous reel
+                else if (swipeDistance < -swipeThreshold && activeIndex > 0) {
+                    container.scrollTo({
+                        top: (activeIndex - 1) * container.clientHeight,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    </script>
+}

@@ -1,0 +1,1684 @@
+@model MovieDetailViewModel
+
+@{
+    ViewData["Title"] = Model.Movie.Title;
+    var airedEpisodes = Model.Episodes;
+    var airedEpisodesCount = airedEpisodes.Count;
+    var firstEpisodeNumber = Model.Episodes.Any() ? Model.Episodes.OrderBy(e => e.EpisodeNumber).FirstOrDefault()?.EpisodeNumber ?? 1 : 1;
+}
+
+<link rel="stylesheet" href="~/css/details.css" asp-append-version="true" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<!-- Hero Banner Section -->
+<div class="hero-banner" style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('@Model.Movie.PosterDoc');">
+    <div class="container">
+        <div class="movie-header">
+            <div class="movie-poster-container">
+                <img src="@Model.Movie.PosterDoc" alt="@Model.Movie.Title Poster" class="movie-poster">
+                <div class="poster-overlay">
+                    <a href="#" class="play-trailer-btn">
+                        <i class="fas fa-play"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="movie-info">
+                <div class="title-section">
+                    <h1 class="movie-title">@Model.Movie.Title</h1>
+                    @if (!string.IsNullOrEmpty(Model.Movie.EnglishTitle))
+                    {
+                        <h2 class="movie-subtitle">@Model.Movie.EnglishTitle</h2>
+                    }
+                </div>
+                
+                <div class="meta-info">
+                    <span class="rating-badge">
+                        <i class="fas fa-star"></i> @(Model.Ratings.Any() ? Model.Movie.AverageRating.ToString("F1") : "N/A")
+                    </span>
+                    <span class="meta-tag">@Model.Movie.ReleaseYear</span>
+                    @* <span class="meta-tag">@(Model.Movie.Duration > 0 ? $"{Model.Movie.Duration} phút" : "N/A")</span> *@
+                    @if (Model.Movie.Genre != null)
+                    {
+                        <span class="meta-tag">@Model.Movie.Genre.Name</span>
+                    }
+                    <span class="meta-tag age-rating">16+</span>
+                </div>
+                
+                <div class="action-buttons">
+                    <a asp-action="Watch" asp-controller="Movies" asp-route-movieId="@Model.Movie.Id" asp-route-episodeNumber="@firstEpisodeNumber" class="btn-primary">
+                        <i class="fas fa-play"></i> Xem ngay
+                    </a>
+                    
+                    @{
+                        ViewBag.CurrentMovieId = Model.Movie.Id;
+                    }
+                    @await Html.PartialAsync("_WatchTogetherPartial")
+                    
+                    <div class="secondary-actions">
+                        <a href="#" id="favorite-action-link" class="action-btn @(Model.IsUserLoggedIn && Model.HasFavorited ? "active" : "")" data-movie-id="@Model.Movie.Id" data-user-id="@Model.UserId" data-is-favorited="@(Model.IsUserLoggedIn && Model.HasFavorited ? "true" : "false")">
+                            <i class="@(Model.IsUserLoggedIn && Model.HasFavorited ? "fas" : "far") fa-heart"></i>
+                        </a>
+                        <a href="#" class="action-btn"><i class="fas fa-plus"></i></a>
+                        <a href="#" class="action-btn"><i class="fas fa-share-alt"></i></a>
+                    </div>
+                </div>
+                
+                <div class="quick-info">
+                    <div class="info-item">
+                        <span class="info-label">Trạng thái:</span>
+                        <span class="info-value">@(Model.Movie.IsCompleted ? "Hoàn thành" : "Đang cập nhật")</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Tập:</span>
+                        <span class="info-value">@airedEpisodesCount/@Model.Movie.TotalEpisodes</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Lượt xem:</span>
+                        <span class="info-value">@Model.Movie.Views.ToString("N0")</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Section -->
+<div class="container main-content">
+    <div class="content-wrapper">
+        <!-- Left Content Column -->
+        <div class="left-column">
+            <!-- Navigation Tabs -->
+            <nav class="content-tabs">
+                <ul>
+                    <li class="active"><a href="#overview" data-tab="overview">Tổng quan</a></li>
+                    <li><a href="#episodes" data-tab="episodes">Danh sách tập</a></li>
+                    <li><a href="#cast" data-tab="cast">Diễn viên</a></li>
+                    <li><a href="#reviews" data-tab="reviews">Đánh giá</a></li>
+                    <li><a href="#related" data-tab="related">Phim liên quan</a></li>
+                </ul>
+            </nav>
+            
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Overview Tab -->
+                <div id="overview" class="tab-pane active">
+                    <h3 class="section-title">Nội dung phim</h3>
+                    <p class="movie-description">@Model.Movie.Description</p>
+                    
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Đạo diễn:</span>
+                            <span class="detail-value">@(Model.Movie.Director ?? "Đang cập nhật")</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Diễn viên:</span>
+                            <span class="detail-value">@(Model.Movie.Cast ?? "Đang cập nhật")</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Quốc gia:</span>
+                            <span class="detail-value">@(Model.Movie.Country?.Name ?? "Đang cập nhật")</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Chất lượng:</span>
+                            <span class="detail-value">Full HD</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Ngôn ngữ:</span>
+                            <span class="detail-value">Thuyết minh</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Thể loại:</span>
+                            <div class="genres-list">
+                                @if (Model.Movie.Genre != null)
+                                {
+                                    <span class="genre-tag">@Model.Movie.Genre.Name</span>
+                                }
+                                @foreach (var movieGenre in Model.Movie.MovieGenres)
+                                {
+                                    <span class="genre-tag">@movieGenre.Genre.Name</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    
+                    @if (Model.NextEpisodeScheduleTime.HasValue)
+                    {
+                        <div class="notification-banner">
+                            <i class="fas fa-bell"></i>
+                            <div>
+                                <strong>Tập @(airedEpisodesCount + 1) sắp ra mắt</strong>
+                                <p>Dự kiến phát sóng: @Model.NextEpisodeScheduleTime.Value.ToString("HH:mm, dd/MM/yyyy")</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+                
+                <!-- Episodes Tab -->
+                <div id="episodes" class="tab-pane">
+                    <div class="episodes-header">
+                        <h3 class="section-title">Danh sách tập</h3>
+                        <div class="episode-filters">
+                            <div class="dropdown">
+                                <button class="filter-btn">Phần 1 <i class="fas fa-chevron-down"></i></button>
+                                <div class="dropdown-content">
+                                    <a href="#">Phần 1</a>
+                                    <a href="#">Phần 2</a>
+                                </div>
+                            </div>
+                            <div class="dropdown">
+                                <button class="filter-btn">Thuyết minh <i class="fas fa-chevron-down"></i></button>
+                                <div class="dropdown-content">
+                                    <a href="#">Thuyết minh</a>
+                                    <a href="#">Phụ đề</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="episodes-grid">
+                        @foreach (var episode in Model.Episodes.OrderBy(e => e.EpisodeNumber))
+                        {
+                            <a asp-action="Watch" asp-controller="Movies" asp-route-movieId="@Model.Movie.Id" asp-route-episodeNumber="@episode.EpisodeNumber" class="episode-card @(episode.EpisodeNumber == firstEpisodeNumber ? "current" : "")">
+                                <div class="episode-number">Tập @episode.EpisodeNumber</div>
+                                <div class="episode-meta">
+                                    <span class="episode-date">@episode.ReleaseDate.ToString("dd/MM/yyyy")</span>
+                                    <span class="episode-duration">24 phút</span>
+                                </div>
+                                <div class="episode-play">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                </div>
+                
+                <!-- Cast Tab -->
+                <div id="cast" class="tab-pane">
+                    <h3 class="section-title">Diễn viên</h3>
+                    
+                    @if (!string.IsNullOrWhiteSpace(Model.Movie.Cast))
+                    {
+                        <div class="cast-grid">
+                            @foreach (var member in Model.Movie.Cast.Split(',').Take(8))
+                            {
+                                <div class="cast-member">
+                                    <div class="cast-avatar">
+                                        <img src="https://ui-avatars.com/api/?name=@member&background=random&color=fff&size=200" alt="@member">
+                                    </div>
+                                    <div class="cast-name">@member.Trim()</div>
+                                    <div class="cast-role">Diễn viên</div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <i class="fas fa-user-slash"></i>
+                            <p>Chưa có thông tin diễn viên</p>
+                        </div>
+                    }
+                </div>
+                
+                <!-- Reviews Tab -->
+                <div id="reviews" class="tab-pane">
+                    <div class="reviews-header">
+                        <h3 class="section-title">Đánh giá & Bình luận</h3>
+                        <div class="review-stats">
+                            <div class="average-rating">
+                                <div class="rating-score">@(Model.Ratings.Any() ? Model.Movie.AverageRating.ToString("F1") : "0.0")</div>
+                                <div class="rating-stars">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <i class="fas fa-star @(i <= Model.Movie.AverageRating ? "active" : "")"></i>
+                                    }
+                                </div>
+                                <div class="rating-count">@Model.Ratings.Count đánh giá</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    @if (!Model.IsUserLoggedIn)
+                    {
+                        <div class="auth-prompt">
+                            <p>Đăng nhập để đánh giá và bình luận</p>
+                            <a asp-controller="Account" asp-action="Login" class="btn-secondary">Đăng nhập</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="review-form">
+                            <div class="form-header">
+                                <h4>Viết đánh giá của bạn</h4>
+                                <div class="rating-input">
+                                    <span>Đánh giá:</span>
+                                    <div class="star-rating">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <i class="far fa-star" data-rating="@i"></i>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <form asp-action="AddRating" asp-controller="Movies" method="post">
+                                <input type="hidden" asp-for="NewRating.MovieId" />
+                                <input type="hidden" asp-for="NewRating.Score" id="rating-score" value="0" />
+                                <input type="hidden" asp-for="NewRating.UserName" value="@User.Identity.Name" />
+                                <input type="hidden" asp-for="NewRating.UserEmail" value="@User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value" />
+                                
+                                <textarea asp-for="NewRating.Review" class="form-control" placeholder="Viết đánh giá của bạn..."></textarea>
+                                <div class="form-footer">
+                                    <button type="submit" class="btn-primary">Gửi đánh giá</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div class="comment-form">
+                            <form asp-action="AddComment" asp-controller="Movies" method="post">
+                                <input type="hidden" asp-for="NewComment.MovieId" />
+                                <input type="hidden" asp-for="NewComment.EpisodeId" />
+                                <input type="hidden" asp-for="NewComment.UserName" value="@User.Identity.Name" />
+                                <input type="hidden" asp-for="NewComment.UserEmail" value="@User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value" />
+                                
+                                <div class="form-group">
+                                    <textarea asp-for="NewComment.Content" class="form-control" placeholder="Viết bình luận..."></textarea>
+                                </div>
+                                <div class="form-footer">
+                                    <label class="spoiler-toggle">
+                                        @* <input type="checkbox" asp-for="NewComment.IsSpoiler" /> *@
+                                        <span class="toggle-slider"></span>
+                                        <span>Tiết lộ nội dung</span>
+                                    </label>
+                                    <button type="submit" class="btn-primary">Bình luận</button>
+                                </div>
+                            </form>
+                        </div>
+                    }
+                    
+                    <div class="reviews-list">
+                        @if (Model.Ratings.Any())
+                        {
+                            @foreach (var rating in Model.Ratings.OrderByDescending(r => r.CreatedAt))
+                            {
+                                <div class="review-item">
+                                    <div class="reviewer-avatar">
+                                        <img src="https://ui-avatars.com/api/?name=@rating.UserName&background=random&color=fff" alt="@rating.UserName">
+                                    </div>
+                                    <div class="review-content">
+                                        <div class="review-header">
+                                            <span class="reviewer-name">@rating.UserName</span>
+                                            <span class="review-date">@rating.CreatedAt.ToString("dd/MM/yyyy")</span>
+                                            <div class="review-rating">
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    <i class="fas fa-star @(i <= rating.Score ? "active" : "")"></i>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="review-text">
+                                            @rating.Review
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="empty-state">
+                                <i class="fas fa-comment-alt"></i>
+                                <p>Chưa có đánh giá nào</p>
+                            </div>
+                        }
+                    </div>
+                    
+                    <div class="comments-list">
+                        <h4 class="sub-section-title">Bình luận (@Model.Comments.Count(c => c.EpisodeId == null))</h4>
+                        
+                        @if (Model.Comments.Any(c => c.EpisodeId == null))
+                        {
+                            @foreach (var comment in Model.Comments.Where(c => c.EpisodeId == null && c.ParentCommentId == null).OrderByDescending(c => c.CreatedAt))
+                            {
+                                <div class="comment-item">
+                                    <div class="commenter-avatar">
+                                        <img src="https://ui-avatars.com/api/?name=@comment.UserName&background=random&color=fff" alt="@comment.UserName">
+                                    </div>
+                                    <div class="comment-content">
+                                        <div class="comment-header">
+                                            <span class="commenter-name">@comment.UserName</span>
+                                            @* <span class="comment-date">@comment.CreatedAt.ToString("dd/MM/yyyy HH:mm")</span>
+                                            @if (comment.IsSpoiler)
+                                            {
+                                                <span class="spoiler-tag">Tiết lộ nội dung</span>
+                                            } *@
+                                        </div>
+                                        <div class="comment-text">
+                                            @comment.Content
+                                        </div>
+                                        <div class="comment-actions">
+                                            <button class="action-btn"><i class="far fa-thumbs-up"></i> @comment.Likes</button>
+                                            <button class="action-btn"><i class="far fa-thumbs-down"></i> @comment.Dislikes</button>
+                                            @if (Model.IsUserLoggedIn)
+                                            {
+                                                <button class="action-btn reply-btn" data-comment-id="@comment.Id">Trả lời</button>
+                                            }
+                                        </div>
+                                        
+                                        @if (comment.Replies != null && comment.Replies.Any())
+                                        {
+                                            <div class="comment-replies">
+                                                @foreach (var reply in comment.Replies.OrderBy(r => r.CreatedAt))
+                                                {
+                                                    <div class="comment-item reply">
+                                                        <div class="commenter-avatar">
+                                                            <img src="https://ui-avatars.com/api/?name=@reply.UserName&background=random&color=fff" alt="@reply.UserName">
+                                                        </div>
+                                                        <div class="comment-content">
+                                                            <div class="comment-header">
+                                                                <span class="commenter-name">@reply.UserName</span>
+                                                                <span class="comment-date">@reply.CreatedAt.ToString("dd/MM/yyyy HH:mm")</span>
+                                                            </div>
+                                                            <div class="comment-text">
+                                                                @reply.Content
+                                                            </div>
+                                                            <div class="comment-actions">
+                                                                <button class="action-btn"><i class="far fa-thumbs-up"></i> @reply.Likes</button>
+                                                                <button class="action-btn"><i class="far fa-thumbs-down"></i> @reply.Dislikes</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                        
+                                        @if (Model.IsUserLoggedIn)
+                                        {
+                                            <form asp-action="AddComment" asp-controller="Movies" method="post" class="reply-form" id="reply-form-@comment.Id" style="display: none;">
+                                                <input type="hidden" asp-for="NewComment.MovieId" />
+                                                <input type="hidden" asp-for="NewComment.EpisodeId" />
+                                                <input type="hidden" asp-for="NewComment.ParentCommentId" value="@comment.Id" />
+                                                <input type="hidden" asp-for="NewComment.UserName" value="@User.Identity.Name" />
+                                                <input type="hidden" asp-for="NewComment.UserEmail" value="@User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value" />
+                                                
+                                                <div class="form-group">
+                                                    <textarea asp-for="NewComment.Content" class="form-control" placeholder="Viết câu trả lời..."></textarea>
+                                                </div>
+                                                <div class="form-footer">
+                                                    <label class="spoiler-toggle">
+                                                        @* <input type="checkbox" asp-for="NewComment.IsSpoiler" /> *@
+                                                        <span class="toggle-slider"></span>
+                                                        <span>Tiết lộ nội dung</span>
+                                                    </label>
+                                                    <button type="submit" class="btn-primary">Gửi</button>
+                                                </div>
+                                            </form>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="empty-state">
+                                <i class="fas fa-comments"></i>
+                                <p>Chưa có bình luận nào</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+                
+                <!-- Related Movies Tab -->
+                <div id="related" class="tab-pane">
+                    <h3 class="section-title">Phim liên quan</h3>
+                    
+                    @if (Model.RelatedMovies.Any())
+                    {
+                        <div class="related-movies-grid">
+                            @foreach (var movie in Model.RelatedMovies.Take(6))
+                            {
+                                <div class="movie-card">
+                                    <a asp-action="Details" asp-controller="Movies" asp-route-id="@movie.Id" class="movie-poster-link">
+                                        <img src="@movie.PosterDoc" alt="@movie.Title" class="movie-poster">
+                                        <div class="movie-overlay">
+                                            <div class="movie-rating">
+                                                <i class="fas fa-star"></i> @(movie.AverageRating > 0 ? movie.AverageRating.ToString("F1") : "N/A")
+                                            </div>
+                                            <div class="movie-title">@movie.Title</div>
+                                            <div class="movie-meta">
+                                                <span>@movie.ReleaseYear</span>
+                                                <span>@movie.TotalEpisodes tập</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <i class="fas fa-film"></i>
+                            <p>Không có phim liên quan</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Sidebar -->
+        <div class="right-sidebar">
+            <div class="sidebar-widget">
+                <h4 class="widget-title">Thông tin thêm</h4>
+                <div class="widget-content">
+                    <div class="info-item">
+                        <span class="info-label">Ngày phát sóng:</span>
+                        <span class="info-value">@Model.Movie.ReleaseYear.ToString("dd/MM/yyyy")</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Chất lượng:</span>
+                        <span class="info-value">Full HD</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Ngôn ngữ:</span>
+                        <span class="info-value">Thuyết minh</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Quốc gia:</span>
+                        <span class="info-value">@(Model.Movie.Country?.Name ?? "Đang cập nhật")</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-widget">
+                <h4 class="widget-title">Thống kê</h4>
+                <div class="widget-content">
+                    <div class="stats-item">
+                        <div class="stats-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="stats-info">
+                            <div class="stats-label">Lượt xem</div>
+                            <div class="stats-value">@Model.Movie.Views.ToString("N0")</div>
+                        </div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="stats-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stats-info">
+                            <div class="stats-label">Đánh giá</div>
+                            <div class="stats-value">@Model.Ratings.Count</div>
+                        </div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="stats-icon">
+                            <i class="fas fa-comment"></i>
+                        </div>
+                        <div class="stats-info">
+                            <div class="stats-label">Bình luận</div>
+                            <div class="stats-value">@Model.Comments.Count(c => c.EpisodeId == null)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-widget">
+                <h4 class="widget-title">Tags</h4>
+                <div class="tags-list">
+                    @if (Model.Movie.Genre != null)
+                    {
+                        <a href="#" class="tag">@Model.Movie.Genre.Name</a>
+                    }
+                    @foreach (var movieGenre in Model.Movie.MovieGenres)
+                    {
+                        <a href="#" class="tag">@movieGenre.Genre.Name</a>
+                    }
+                    <a href="#" class="tag">@Model.Movie.Country?.Name</a>
+                    <a href="#" class="tag">@Model.Movie.ReleaseYear</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.content-tabs a').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Update active tab
+                document.querySelectorAll('.content-tabs li').forEach(item => {
+                    item.classList.remove('active');
+                });
+                this.parentElement.classList.add('active');
+                
+                // Show corresponding content
+                const tabId = this.getAttribute('href').substring(1);
+                document.querySelectorAll('.tab-pane').forEach(pane => {
+                    pane.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Star rating functionality
+        document.querySelectorAll('.star-rating .fa-star').forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = parseInt(this.getAttribute('data-rating'));
+                document.getElementById('rating-score').value = rating;
+                
+                // Update star display
+                const stars = this.parentElement.children;
+                for (let i = 0; i < stars.length; i++) {
+                    if (i < rating) {
+                        stars[i].classList.add('fas');
+                        stars[i].classList.remove('far');
+                    } else {
+                        stars[i].classList.add('far');
+                        stars[i].classList.remove('fas');
+                    }
+                }
+            });
+        });
+        
+        // Reply button functionality
+        document.querySelectorAll('.reply-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const commentId = this.getAttribute('data-comment-id');
+                const form = document.getElementById(`reply-form-${commentId}`);
+                form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            });
+        });
+        
+        // Favorite button functionality
+        document.getElementById('favorite-action-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const link = this;
+            const movieId = link.getAttribute('data-movie-id');
+            const userId = link.getAttribute('data-user-id');
+            let isFavorited = link.getAttribute('data-is-favorited') === 'true';
+            
+            if (!userId) {
+                alert('Vui lòng đăng nhập để thêm phim vào danh sách yêu thích');
+                return;
+            }
+            
+            // Toggle UI immediately for better UX
+            isFavorited = !isFavorited;
+            link.setAttribute('data-is-favorited', isFavorited);
+            
+            if (isFavorited) {
+                link.classList.add('active');
+                link.querySelector('i').classList.remove('far');
+                link.querySelector('i').classList.add('fas');
+            } else {
+                link.classList.remove('active');
+                link.querySelector('i').classList.remove('fas');
+                link.querySelector('i').classList.add('far');
+            }
+            
+            // Send AJAX request
+            fetch('@Url.Action("ToggleFavorite", "Movies")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify({ movieId: movieId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    // Revert UI if request failed
+                    isFavorited = !isFavorited;
+                    link.setAttribute('data-is-favorited', isFavorited);
+                    
+                    if (isFavorited) {
+                        link.classList.add('active');
+                        link.querySelector('i').classList.remove('far');
+                        link.querySelector('i').classList.add('fas');
+                    } else {
+                        link.classList.remove('active');
+                        link.querySelector('i').classList.remove('fas');
+                        link.querySelector('i').classList.add('far');
+                    }
+                    
+                    alert('Có lỗi xảy ra: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra khi kết nối đến server');
+            });
+        });
+    </script>
+
+    <style>
+        /* Base Styles */
+:root {
+    --primary-color: #FF2D55;
+    --secondary-color: #2D3748;
+    --accent-color: #FFC107;
+    --dark-bg: #1A1B29;
+    --light-bg: #2A2C3C;
+    --text-primary: #FFFFFF;
+    --text-secondary: #B0B0B0;
+    --text-muted: #6B7280;
+    --border-color: #3A3A5A;
+    --success-color: #4CAF50;
+    --info-color: #2196F3;
+    --warning-color: #FF9800;
+    --danger-color: #F44336;
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: var(--text-primary);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: var(--accent-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Hero Banner */
+.hero-banner {
+    background-size: cover;
+    background-position: center;
+    padding: 60px 0 30px;
+    position: relative;
+}
+
+.movie-header {
+    display: flex;
+    gap: 30px;
+    align-items: flex-end;
+}
+
+.movie-poster-container {
+    position: relative;
+    width: 250px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.movie-poster {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.poster-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.movie-poster-container:hover .poster-overlay {
+    opacity: 1;
+}
+
+.play-trailer-btn {
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+}
+
+.movie-info {
+    flex-grow: 1;
+}
+
+.title-section {
+    margin-bottom: 20px;
+}
+
+.movie-title {
+    font-size: 2.5rem;
+    margin: 0;
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+.movie-subtitle {
+    font-size: 1.5rem;
+    margin: 5px 0 0;
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+.meta-info {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.rating-badge {
+    background-color: var(--accent-color);
+    color: #333;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.meta-tag {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.age-rating {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #E61E4D;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 45, 85, 0.3);
+}
+
+.secondary-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.action-btn.active {
+    background-color: var(--primary-color);
+}
+
+.quick-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.info-item {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.info-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 5px;
+}
+
+.info-value {
+    font-weight: 600;
+}
+
+/* Main Content */
+.main-content {
+    padding: 40px 0;
+}
+
+.content-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 30px;
+}
+
+.left-column {
+    background-color: var(--light-bg);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.right-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Content Tabs */
+.content-tabs {
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 20px;
+}
+
+.content-tabs ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.content-tabs li {
+    margin-right: 20px;
+}
+
+.content-tabs li a {
+    display: block;
+    padding: 10px 0;
+    position: relative;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.content-tabs li.active a {
+    color: var(--text-primary);
+}
+
+.content-tabs li.active a::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--primary-color);
+    border-radius: 3px 3px 0 0;
+}
+
+/* Tab Content */
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    margin: 0 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sub-section-title {
+    font-size: 1.2rem;
+    margin: 30px 0 15px;
+}
+
+.movie-description {
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.detail-item {
+    display: flex;
+    gap: 10px;
+}
+
+.detail-label {
+    font-weight: 600;
+    min-width: 100px;
+}
+
+.detail-value {
+    color: var(--text-secondary);
+}
+
+.genres-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.genre-tag {
+    background-color: var(--secondary-color);
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.notification-banner {
+    background-color: rgba(255, 45, 85, 0.2);
+    border-left: 4px solid var(--primary-color);
+    padding: 15px;
+    border-radius: 5px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.notification-banner i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+/* Episodes Section */
+.episodes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.episode-filters {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-btn {
+    background-color: var(--secondary-color);
+    border: none;
+    color: var(--text-primary);
+    padding: 8px 15px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--light-bg);
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.dropdown-content a {
+    color: var(--text-primary);
+    padding: 12px 16px;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: var(--primary-color);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.episodes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.episode-card {
+    background-color: var(--secondary-color);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.episode-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.episode-card.current {
+    border: 2px solid var(--primary-color);
+}
+
+.episode-number {
+    padding: 15px;
+    font-weight: 600;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.episode-meta {
+    padding: 0 15px 15px;
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.episode-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.episode-card:hover .episode-play {
+    opacity: 1;
+}
+
+/* Cast Section */
+.cast-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 20px;
+}
+
+.cast-member {
+    text-align: center;
+}
+
+.cast-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 10px;
+    border: 3px solid var(--primary-color);
+}
+
+.cast-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cast-name {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.cast-role {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* Reviews Section */
+.reviews-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.review-stats {
+    display: flex;
+    gap: 20px;
+}
+
+.average-rating {
+    text-align: center;
+}
+
+.rating-score {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.rating-stars {
+    color: var(--accent-color);
+    margin: 5px 0;
+}
+
+.rating-stars .fa-star {
+    margin: 0 2px;
+}
+
+.rating-stars .fa-star.active {
+    color: var(--accent-color);
+}
+
+.rating-count {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.auth-prompt {
+    background-color: var(--secondary-color);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.auth-prompt p {
+    margin-bottom: 15px;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: var(--text-primary);
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: var(--light-bg);
+}
+
+.review-form {
+    background-color: var(--secondary-color);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.form-header {
+    margin-bottom: 15px;
+}
+
+.rating-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.star-rating {
+    color: var(--accent-color);
+}
+
+.star-rating .fa-star {
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.form-control {
+    width: 100%;
+    background-color: var(--light-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 12px;
+    color: var(--text-primary);
+    resize: vertical;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.spoiler-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.toggle-slider {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    background-color: var(--border-color);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.toggle-slider::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: white;
+    top: 2px;
+    left: 2px;
+    transition: all 0.3s ease;
+}
+
+.spoiler-toggle input {
+    display: none;
+}
+
+.spoiler-toggle input:checked + .toggle-slider {
+    background-color: var(--primary-color);
+}
+
+.spoiler-toggle input:checked + .toggle-slider::after {
+    transform: translateX(20px);
+}
+
+.comment-form {
+    background-color: var(--secondary-color);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.reviews-list, .comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.review-item, .comment-item {
+    display: flex;
+    gap: 15px;
+    background-color: var(--secondary-color);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.reviewer-avatar, .commenter-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.reviewer-avatar img, .commenter-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.review-content, .comment-content {
+    flex-grow: 1;
+}
+
+.review-header, .comment-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.reviewer-name, .commenter-name {
+    font-weight: 600;
+}
+
+.review-date, .comment-date {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.review-rating {
+    color: var(--accent-color);
+    margin-left: auto;
+}
+
+.review-text, .comment-text {
+    line-height: 1.6;
+}
+
+.comment-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.comment-actions button {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+}
+
+.comment-actions button:hover {
+    color: var(--primary-color);
+}
+
+.spoiler-tag {
+    background-color: var(--danger-color);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.comment-replies {
+    margin-top: 20px;
+    padding-left: 20px;
+    border-left: 2px solid var(--border-color);
+}
+
+.comment-item.reply {
+    background-color: var(--light-bg);
+    padding: 15px;
+}
+
+.reply-form {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Related Movies */
+.related-movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+}
+
+.movie-card {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.movie-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.movie-poster {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.movie-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 15px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: white;
+}
+
+.movie-rating {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.movie-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.movie-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* Sidebar Widgets */
+.sidebar-widget {
+    background-color: var(--light-bg);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.widget-title {
+    font-size: 1.2rem;
+    margin: 0 0 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.widget-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.info-label {
+    color: var(--text-secondary);
+}
+
+.info-value {
+    font-weight: 600;
+}
+
+.stats-item {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.stats-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.stats-info {
+    flex-grow: 1;
+}
+
+.stats-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.stats-value {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag {
+    background-color: var(--secondary-color);
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.tag:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-secondary);
+}
+
+.empty-state i {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    margin: 0;
+}
+
+/* Responsive Styles */
+@@media (max-width: 992px) {
+    .content-wrapper {
+        grid-template-columns: 1fr;
+    }
+    
+    .right-sidebar {
+        grid-row: 1;
+    }
+    
+    .movie-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .meta-info, .action-buttons, .quick-info {
+        justify-content: center;
+    }
+    
+    .movie-poster-container {
+        width: 200px;
+    }
+}
+
+@@media (max-width: 768px) {
+    .movie-title {
+        font-size: 2rem;
+    }
+    
+    .movie-subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .episodes-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    
+    .cast-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+}
+
+@@media (max-width: 576px) {
+    .hero-banner {
+        padding: 30px 0;
+    }
+    
+    .movie-title {
+        font-size: 1.8rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .secondary-actions {
+        justify-content: center;
+    }
+    
+    .content-tabs ul {
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 5px;
+    }
+    
+    .content-tabs li {
+        margin-right: 15px;
+    }
+}
+    </style>
+}

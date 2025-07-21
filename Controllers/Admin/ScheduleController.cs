@@ -377,7 +377,8 @@ namespace MovieWebsite.Controllers
 
             await _context.SaveChangesAsync();
             // TODO: Redirect đến trang danh sách lịch chiếu của Admin
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(AdminIndex));
+            
         }
 
         // Hàm GetSelectableDates không thay đổi

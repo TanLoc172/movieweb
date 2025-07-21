@@ -1,0 +1,59 @@
+@model ReelViewModel
+
+@{
+    ViewData["Title"] = "Chỉnh Sửa Reel";
+    @* Layout = "_AdminLayout"; *@
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <h5>Video hiện tại</h5>
+                @if (!string.IsNullOrEmpty(Model.ExistingVideoPath))
+                {
+                    <video width="320" height="240" controls>
+                        <source src="@Url.Content(Model.ExistingVideoPath)" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                }
+                else
+                {
+                    <p class="text-muted">Chưa có video.</p>
+                }
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="VideoFile" class="form-label">Tải lên video mới (để thay thế)</label>
+                <input asp-for="VideoFile" class="form-control" type="file" accept="video/*" />
+                <span asp-validation-for="VideoFile" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3 form-check">
+                <input class="form-check-input" asp-for="IsPublished" />
+                <label class="form-check-label" asp-for="IsPublished">Đã xuất bản</label>
+            </div>
+            
+            <div class="mb-3">
+                <input type="submit" value="Lưu thay đổi" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

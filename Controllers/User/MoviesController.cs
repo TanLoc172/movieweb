@@ -491,83 +491,193 @@ namespace MovieWebsite.Controllers
 
 
         [HttpPost]
-    [Authorize] // Yêu cầu người dùng phải đăng nhập để thực hiện hành động này
-    [ValidateAntiForgeryToken] // Kiểm tra token chống tấn công CSRF
-    public async Task<IActionResult> ToggleFavorite(int movieId)
-    {
-        // 1. Lấy ID của người dùng hiện tại
-        var userId = _userManager.GetUserId(User);
-        if (string.IsNullOrEmpty(userId))
+        [Authorize] // Yêu cầu người dùng phải đăng nhập để thực hiện hành động này
+        [ValidateAntiForgeryToken] // Kiểm tra token chống tấn công CSRF
+        public async Task<IActionResult> ToggleFavorite(int movieId)
         {
-            // Trường hợp này hiếm khi xảy ra vì đã có [Authorize]
-            // nhưng vẫn nên kiểm tra để đảm bảo an toàn.
-            return Json(new { success = false, message = "Người dùng không hợp lệ." });
-        }
-
-        try
-        {
-            // 2. Tìm bản ghi yêu thích trong database
-            var existingFavorite = await _context.UserFavoriteMovies
-                .FirstOrDefaultAsync(ufm => ufm.UserId == userId && ufm.MovieId == movieId);
-
-            bool isNowFavorited;
-
-            if (existingFavorite != null)
+            // 1. Lấy ID của người dùng hiện tại
+            var userId = _userManager.GetUserId(User);
+            if (string.IsNullOrEmpty(userId))
             {
-                // 3a. Nếu đã tồn tại -> Xóa nó đi (Bỏ yêu thích)
-                _context.UserFavoriteMovies.Remove(existingFavorite);
-                isNowFavorited = false; // Trạng thái mới là "chưa yêu thích"
+                // Trường hợp này hiếm khi xảy ra vì đã có [Authorize]
+                // nhưng vẫn nên kiểm tra để đảm bảo an toàn.
+                return Json(new { success = false, message = "Người dùng không hợp lệ." });
             }
-            else
+
+            try
             {
-                // 3b. Nếu chưa tồn tại -> Tạo mới (Thêm yêu thích)
-                var newFavorite = new UserFavoriteMovie
+                // 2. Tìm bản ghi yêu thích trong database
+                var existingFavorite = await _context.UserFavoriteMovies
+                    .FirstOrDefaultAsync(ufm => ufm.UserId == userId && ufm.MovieId == movieId);
+
+                bool isNowFavorited;
+
+                if (existingFavorite != null)
                 {
-                    UserId = userId,
-                    MovieId = movieId
-                };
-                await _context.UserFavoriteMovies.AddAsync(newFavorite);
-                isNowFavorited = true; // Trạng thái mới là "đã yêu thích"
+                    // 3a. Nếu đã tồn tại -> Xóa nó đi (Bỏ yêu thích)
+                    _context.UserFavoriteMovies.Remove(existingFavorite);
+                    isNowFavorited = false; // Trạng thái mới là "chưa yêu thích"
+                }
+                else
+                {
+                    // 3b. Nếu chưa tồn tại -> Tạo mới (Thêm yêu thích)
+                    var newFavorite = new UserFavoriteMovie
+                    {
+                        UserId = userId,
+                        MovieId = movieId
+                    };
+                    await _context.UserFavoriteMovies.AddAsync(newFavorite);
+                    isNowFavorited = true; // Trạng thái mới là "đã yêu thích"
+                }
+
+                // 4. Lưu các thay đổi vào database
+                await _context.SaveChangesAsync();
+
+                // 5. Trả về kết quả JSON thành công cho client
+                // JavaScript sẽ dùng thuộc tính 'isFavorited' để cập nhật icon
+                return Json(new { success = true, isFavorited = isNowFavorited });
             }
-
-            // 4. Lưu các thay đổi vào database
-            await _context.SaveChangesAsync();
-
-            // 5. Trả về kết quả JSON thành công cho client
-            // JavaScript sẽ dùng thuộc tính 'isFavorited' để cập nhật icon
-            return Json(new { success = true, isFavorited = isNowFavorited });
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Lỗi khi thay đổi trạng thái yêu thích cho phim ID {MovieId} của người dùng {UserId}", movieId, userId);
+                // Trả về lỗi nếu có vấn đề xảy ra
+                return Json(new { success = false, message = "Đã xảy ra lỗi phía máy chủ." });
+            }
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Lỗi khi thay đổi trạng thái yêu thích cho phim ID {MovieId} của người dùng {UserId}", movieId, userId);
-            // Trả về lỗi nếu có vấn đề xảy ra
-            return Json(new { success = false, message = "Đã xảy ra lỗi phía máy chủ." });
-        }
-    }
 
 
         // GET: Movies/Details/5
+        // public async Task<IActionResult> Details(int? id)
+        // {
+        //     try
+        //     {
+        //         if (id == null)
+        //         {
+        //             _logger.LogWarning("Movie ID is null in Details action");
+        //             return NotFound();
+        //         }
+
+        //         // Fetch movie with related data, including comments and their replies
+        //         var movie = await _context
+        //             .Movies
+        //             .Include(m => m.Country)
+        //             .Include(m => m.Genre)
+        //             .Include(m => m.MovieGenres).ThenInclude(mg => mg.Genre)
+        //             .Include(m => m.Episodes)
+        //             .Include(m => m.Ratings)
+        //             // Eagerly load comments and their replies
+        //             .Include(m => m.Comments)
+        //                 .ThenInclude(c => c.Replies) // Include replies for each comment
+        //             .FirstOrDefaultAsync(m => m.Id == id);
+
+        //         if (movie == null)
+        //         {
+        //             _logger.LogWarning("Movie not found with ID: {Id}", id);
+        //             return NotFound();
+        //         }
+
+        //         // Increment views
+        //         movie.Views++; // Ensure this is uncommented and working
+        //         await _context.SaveChangesAsync();
+
+
+        //         // Get related movies (same genre, excluding current movie)
+        //         var relatedMovies = await _context
+        //             .Movies
+        //             .Include(m => m.Genre) // Include Genre for genre name in related movies list
+        //             .Where(m =>
+        //                 m.Id != movie.Id
+        //                 && (
+        //                     m.GenreId == movie.GenreId || // Check primary genre
+        //                     m.MovieGenres.Any(mg => mg.GenreId == movie.GenreId) // Check other genres
+        //                 )
+        //             )
+        //             .Take(6) // Limit to 6 related movies
+        //             .ToListAsync();
+
+        //         // --- Prepare ViewModel ---
+        //         var viewModel = new MovieDetailViewModel
+        //         {
+        //             Movie = movie,
+        //             Episodes = movie.Episodes.OrderBy(e => e.EpisodeNumber).ToList(),
+        //             Ratings = movie.Ratings.OrderByDescending(r => r.CreatedAt).ToList(),
+        //             // Filter comments to only include top-level ones for initial display
+        //             Comments = movie.Comments.Where(c => c.ParentCommentId == null).OrderByDescending(c => c.CreatedAt).ToList(),
+        //             RelatedMovies = relatedMovies,
+        //             NewRating = new RatingViewModel { MovieId = movie.Id }, // Initialize form models
+        //             NewComment = new CommentViewModel { MovieId = movie.Id }, // Initialize form models
+        //         };
+
+        //         // --- User Specific Data for Favorites and Form Population ---
+        //         string currentUserId = null;
+        //         bool isUserLoggedIn = User.Identity != null && User.Identity.IsAuthenticated;
+        //         bool hasFavorited = false;
+
+        //         if (isUserLoggedIn)
+        //         {
+        //             var appUser = await _userManager.GetUserAsync(User);
+        //             if (appUser != null)
+        //             {
+        //                 currentUserId = appUser.Id;
+
+        //                 // Check if the current user has favorited this movie
+        //                 hasFavorited = await _context.UserFavoriteMovies.AnyAsync(ufm => ufm.UserId == currentUserId && ufm.MovieId == movie.Id);
+
+        //                 // Pre-populate user details for comment/rating forms if logged in
+        //                 viewModel.NewComment.UserName = appUser.FullName ?? appUser.UserName ?? appUser.Email;
+        //                 viewModel.NewComment.UserEmail = appUser.Email;
+        //                 viewModel.NewRating.UserName = appUser.FullName ?? appUser.UserName ?? appUser.Email;
+        //                 viewModel.NewRating.UserEmail = appUser.Email;
+        //             }
+        //             else
+        //             {
+        //                 // User is authenticated but GetUserAsync returned null (should not happen usually)
+        //                 _logger.LogWarning("User is authenticated but UserManager could not retrieve user details for userId: {UserId}", User.FindFirst("sub")?.Value ?? "N/A");
+        //             }
+        //         }
+
+        //         // Assign user-specific data to the ViewModel
+        //         viewModel.UserId = currentUserId;
+        //         viewModel.IsUserLoggedIn = isUserLoggedIn;
+        //         viewModel.HasFavorited = hasFavorited;
+
+        //         // The ViewBag.CurrentMovieId is not strictly necessary if you use asp-for correctly with ViewModels
+        //         // ViewBag.CurrentMovieId = movie.Id;
+
+        //         return View(viewModel);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         _logger.LogError(ex, "Error loading movie details for ID: {Id}", id);
+        //         TempData["ErrorMessage"] = "Đã xảy ra lỗi khi tải chi tiết phim";
+        //         // Redirect to the Index action of MoviesController
+        //         return RedirectToAction(nameof(Index));
+        //     }
+        // }
+
+
         public async Task<IActionResult> Details(int? id)
         {
             try
             {
+                // 1. Kiểm tra ID đầu vào
                 if (id == null)
                 {
                     _logger.LogWarning("Movie ID is null in Details action");
                     return NotFound();
                 }
 
-                // Fetch movie with related data, including comments and their replies
+                // 2. Truy vấn phim và các dữ liệu liên quan (gộp từ cả 2 phiên bản)
+                // Bao gồm: Country, Genre, MovieGenres, Episodes, Ratings, Comments và Replies
                 var movie = await _context
                     .Movies
                     .Include(m => m.Country)
                     .Include(m => m.Genre)
                     .Include(m => m.MovieGenres).ThenInclude(mg => mg.Genre)
-                    .Include(m => m.Episodes)
+                    .Include(m => m.Episodes) // Lấy tất cả các tập để xử lý logic bên dưới
                     .Include(m => m.Ratings)
-                    // Eagerly load comments and their replies
                     .Include(m => m.Comments)
-                        .ThenInclude(c => c.Replies) // Include replies for each comment
+                        .ThenInclude(c => c.Replies) // Lấy cả các comment trả lời
                     .FirstOrDefaultAsync(m => m.Id == id);
 
                 if (movie == null)
@@ -576,39 +686,69 @@ namespace MovieWebsite.Controllers
                     return NotFound();
                 }
 
-                // Increment views
-                movie.Views++; // Ensure this is uncommented and working
+                // 3. Tăng lượt xem và lưu thay đổi (thực hiện sớm)
+                movie.Views++;
                 await _context.SaveChangesAsync();
-                
 
-                // Get related movies (same genre, excluding current movie)
+                // 4. Lọc các tập phim đã được phát hành để hiển thị
+                var airedEpisodes = movie.Episodes
+                                         .Where(e => e.IsPublished)
+                                         .OrderBy(e => e.EpisodeNumber)
+                                         .ToList();
+
+                // 5. [Logic từ code 2] Tìm lịch chiếu cho tập tiếp theo
+                DateTime? nextScheduleTime = null;
+                // Chỉ tìm khi phim chưa hoàn thành và số tập đã phát hành nhỏ hơn tổng số tập
+                if (!movie.IsCompleted && airedEpisodes.Count < movie.TotalEpisodes)
+                {
+                    // Tìm số của tập tiếp theo
+                    int nextEpisodeNumber = airedEpisodes.Any() ? airedEpisodes.Max(e => e.EpisodeNumber) + 1 : 1;
+
+                    // Truy vấn bảng Schedule để tìm lịch chiếu cho tập đó
+                    var nextSchedule = await _context.Schedules
+                        .Include(s => s.Episode)
+                        .Where(s => s.MovieId == id && s.Episode.EpisodeNumber == nextEpisodeNumber)
+                        .OrderBy(s => s.ScheduledTime) // Lấy lịch sớm nhất
+                        .FirstOrDefaultAsync();
+
+                    if (nextSchedule != null)
+                    {
+                        nextScheduleTime = nextSchedule.ScheduledTime;
+                    }
+                }
+
+                // 6. Lấy danh sách phim liên quan
                 var relatedMovies = await _context
                     .Movies
-                    .Include(m => m.Genre) // Include Genre for genre name in related movies list
+                    .Include(m => m.Genre)
                     .Where(m =>
                         m.Id != movie.Id
                         && (
-                            m.GenreId == movie.GenreId || // Check primary genre
-                            m.MovieGenres.Any(mg => mg.GenreId == movie.GenreId) // Check other genres
+                            m.GenreId == movie.GenreId ||
+                            m.MovieGenres.Any(mg => mg.GenreId == movie.GenreId)
                         )
                     )
-                    .Take(6) // Limit to 6 related movies
+                    .Take(6)
                     .ToListAsync();
 
-                // --- Prepare ViewModel ---
+                // 7. Khởi tạo ViewModel và điền dữ liệu cơ bản
                 var viewModel = new MovieDetailViewModel
                 {
                     Movie = movie,
-                    Episodes = movie.Episodes.OrderBy(e => e.EpisodeNumber).ToList(),
+                    // Sử dụng danh sách tập đã lọc
+                    Episodes = airedEpisodes,
+                    // Thêm lịch chiếu tập tiếp theo
+                    NextEpisodeScheduleTime = nextScheduleTime,
                     Ratings = movie.Ratings.OrderByDescending(r => r.CreatedAt).ToList(),
-                    // Filter comments to only include top-level ones for initial display
+                    // Lọc chỉ lấy các comment gốc (không phải reply)
                     Comments = movie.Comments.Where(c => c.ParentCommentId == null).OrderByDescending(c => c.CreatedAt).ToList(),
                     RelatedMovies = relatedMovies,
-                    NewRating = new RatingViewModel { MovieId = movie.Id }, // Initialize form models
-                    NewComment = new CommentViewModel { MovieId = movie.Id }, // Initialize form models
+                    // Khởi tạo các form model
+                    NewRating = new RatingViewModel { MovieId = movie.Id },
+                    NewComment = new CommentViewModel { MovieId = movie.Id },
                 };
 
-                // --- User Specific Data for Favorites and Form Population ---
+                // 8. [Logic từ code 1] Xử lý dữ liệu dành riêng cho người dùng đang đăng nhập
                 string currentUserId = null;
                 bool isUserLoggedIn = User.Identity != null && User.Identity.IsAuthenticated;
                 bool hasFavorited = false;
@@ -620,10 +760,10 @@ namespace MovieWebsite.Controllers
                     {
                         currentUserId = appUser.Id;
 
-                        // Check if the current user has favorited this movie
+                        // Kiểm tra xem người dùng đã thêm phim này vào danh sách yêu thích chưa
                         hasFavorited = await _context.UserFavoriteMovies.AnyAsync(ufm => ufm.UserId == currentUserId && ufm.MovieId == movie.Id);
 
-                        // Pre-populate user details for comment/rating forms if logged in
+                        // Điền sẵn thông tin người dùng vào các form
                         viewModel.NewComment.UserName = appUser.FullName ?? appUser.UserName ?? appUser.Email;
                         viewModel.NewComment.UserEmail = appUser.Email;
                         viewModel.NewRating.UserName = appUser.FullName ?? appUser.UserName ?? appUser.Email;
@@ -631,29 +771,26 @@ namespace MovieWebsite.Controllers
                     }
                     else
                     {
-                        // User is authenticated but GetUserAsync returned null (should not happen usually)
-                        _logger.LogWarning("User is authenticated but UserManager could not retrieve user details for userId: {UserId}", User.FindFirst("sub")?.Value ?? "N/A");
+                        _logger.LogWarning("User is authenticated but UserManager could not retrieve user details.");
                     }
                 }
 
-                // Assign user-specific data to the ViewModel
+                // Gán dữ liệu người dùng vào ViewModel
                 viewModel.UserId = currentUserId;
                 viewModel.IsUserLoggedIn = isUserLoggedIn;
                 viewModel.HasFavorited = hasFavorited;
 
-                // The ViewBag.CurrentMovieId is not strictly necessary if you use asp-for correctly with ViewModels
-                // ViewBag.CurrentMovieId = movie.Id;
-
+                // Trả về View với ViewModel đã được điền đầy đủ thông tin
                 return View(viewModel);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error loading movie details for ID: {Id}", id);
-                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi tải chi tiết phim";
-                // Redirect to the Index action of MoviesController
-                return RedirectToAction(nameof(Index));
+                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi tải chi tiết phim.";
+                return RedirectToAction(nameof(Index)); // Chuyển hướng về trang chủ nếu có lỗi
             }
         }
+
 
         // GET: Movies/Watch/{movieId}/{episodeNumber}
         public async Task<IActionResult> Watch(int movieId, int episodeNumber)
@@ -1348,9 +1485,9 @@ namespace MovieWebsite.Controllers
                 // Lọc các bộ phim thuộc thể loại này sử dụng bảng trung gian MovieGenres
                 var moviesWithGenre = await _context
                     .Movies.Include(m => m.Country) // Bao gồm thông tin quốc gia để hiển thị tên quốc gia
-                    // Nếu bạn muốn hiển thị TÊN của thể loại chính của phim (nếu có trường GenreId trong Movie),
-                    // bạn có thể giữ lại .Include(m => m.Genre).
-                    // Tuy nhiên, để hiển thị tất cả các thể loại của phim trong danh sách, bạn cần Include MovieGenres
+                                                    // Nếu bạn muốn hiển thị TÊN của thể loại chính của phim (nếu có trường GenreId trong Movie),
+                                                    // bạn có thể giữ lại .Include(m => m.Genre).
+                                                    // Tuy nhiên, để hiển thị tất cả các thể loại của phim trong danh sách, bạn cần Include MovieGenres
                     .Include(m => m.MovieGenres) // Bao gồm bảng trung gian
                     .ThenInclude(mg => mg.Genre) // Từ bảng trung gian, bao gồm thông tin của Genre
                     .Where(m => m.MovieGenres.Any(mg => mg.GenreId == genreId)) // Lọc phim có ít nhất 1 liên kết với genreId này
@@ -1381,6 +1518,81 @@ namespace MovieWebsite.Controllers
                 return RedirectToAction(nameof(Index)); // Chuyển hướng về trang danh sách phim chính
             }
         }
+        
+
+         /// Lấy danh sách các phim bộ (có nhiều hơn 1 tập).
+        /// </summary>
+        [Route("Movies/Series")]
+        public async Task<IActionResult> SeriesMovies()
+        {
+            try
+            {
+                var seriesMovies = await _context
+                    .Movies.Include(m => m.Country)
+                    .Include(m => m.MovieGenres)
+                    .ThenInclude(mg => mg.Genre)
+                    .Where(m => m.TotalEpisodes > 1)
+                    .OrderByDescending(m => m.UpdatedAt)
+                    .ToListAsync();
+
+                // Tạo và gán dữ liệu cho ViewModel
+                var viewModel = new SeriesMoviesViewModel
+                {
+                    PageTitle = "Phim Bộ Mới Cập Nhật",
+                    PageDescription = "Khám phá các bộ phim truyền hình, phim dài tập mới nhất và hấp dẫn nhất.",
+                    Movies = seriesMovies
+                };
+                
+                _logger.LogInformation("Đã lấy thành công {MovieCount} phim bộ.", seriesMovies.Count);
+
+                // Trả về view với ViewModel
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Lỗi khi lấy danh sách phim bộ.");
+                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi tải danh sách phim bộ.";
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        /// <summary>
+        /// Lấy danh sách các phim lẻ (chỉ có 1 tập).
+        /// </summary>
+        [Route("Movies/Feature")]
+        public async Task<IActionResult> FeatureMovies()
+        {
+            try
+            {
+                var featureMovies = await _context
+                    .Movies.Include(m => m.Country)
+                    .Include(m => m.MovieGenres)
+                    .ThenInclude(mg => mg.Genre)
+                    .Where(m => m.TotalEpisodes == 1)
+                    .OrderByDescending(m => m.UpdatedAt)
+                    .ToListAsync();
+                
+                // Tạo và gán dữ liệu cho ViewModel
+                var viewModel = new FeatureMoviesViewModel
+                {
+                    PageTitle = "Phim Lẻ Đặc Sắc",
+                    PageDescription = "Tuyển tập những bộ phim lẻ, phim chiếu rạp đặc sắc từ nhiều quốc gia.",
+                    Movies = featureMovies
+                };
+
+                _logger.LogInformation("Đã lấy thành công {MovieCount} phim lẻ.", featureMovies.Count);
+
+                // Trả về view với ViewModel
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Lỗi khi lấy danh sách phim lẻ.");
+                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi tải danh sách phim lẻ.";
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
 
         // // Giả định bạn có trang Index để hiển thị tất cả phim hoặc chuyển hướng
         // public async Task<IActionResult> Index()

@@ -1,0 +1,53 @@
+@model IEnumerable<MovieWebsite.Models.Reel>
+
+@{
+    ViewData["Title"] = "Quản lý Reels";
+    @* Layout = "_AdminLayout";  *@
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Tạo Reel Mới</a>
+</p>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Tiêu đề</th>
+            <th>Lượt xem</th>
+            <th>Trạng thái</th>
+            <th>Ngày tạo</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                <td>@Html.DisplayFor(modelItem => item.Views)</td>
+                <td>
+                    @if (item.IsPublished)
+                    {
+                        <span class="badge bg-success">Đã xuất bản</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Bản nháp</span>
+                    }
+                </td>
+                <td>@item.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a> |
+                    <a asp-action="ReelsDetails" asp-route-id="@item.Id" class="btn btn-sm btn-info" target="_blank">Xem</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Xoá</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

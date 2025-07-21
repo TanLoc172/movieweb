@@ -154,12 +154,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTW92aWVzL0RldGFpbHMxLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/tanloc/MovieWebsite/Views/Movies/Details2.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTW92aWVzL0RldGFpbHMyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/tanloc/MovieWebsite/Views/Movies/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTW92aWVzL0VkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/tanloc/MovieWebsite/Views/Movies/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTW92aWVzL0Vycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tanloc/MovieWebsite/Views/Movies/FeatureMovies.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTW92aWVzL0ZlYXR1cmVNb3ZpZXMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/tanloc/MovieWebsite/Views/Movies/HQ.cshtml]
@@ -182,6 +190,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTW92aWVzL1F1b2NnaWEuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/tanloc/MovieWebsite/Views/Movies/SeriesMovies.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTW92aWVzL1Nlcmllc01vdmllcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/tanloc/MovieWebsite/Views/Movies/TQ.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTW92aWVzL1RRLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -192,6 +204,30 @@ build_metadata.AdditionalFiles.CssScope =
 
 [/Users/tanloc/MovieWebsite/Views/Movies/Watch.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTW92aWVzL1dhdGNoLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tanloc/MovieWebsite/Views/Reels/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmVlbHMvQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tanloc/MovieWebsite/Views/Reels/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmVlbHMvRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tanloc/MovieWebsite/Views/Reels/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmVlbHMvRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tanloc/MovieWebsite/Views/Reels/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmVlbHMvSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tanloc/MovieWebsite/Views/Reels/ReelsDetails.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmVlbHMvUmVlbHNEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tanloc/MovieWebsite/Views/Reels/Watch.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmVlbHMvV2F0Y2guY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/tanloc/MovieWebsite/Views/Schedule/AdminIndex.cshtml]
@@ -228,6 +264,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [/Users/tanloc/MovieWebsite/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tanloc/MovieWebsite/Views/Shared/_Footer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19Gb290ZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/tanloc/MovieWebsite/Views/Shared/_HeroBannerPartial.cshtml]

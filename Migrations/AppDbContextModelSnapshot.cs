@@ -45,13 +45,13 @@ namespace MovieWebsite.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f9b7cef5-d120-4efd-8ce0-b82f1ed32dbc",
+                            Id = "34d1e12e-bab3-4bb8-a9c6-e697e454a3cf",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "e5592f94-cbee-4ef4-87aa-e2b9faabb9d4",
+                            Id = "193b4458-4ea7-4dc0-9363-ca51d60f3040",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -433,112 +433,112 @@ namespace MovieWebsite.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 7, 15, 21, 26, 14, 338, DateTimeKind.Local).AddTicks(8930),
+                            CreatedAt = new DateTime(2025, 7, 20, 22, 58, 31, 848, DateTimeKind.Local).AddTicks(1650),
                             Duration = 1200,
                             EpisodeNumber = 1,
                             IsPublished = true,
                             MovieId = 1,
                             ReleaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Tập 1",
-                            UpdatedAt = new DateTime(2025, 7, 15, 21, 26, 14, 338, DateTimeKind.Local).AddTicks(8930),
+                            UpdatedAt = new DateTime(2025, 7, 20, 22, 58, 31, 848, DateTimeKind.Local).AddTicks(1650),
                             VideoPath = "/Uploads/videos/1_ep1.mp4",
                             Views = 0
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 7, 15, 21, 26, 14, 338, DateTimeKind.Local).AddTicks(8950),
+                            CreatedAt = new DateTime(2025, 7, 20, 22, 58, 31, 848, DateTimeKind.Local).AddTicks(1660),
                             Duration = 1200,
                             EpisodeNumber = 2,
                             IsPublished = true,
                             MovieId = 1,
                             ReleaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Tập 2",
-                            UpdatedAt = new DateTime(2025, 7, 15, 21, 26, 14, 338, DateTimeKind.Local).AddTicks(8950),
+                            UpdatedAt = new DateTime(2025, 7, 20, 22, 58, 31, 848, DateTimeKind.Local).AddTicks(1660),
                             VideoPath = "/Uploads/videos/1_ep2.mp4",
                             Views = 0
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 7, 15, 21, 26, 14, 338, DateTimeKind.Local).AddTicks(8980),
+                            CreatedAt = new DateTime(2025, 7, 20, 22, 58, 31, 848, DateTimeKind.Local).AddTicks(1680),
                             Duration = 1200,
                             EpisodeNumber = 1,
                             IsPublished = true,
                             MovieId = 2,
                             ReleaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Tập 1",
-                            UpdatedAt = new DateTime(2025, 7, 15, 21, 26, 14, 338, DateTimeKind.Local).AddTicks(8980),
+                            UpdatedAt = new DateTime(2025, 7, 20, 22, 58, 31, 848, DateTimeKind.Local).AddTicks(1680),
                             VideoPath = "/Uploads/videos/2_ep1.mp4",
                             Views = 0
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 7, 15, 21, 26, 14, 338, DateTimeKind.Local).AddTicks(8990),
+                            CreatedAt = new DateTime(2025, 7, 20, 22, 58, 31, 848, DateTimeKind.Local).AddTicks(1690),
                             Duration = 1200,
                             EpisodeNumber = 2,
                             IsPublished = true,
                             MovieId = 2,
                             ReleaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Tập 2",
-                            UpdatedAt = new DateTime(2025, 7, 15, 21, 26, 14, 338, DateTimeKind.Local).AddTicks(8990),
+                            UpdatedAt = new DateTime(2025, 7, 20, 22, 58, 31, 848, DateTimeKind.Local).AddTicks(1690),
                             VideoPath = "/Uploads/videos/2_ep2.mp4",
                             Views = 0
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 7, 15, 21, 26, 14, 338, DateTimeKind.Local).AddTicks(9020),
+                            CreatedAt = new DateTime(2025, 7, 20, 22, 58, 31, 848, DateTimeKind.Local).AddTicks(1710),
                             Duration = 1200,
                             EpisodeNumber = 1,
                             IsPublished = true,
                             MovieId = 3,
                             ReleaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Tập 1",
-                            UpdatedAt = new DateTime(2025, 7, 15, 21, 26, 14, 338, DateTimeKind.Local).AddTicks(9020),
+                            UpdatedAt = new DateTime(2025, 7, 20, 22, 58, 31, 848, DateTimeKind.Local).AddTicks(1710),
                             VideoPath = "/Uploads/videos/3_ep1.mp4",
                             Views = 0
                         },
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2025, 7, 15, 21, 26, 14, 338, DateTimeKind.Local).AddTicks(9090),
+                            CreatedAt = new DateTime(2025, 7, 20, 22, 58, 31, 848, DateTimeKind.Local).AddTicks(1720),
                             Duration = 1200,
                             EpisodeNumber = 2,
                             IsPublished = true,
                             MovieId = 3,
                             ReleaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Tập 2",
-                            UpdatedAt = new DateTime(2025, 7, 15, 21, 26, 14, 338, DateTimeKind.Local).AddTicks(9090),
+                            UpdatedAt = new DateTime(2025, 7, 20, 22, 58, 31, 848, DateTimeKind.Local).AddTicks(1720),
                             VideoPath = "/Uploads/videos/3_ep2.mp4",
                             Views = 0
                         },
                         new
                         {
                             Id = 7,
-                            CreatedAt = new DateTime(2025, 7, 15, 21, 26, 14, 338, DateTimeKind.Local).AddTicks(9120),
+                            CreatedAt = new DateTime(2025, 7, 20, 22, 58, 31, 848, DateTimeKind.Local).AddTicks(1760),
                             Duration = 1200,
                             EpisodeNumber = 1,
                             IsPublished = true,
                             MovieId = 4,
                             ReleaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Tập 1",
-                            UpdatedAt = new DateTime(2025, 7, 15, 21, 26, 14, 338, DateTimeKind.Local).AddTicks(9120),
+                            UpdatedAt = new DateTime(2025, 7, 20, 22, 58, 31, 848, DateTimeKind.Local).AddTicks(1760),
                             VideoPath = "/Uploads/videos/4_ep1.mp4",
                             Views = 0
                         },
                         new
                         {
                             Id = 8,
-                            CreatedAt = new DateTime(2025, 7, 15, 21, 26, 14, 338, DateTimeKind.Local).AddTicks(9130),
+                            CreatedAt = new DateTime(2025, 7, 20, 22, 58, 31, 848, DateTimeKind.Local).AddTicks(1770),
                             Duration = 1200,
                             EpisodeNumber = 2,
                             IsPublished = true,
                             MovieId = 4,
                             ReleaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Tập 2",
-                            UpdatedAt = new DateTime(2025, 7, 15, 21, 26, 14, 338, DateTimeKind.Local).AddTicks(9130),
+                            UpdatedAt = new DateTime(2025, 7, 20, 22, 58, 31, 848, DateTimeKind.Local).AddTicks(1770),
                             VideoPath = "/Uploads/videos/4_ep2.mp4",
                             Views = 0
                         });
@@ -725,7 +725,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 8.5,
                             Cast = "Trần Nghĩa, Trúc Anh",
                             CountryId = 1,
-                            CreatedAt = new DateTime(2022, 4, 2, 14, 26, 14, 338, DateTimeKind.Utc).AddTicks(8740),
+                            CreatedAt = new DateTime(2022, 4, 7, 15, 58, 31, 848, DateTimeKind.Utc).AddTicks(1540),
                             Description = "Chuyện phim kể về mối tình si của chàng trai Ngạn dành cho Hà Lan từ thuở thiếu thời...",
                             Director = "Victor Vũ",
                             EnglishTitle = "Dreamy Eyes",
@@ -740,7 +740,7 @@ namespace MovieWebsite.Migrations
                             Title = "Mắt Biếc",
                             TotalEpisodes = 2,
                             TrailerPath = "/Uploads/trailer/1.mp4",
-                            UpdatedAt = new DateTime(2022, 4, 2, 14, 26, 14, 338, DateTimeKind.Utc).AddTicks(8740),
+                            UpdatedAt = new DateTime(2022, 4, 7, 15, 58, 31, 848, DateTimeKind.Utc).AddTicks(1540),
                             Views = 1500000
                         },
                         new
@@ -749,7 +749,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 7.7999999999999998,
                             Cast = "Thái Hòa, Kiều Minh Tuấn",
                             CountryId = 1,
-                            CreatedAt = new DateTime(2022, 10, 19, 14, 26, 14, 338, DateTimeKind.Utc).AddTicks(8740),
+                            CreatedAt = new DateTime(2022, 10, 24, 15, 58, 31, 848, DateTimeKind.Utc).AddTicks(1540),
                             Description = "Một buổi tối tụ họp bạn bè bỗng trở nên căng thẳng khi mọi người quyết định chơi một trò chơi...",
                             Director = "Nguyễn Quang Dũng",
                             EnglishTitle = "Full House (Vietnamese)",
@@ -764,7 +764,7 @@ namespace MovieWebsite.Migrations
                             Title = "Tiệc Trăng Máu",
                             TotalEpisodes = 2,
                             TrailerPath = "/Uploads/trailer/2.mp4",
-                            UpdatedAt = new DateTime(2022, 10, 19, 14, 26, 14, 338, DateTimeKind.Utc).AddTicks(8740),
+                            UpdatedAt = new DateTime(2022, 10, 24, 15, 58, 31, 848, DateTimeKind.Utc).AddTicks(1540),
                             Views = 1200000
                         },
                         new
@@ -773,7 +773,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 8.8000000000000007,
                             Cast = "Trấn Thành, Tuấn Trần",
                             CountryId = 1,
-                            CreatedAt = new DateTime(2023, 1, 27, 14, 26, 14, 338, DateTimeKind.Utc).AddTicks(8740),
+                            CreatedAt = new DateTime(2023, 2, 1, 15, 58, 31, 848, DateTimeKind.Utc).AddTicks(1540),
                             Description = "Câu chuyện cảm động về tình cha con, những xung đột thế hệ và tình làng nghĩa xóm...",
                             Director = "Vũ Ngọc Đãng",
                             EnglishTitle = "Dad, I'm Sorry",
@@ -788,7 +788,7 @@ namespace MovieWebsite.Migrations
                             Title = "Bố Già",
                             TotalEpisodes = 2,
                             TrailerPath = "/Uploads/trailer/3.mp4",
-                            UpdatedAt = new DateTime(2023, 1, 27, 14, 26, 14, 338, DateTimeKind.Utc).AddTicks(8740),
+                            UpdatedAt = new DateTime(2023, 2, 1, 15, 58, 31, 848, DateTimeKind.Utc).AddTicks(1540),
                             Views = 2000000
                         },
                         new
@@ -797,7 +797,7 @@ namespace MovieWebsite.Migrations
                             AverageRating = 9.1999999999999993,
                             Cast = "Song Kang-ho, Choi Woo-shik",
                             CountryId = 2,
-                            CreatedAt = new DateTime(2021, 6, 6, 14, 26, 14, 338, DateTimeKind.Utc).AddTicks(8740),
+                            CreatedAt = new DateTime(2021, 6, 11, 15, 58, 31, 848, DateTimeKind.Utc).AddTicks(1540),
                             Description = "Một gia đình nghèo tìm cách 'ký sinh' vào cuộc sống của một gia đình giàu có...",
                             Director = "Bong Joon Ho",
                             EnglishTitle = "Parasite",
@@ -812,7 +812,7 @@ namespace MovieWebsite.Migrations
                             Title = "Ký Sinh Trùng",
                             TotalEpisodes = 2,
                             TrailerPath = "/Uploads/trailer/4.mp4",
-                            UpdatedAt = new DateTime(2021, 6, 6, 14, 26, 14, 338, DateTimeKind.Utc).AddTicks(8740),
+                            UpdatedAt = new DateTime(2021, 6, 11, 15, 58, 31, 848, DateTimeKind.Utc).AddTicks(1540),
                             Views = 1800000
                         });
                 });
@@ -950,6 +950,47 @@ namespace MovieWebsite.Migrations
                     b.HasIndex("MovieId");
 
                     b.ToTable("Ratings");
+                });
+
+            modelBuilder.Entity("MovieWebsite.Models.Reel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsPublished")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Likes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ThumbnailPath")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UploaderId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("VideoPath")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Views")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UploaderId");
+
+                    b.ToTable("Reels");
                 });
 
             modelBuilder.Entity("MovieWebsite.Models.Schedule", b =>
@@ -1207,6 +1248,17 @@ namespace MovieWebsite.Migrations
                         .IsRequired();
 
                     b.Navigation("Movie");
+                });
+
+            modelBuilder.Entity("MovieWebsite.Models.Reel", b =>
+                {
+                    b.HasOne("MovieWebsite.Models.AppUser", "Uploader")
+                        .WithMany()
+                        .HasForeignKey("UploaderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Uploader");
                 });
 
             modelBuilder.Entity("MovieWebsite.Models.Schedule", b =>

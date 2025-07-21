@@ -223,6 +223,7 @@ public class MovieDetailViewModel
     public string UserId { get; set; } // The ID of the logged-in user
     public bool IsUserLoggedIn { get; set; } // Flag to check if user is logged in
     public bool HasFavorited { get; set; } // Flag to check if the current user has favorited this movie
+    public List<Reel> Reels { get; set; } = new List<Reel>();
 }
 
 public class HomeViewModel1
@@ -570,6 +571,66 @@ public class ProfileViewModel
     // Dùng để upload ảnh đại diện mới
     public IFormFile NewAvatar { get; set; }
 }
+
+
+// Có thể thêm vào file ViewModels.cs của bạn
+public class ReelViewModel
+{
+    public int Id { get; set; }
+
+    [Required(ErrorMessage = "Tiêu đề là bắt buộc.")]
+    [MaxLength(255)]
+    public string Title { get; set; }
+
+    // Dùng để hiển thị video hiện tại khi edit
+    public string? ExistingVideoPath { get; set; }
+
+    // Dùng để upload file video mới
+    [Display(Name = "File Video (mp4, mov,...)")]
+    public IFormFile? VideoFile { get; set; }
+
+    public bool IsPublished { get; set; } = true;
+
+    // Dùng cho dropdown list trên form
+    public List<SelectListItem> MovieList { get; set; } = new List<SelectListItem>();
+}
+
+public class SeriesMoviesViewModel
+{
+    /// <summary>
+    /// Tiêu đề của trang, ví dụ: "Danh sách Phim Bộ".
+    /// </summary>
+    public string PageTitle { get; set; }
+
+    /// <summary>
+    /// Một mô tả ngắn cho trang (tùy chọn).
+    /// </summary>
+    public string? PageDescription { get; set; }
+
+    /// <summary>
+    /// Danh sách các phim bộ được lấy từ cơ sở dữ liệu.
+    /// </summary>
+    public List<Movie> Movies { get; set; } = new List<Movie>();
+}
+
+public class FeatureMoviesViewModel
+{
+    /// <summary>
+    /// Tiêu đề của trang, ví dụ: "Danh sách Phim Lẻ".
+    /// </summary>
+    public string PageTitle { get; set; }
+
+    /// <summary>
+    /// Một mô tả ngắn cho trang (tùy chọn).
+    /// </summary>
+    public string? PageDescription { get; set; }
+
+    /// <summary>
+    /// Danh sách các phim lẻ được lấy từ cơ sở dữ liệu.
+    /// </summary>
+    public List<Movie> Movies { get; set; } = new List<Movie>();
+}
+
 
 // public class CreateWatchPartyViewModel
 // {

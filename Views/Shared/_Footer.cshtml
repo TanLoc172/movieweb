@@ -1,0 +1,416 @@
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @* * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        } *@
+        
+        @* body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        } *@
+
+        .site-footer.footer {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .site-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(220, 20, 60, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .footer-banner {
+            background: linear-gradient(90deg, #da020e 0%, #ffd700 50%, #da020e 100%);
+            padding: 12px 0;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            animation: shimmer 3s ease-in-out infinite;
+            margin: 0 auto;
+                justify-content: center;
+    align-items: center;
+        }
+
+        @@keyframes shimmer {
+            0%, 100% { background-position: -200% center; }
+            50% { background-position: 200% center; }
+        }
+
+        .footer-banner::before {
+            content: '🇻🇳';
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        .footer-banner::after {
+            content: '🇻🇳';
+            margin-left: 10px;
+            font-size: 18px;
+        }
+
+        .star {
+            display: inline-block;
+            animation: twinkle 2s ease-in-out infinite alternate;
+            margin-right: 8px;
+            font-size: 18px;
+        }
+
+        @@keyframes twinkle {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+            100% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+        }
+
+        @* .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        } *@
+
+        .footer-content-wrapper {
+            padding: 40px 0;
+        }
+
+        .footer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .play-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+        }
+
+        .play-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 55%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            border-left: 12px solid #1a1a2e;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+        }
+
+        .logo-text h3 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ffd700, #fff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+            font-style: italic;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px) scale(1.1);
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .social-icon:nth-child(1):hover { color: #0088cc; }
+        .social-icon:nth-child(2):hover { color: #7289da; }
+        .social-icon:nth-child(3):hover { color: #1da1f2; }
+        .social-icon:nth-child(4):hover { color: #1877f2; }
+        .social-icon:nth-child(5):hover { color: #ff0050; }
+        .social-icon:nth-child(6):hover { color: #ff0000; }
+        .social-icon:nth-child(7):hover { color: #ff5a5f; }
+        .social-icon:nth-child(8):hover { color: #e4405f; }
+
+        .footer-links-and-categories {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-nav h4,
+        .footer-categories h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #ffd700;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-nav h4::after,
+        .footer-categories h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background: linear-gradient(90deg, #ffd700, #fff);
+        }
+
+        .footer-nav ul,
+        .footer-categories ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .footer-nav li a,
+        .footer-categories li a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .footer-nav li a::before,
+        .footer-categories li a::before {
+            content: '▸';
+            margin-right: 8px;
+            color: #ffd700;
+            transition: all 0.3s ease;
+        }
+
+        .footer-nav li a:hover,
+        .footer-categories li a:hover {
+            color: #ffd700;
+            transform: translateX(5px);
+        }
+
+        .footer-nav li a:hover::before,
+        .footer-categories li a:hover::before {
+            transform: translateX(3px);
+        }
+
+        .footer-description {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-description p {
+            line-height: 1.8;
+            font-size: 15px;
+            color: rgba(255,255,255,0.9);
+            text-align: justify;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+        }
+
+        .footer-copyright::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ffd700, transparent);
+        }
+
+        .footer-copyright p {
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .footer-copyright p::before {
+            content: '🎬';
+            font-size: 16px;
+        }
+
+        .footer-copyright p::after {
+            content: '- Tự hào Việt Nam';
+            font-style: italic;
+            color: #ffd700;
+        }
+
+        @@media (max-width: 768px) {
+            .footer-header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .footer-links-and-categories {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .footer-social {
+                justify-content: center;
+            }
+            
+            .footer-nav ul,
+            .footer-categories ul {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-description {
+                padding: 20px;
+            }
+            
+            .footer-banner {
+                font-size: 14px;
+                padding: 10px 0;
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .page-container {
+                padding: 0 15px;
+            }
+            
+            .footer-content-wrapper {
+                padding: 30px 0;
+            }
+            
+            .logo-text h3 {
+                font-size: 24px;
+            }
+            
+            .social-icon {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+
+    <footer class="site-footer footer">
+        <div class="footer-banner">
+            @* <span class="star">⭐</span> *@
+            <span>Hoàng Sa & Trường Sa là của Việt Nam!</span>
+        </div>
+        <div class="page-container">
+            <div class="footer-content-wrapper">
+                <!-- Phần Logo và Social Media -->
+                <div class="footer-header">
+                    <div class="footer-logo">
+                        <div class="play-icon"></div>
+                        <div class="logo-text">
+                            <h3>RoPhim</h3>
+                            <p>Phim hay cả rổ</p>
+                        </div>
+                    </div>
+                    <div class="footer-social">
+                        <a href="#" class="social-icon"><i class="fab fa-telegram-plane"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-x-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-airbnb"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Phần Links Điều hướng và Danh mục -->
+                <div class="footer-links-and-categories">
+                    <div class="footer-nav">
+                        <h4>Liên kết hữu ích</h4>
+                        <ul>
+                            <li><a href="#">Hỏi-Đáp</a></li>
+                            <li><a href="#">Chính sách bảo mật</a></li>
+                            <li><a href="#">Điều khoản sử dụng</a></li>
+                            <li><a href="#">Giới thiệu</a></li>
+                            <li><a href="#">Liên hệ</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-categories">
+                        <h4>Đối tác phim</h4>
+                        <ul>
+                            <li><a href="#">Dongphim</a></li>
+                            <li><a href="#">Ghienphim</a></li>
+                            <li><a href="#">Motphim</a></li>
+                            <li><a href="#">Subnhanh</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Phần Mô tả và Bản quyền -->
+                <div class="footer-description">
+                    <p>RoPhim – Phim hay cả rổ - Trang xem phim online chất lượng cao miễn phí Vietsub, thuyết minh, lồng tiếng full HD. Kho phim mới khổng lồ, phim chiếu rạp, phim bộ, phim lẻ từ nhiều quốc gia như Việt Nam, Hàn Quốc, Trung Quốc, Thái Lan, Nhật Bản, Âu Mỹ… đa dạng thể loại. Khám phá nền tảng phim trực tuyến hay nhất 2024 chất lượng 4K! Chúng tôi tự hào mang đến những bộ phim chất lượng cao cho khán giả Việt Nam.</p>
+                </div>
+                
+                <div class="footer-copyright">
+                    <p>© 2024 RoPhim</p>
+                </div>
+            </div>
+        </div>
+    </footer>
