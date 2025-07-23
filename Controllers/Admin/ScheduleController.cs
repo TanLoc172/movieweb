@@ -1,601 +1,345 @@
-using Microsoft.AspNetCore.Authorization;
+
+// using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MovieWebsite.Data;
 using MovieWebsite.Models;
-using System;
-using System.Collections.Generic;
+
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MovieWebsite.Controllers
+public class ScheduleController : Controller
 {
-    public class ScheduleController : Controller
+    private readonly AppDbContext _context;
+    private readonly IWebHostEnvironment _webHostEnvironment;
+
+    public ScheduleController(AppDbContext context, IWebHostEnvironment webHostEnvironment)
     {
-        private readonly AppDbContext _context;
+        _context = context;
+        _webHostEnvironment = webHostEnvironment;
+    }
 
-        public ScheduleController(AppDbContext context)
-        {
-            _context = context;
-        }
+    // ===================================================================
+    // PHẦN DÀNH CHO NGƯỜI DÙNG (PUBLIC)
+    // ===================================================================
 
-        // Action chính để hiển thị trang lịch chiếu
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            // 1. Xác định khoảng thời gian cần lấy lịch
-            var today = DateTime.Today;
-            var endDate = today.AddDays(7); // Lấy lịch cho 7 ngày tới
+    // GET: /Schedule hoặc /Schedule/Index
+    // [AllowAnonymous] // Mọi người đều có thể xem
+    public async Task<IActionResult> Index()
+    {
+        var now = DateTime.UtcNow;
+        var endDate = now.AddDays(7); // Lấy lịch trong 7 ngày tới
 
-            // 2. Truy vấn CSDL để lấy các lịch trình trong khoảng thời gian đã định
-            // Sử dụng Include để tải sẵn dữ liệu liên quan (Movie, Episode) -> tránh lỗi N+1 query
-            var schedules = await _context.Schedules
-                .Include(s => s.Movie)
-                // .Include(s => s.Episode) // Không cần thiết nếu bạn không dùng thông tin gì khác ngoài EpisodeNumber từ Episode
-                .Where(s => s.ScheduledTime >= today && s.ScheduledTime < endDate)
-                .OrderBy(s => s.ScheduledTime) // Sắp xếp theo thời gian sớm nhất
-                .ToListAsync();
+        // Lấy lịch chiếu sắp tới, không kiểm tra IsPublished
+        var schedules = await _context.Schedules
+            .Include(s => s.Movie)
+            .Include(s => s.Episode)
+            .Where(s => s.ScheduledTime >= now && s.ScheduledTime < endDate)
+            .OrderBy(s => s.ScheduledTime)
+            .ToListAsync();
 
-            // 3. Xử lý dữ liệu và gom nhóm theo ngày
-            // Dùng Dictionary với Key là ngày (không có giờ), Value là danh sách các mục lịch chiếu của ngày đó
-            var groupedSchedules = schedules
-                .GroupBy(s => s.ScheduledTime.Date)
-                .ToDictionary(
-                    group => group.Key, // Key là ngày (ví dụ: 2024-05-24 00:00:00)
-                    group => group.Select(s => new ScheduleItemViewModel
-                    {
-                        // 4. Map dữ liệu từ Model sang ScheduleItemViewModel
-                        ScheduleId = s.Id,
-                        MovieId = s.Movie.Id,
-                        MovieTitle = s.Movie.Title,
-                        // Hoặc PosterDoc tùy bạn chọn
-                        PosterDoc = s.Movie.PosterDoc,
-                        // Lấy thông tin tập phim từ chính lịch chiếu nếu có
-                        EpisodeNumber = s.EpisodeId.HasValue ? _context.Episodes.Find(s.EpisodeId.Value)?.EpisodeNumber : null,
-                        EpisodeTitle = s.EpisodeId.HasValue ? _context.Episodes.Find(s.EpisodeId.Value)?.Title : null,
-                        ScheduledTime = s.ScheduledTime,
-                        Description = s.Description,
-                        EntryType = s.EntryType,
-                        // Tạo một tiêu đề chung để hiển thị
-                        ItemTitle = s.EpisodeId.HasValue
-                            ? $"{s.Movie.Title} - Tập {_context.Episodes.Find(s.EpisodeId.Value)?.EpisodeNumber}"
-                            : s.Movie.Title
-                    }).ToList() // Value là danh sách các ScheduleItemViewModel của ngày đó
-                );
-
-            // 5. Tạo ViewModel chính cho View
-            var viewModel = new ScheduleViewModel
-            {
-                // Tạo danh sách các ngày để hiển thị tab (Hôm nay, Ngày mai, Thứ 2,...)
-                SelectableDates = Enumerable.Range(0, 7).Select(i => today.AddDays(i)).ToList(),
-                ScheduledGroups = groupedSchedules,
-                ViewType = "week" // Có thể đặt mặc định hoặc dựa trên tham số query
-            };
-
-            return View(viewModel);
-        }
-        // Helper method để lấy danh sách phim cho dropdown, tránh lặp code
-        private async Task PopulateMoviesDropdown(ScheduleViewModelForAdmin viewModel)
-        {
-            viewModel.Movies = await _context.Movies
-                                            .OrderBy(m => m.Title)
-                                            .ToListAsync();
-        }
-
-        // GET: /Schedule/AdminIndex - Trang quản lý lịch chiếu
-        // Đổi tên action để không trùng với trang Index công khai
-        public async Task<IActionResult> AdminIndex()
-        {
-            // Tạo ViewModel mới, nhẹ hơn cho trang danh sách
-            var scheduleList = await _context.Schedules
-                .Include(s => s.Movie) // Lấy thông tin phim
-                .Include(s => s.Episode) // Lấy thông tin tập phim
-                .OrderByDescending(s => s.ScheduledTime)
-                .Select(s => new ScheduleAdminItemViewModel // Map sang ViewModel mới
+        // Nhóm lịch chiếu theo ngày
+        var groupedSchedules = schedules
+            .GroupBy(s => s.ScheduledTime.ToLocalTime().Date)
+            .ToDictionary(
+                group => group.Key,
+                group => group.Select(s => new ScheduleItemViewModel
                 {
-                    Id = s.Id,
-                    ScheduledTime = s.ScheduledTime,
+                    ScheduleId = s.Id,
+                    MovieId = s.MovieId,
                     MovieTitle = s.Movie.Title,
-                    // Sử dụng toán tử ?. để tránh lỗi nếu Episode là null
-                    EpisodeInfo = s.Episode != null ? $"Tập {s.Episode.EpisodeNumber} - {s.Episode.Title}" : "Phim lẻ / Sự kiện",
+                    PosterDoc = s.Movie.PosterDoc,
+                    EpisodeNumber = s.Episode?.EpisodeNumber,
+                    ScheduledTime = s.ScheduledTime,
                     Description = s.Description,
-                    EntryType = s.EntryType
-                })
-                .ToListAsync();
+                    EntryType = s.EntryType,
+                    ItemTitle = s.EpisodeId.HasValue && s.Episode != null
+                        ? $"Tập {s.Episode.EpisodeNumber}: {s.Episode.Title}"
+                        : s.Movie.Title
+                }).ToList()
+            );
 
-            return View(scheduleList);
+        var viewModel = new ScheduleViewModel
+        {
+            ScheduledGroups = groupedSchedules
+        };
+
+        return View("Index", viewModel); // Chỉ định view rõ ràng để không bị nhầm lẫn
+    }
+
+    // ===================================================================
+    // PHẦN DÀNH CHO QUẢN TRỊ VIÊN (ADMIN)
+    // Các action này phải được bảo vệ
+    // ===================================================================
+
+    // // GET: /Schedule/Manage
+    // [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Manage()
+    {
+        var scheduleList = await _context.Schedules
+            .Include(s => s.Movie)
+            .Include(s => s.Episode)
+            .OrderByDescending(s => s.ScheduledTime)
+            .Select(s => new ScheduleAdminItemViewModel
+            {
+                Id = s.Id,
+                ScheduledTime = s.ScheduledTime,
+                MovieTitle = s.Movie.Title,
+                EpisodeInfo = s.Episode != null ? $"Tập {s.Episode.EpisodeNumber} - {s.Episode.Title}" : "Phim lẻ / Sự kiện",
+                Description = s.Description,
+                EntryType = s.EntryType
+            })
+            .ToListAsync();
+
+        return View("AdminIndex", scheduleList); // Chỉ định view rõ ràng
+    }
+
+    // GET: /Schedule/Create
+    // [Authorize(Roles = "Admin")]
+    [HttpGet("Schedule/Create")]
+    public async Task<IActionResult> Create()
+    {
+        var viewModel = new ScheduleViewModelForAdmin
+        {
+            Movies = await _context.Movies.OrderBy(m => m.Title).ToListAsync()
+        };
+        return View(viewModel); // View này mặc định là của Admin
+    }
+
+    // POST: /Schedule/Create
+    [HttpPost("Schedule/Create")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(ScheduleViewModelForAdmin viewModel)
+    {
+        // Validation=
+        if (viewModel.EntryType == ScheduleType.EpisodeRelease)
+        {
+            if (!viewModel.NewEpisodeNumber.HasValue)
+                ModelState.AddModelError(nameof(viewModel.NewEpisodeNumber), "Số tập là bắt buộc.");
+
+            if (string.IsNullOrWhiteSpace(viewModel.NewEpisodeTitle))
+                ModelState.AddModelError(nameof(viewModel.NewEpisodeTitle), "Tên tập là bắt buộc.");
+
+            if (viewModel.NewEpisodeVideoFile == null || viewModel.NewEpisodeVideoFile.Length == 0)
+                ModelState.AddModelError(nameof(viewModel.NewEpisodeVideoFile), "Vui lòng chọn một file video để upload.");
         }
 
-        // === API Endpoint để lấy danh sách tập phim ===
-        // GET: /Schedule/GetEpisodesForMovie?movieId=5
-        [HttpGet]
-        public async Task<IActionResult> GetEpisodesForMovie(int movieId)
+        if (ModelState.IsValid)
         {
-            if (movieId <= 0)
-            {
-                return Json(new List<object>()); // Trả về danh sách rỗng nếu không có movieId
-            }
-
-            var episodes = await _context.Episodes
-                .Where(e => e.MovieId == movieId)
-                .OrderBy(e => e.EpisodeNumber)
-                .Select(e => new { id = e.Id, text = $"Tập {e.EpisodeNumber}: {e.Title}" }) // Định dạng cho select/option
-                .ToListAsync();
-
-            return Json(episodes);
-        }
-        // GET: Schedule/Create
-        public async Task<IActionResult> Create()
-        {
-            var viewModel = new ScheduleViewModelForAdmin();
-            // Lấy danh sách phim để hiển thị trong dropdown
-            await PopulateMoviesDropdown(viewModel);
-            return View(viewModel);
-        }
-
-        // POST: Schedule/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ScheduleViewModelForAdmin viewModel)
-        {
-            // Luôn cần xóa các thuộc tính chỉ dùng để hiển thị khỏi ModelState
-            ModelState.Remove("Movies");
-
-            // === VALIDATION LOGIC NÂNG CAO ===
-            // Chỉ kiểm tra thông tin tập mới khi người dùng chọn loại là "Ra mắt tập phim"
-            if (viewModel.EntryType == ScheduleType.EpisodeRelease)
-            {
-                if (!viewModel.NewEpisodeNumber.HasValue)
-                {
-                    ModelState.AddModelError(nameof(viewModel.NewEpisodeNumber), "Số tập là bắt buộc khi lên lịch cho tập phim mới.");
-                }
-                if (string.IsNullOrWhiteSpace(viewModel.NewEpisodeTitle))
-                {
-                    ModelState.AddModelError(nameof(viewModel.NewEpisodeTitle), "Tên tập là bắt buộc khi lên lịch cho tập phim mới.");
-                }
-
-                // Nếu số tập có giá trị, kiểm tra xem nó đã tồn tại cho phim này chưa
-                if (viewModel.NewEpisodeNumber.HasValue)
-                {
-                    bool episodeExists = await _context.Episodes
-                        .AnyAsync(e => e.MovieId == viewModel.MovieId && e.EpisodeNumber == viewModel.NewEpisodeNumber.Value);
-
-                    if (episodeExists)
-                    {
-                        ModelState.AddModelError(nameof(viewModel.NewEpisodeNumber), $"Tập {viewModel.NewEpisodeNumber.Value} đã tồn tại cho phim này. Vui lòng chọn số tập khác.");
-                    }
-                }
-            }
-
-            if (ModelState.IsValid)
-            {
-                // Sử dụng transaction để đảm bảo cả 2 thao tác (tạo tập, tạo lịch) đều thành công hoặc thất bại cùng nhau
-                using (var transaction = await _context.Database.BeginTransactionAsync())
-                {
-                    try
-                    {
-                        int? episodeIdForSchedule = null;
-
-                        // Chỉ tạo tập phim mới nếu loại hình là ra mắt tập
-                        if (viewModel.EntryType == ScheduleType.EpisodeRelease)
-                        {
-                            // 1. TẠO TẬP PHIM MỚI
-                            var newEpisode = new Episode
-                            {
-                                MovieId = viewModel.MovieId,
-                                EpisodeNumber = viewModel.NewEpisodeNumber.Value,
-                                Title = viewModel.NewEpisodeTitle,
-                                Description = viewModel.Description, // Có thể dùng chung mô tả
-                                ReleaseDate = viewModel.ScheduledTime, // Ngày phát hành dự kiến
-                                VideoPath = "placeholder.mp4", // Đặt một giá trị tạm, sẽ cập nhật sau
-                                Duration = 0,
-                                Views = 0,
-                            };
-                            _context.Episodes.Add(newEpisode);
-                            await _context.SaveChangesAsync(); // Lưu để lấy được newEpisode.Id
-
-                            episodeIdForSchedule = newEpisode.Id; // Lấy ID của tập vừa tạo
-                        }
-
-                        // 2. TẠO LỊCH CHIẾU
-                        var schedule = new Schedule
-                        {
-                            ScheduledTime = viewModel.ScheduledTime,
-                            MovieId = viewModel.MovieId,
-                            EpisodeId = episodeIdForSchedule, // Gán ID nếu có, nếu không thì là null (cho phim lẻ)
-                            Description = viewModel.Description,
-                            EntryType = viewModel.EntryType,
-                        };
-                        _context.Schedules.Add(schedule);
-                        await _context.SaveChangesAsync();
-
-                        // Nếu tất cả thành công, xác nhận transaction
-                        await transaction.CommitAsync();
-
-                        // TempData["SuccessMessage"] = "Đã lên lịch chiếu thành công!";
-                        return RedirectToAction(nameof(AdminIndex));
-                    }
-                    catch (Exception ex)
-                    {
-                        // Nếu có lỗi, hủy bỏ tất cả thay đổi
-                        await transaction.RollbackAsync();
-                        // Ghi lại log lỗi (quan trọng cho gỡ lỗi)
-                        // logger.LogError(ex, "Lỗi khi tạo lịch chiếu mới.");
-                        ModelState.AddModelError("", "Đã có lỗi không mong muốn xảy ra. Vui lòng thử lại.");
-                    }
-                }
-            }
-
-            // Nếu model không hợp lệ, tải lại danh sách phim và trả về view với các lỗi
-            viewModel.Movies = await _context.Movies.OrderBy(m => m.Title).ToListAsync();
-            return View(viewModel);
-        }
-        // GET: Schedule/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var schedule = await _context.Schedules.FindAsync(id);
-            if (schedule == null)
-            {
-                return NotFound();
-            }
-
-            // Map từ Model sang ViewModel để hiển thị trên form
-            var viewModel = new ScheduleViewModelForAdmin
-            {
-                Id = schedule.Id,
-                ScheduledTime = schedule.ScheduledTime,
-                MovieId = schedule.MovieId,
-                EpisodeId = schedule.EpisodeId,
-                Description = schedule.Description,
-                EntryType = schedule.EntryType
-            };
-
-            // Lấy danh sách phim cho dropdown
-            await PopulateMoviesDropdown(viewModel);
-            // Load danh sách tập phim cho phim hiện tại
-            if (viewModel.MovieId > 0)
-            {
-                viewModel.Episodes = await _context.Episodes
-                    .Where(e => e.MovieId == viewModel.MovieId)
-                    .OrderBy(e => e.EpisodeNumber)
-                    .ToListAsync();
-            }
-            return View(viewModel);
-        }
-
-        // POST: Schedule/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ScheduleViewModelForAdmin viewModel)
-        {
-            if (id != viewModel.Id)
-            {
-                return NotFound();
-            }
-
-            // Luôn xóa các thuộc tính hiển thị khỏi ModelState
-            ModelState.Remove("Movies");
-            ModelState.Remove("Episodes");
-            ModelState.Remove("NewEpisodeNumber");
-            ModelState.Remove("NewEpisodeTitle");
-
-            if (ModelState.IsValid)
+            // Bắt đầu transaction
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    var scheduleToUpdate = await _context.Schedules.FindAsync(id);
-                    if (scheduleToUpdate == null)
-                    {
-                        return NotFound();
-                    }
+                    // === BẮT ĐẦU ĐIỀN LOGIC VÀO ĐÂY ===
 
-                    // Cập nhật các thuộc tính chung
-                    scheduleToUpdate.ScheduledTime = viewModel.ScheduledTime;
-                    scheduleToUpdate.MovieId = viewModel.MovieId;
-                    scheduleToUpdate.Description = viewModel.Description;
-                    scheduleToUpdate.EntryType = viewModel.EntryType;
+                    int? episodeIdForSchedule = null;
 
-                    // === LOGIC MỚI: XỬ LÝ KHI LOẠI LỊCH CHIẾU THAY ĐỔI ===
+                    // Chỉ thực hiện logic này nếu người dùng muốn tạo lịch cho tập phim mới
                     if (viewModel.EntryType == ScheduleType.EpisodeRelease)
                     {
-                        // Nếu là loại ra mắt tập, lấy EpisodeId từ form
-                        scheduleToUpdate.EpisodeId = viewModel.EpisodeId;
-                    }
-                    else
-                    {
-                        // Nếu là các loại khác (Phim lẻ, sự kiện...), đảm bảo không có EpisodeId
-                        scheduleToUpdate.EpisodeId = null;
-                    }
-                    // ====================================================
+                        string videoPath = null;
+                        if (viewModel.NewEpisodeVideoFile != null)
+                        {
+                            // 1. Tạo đường dẫn thư mục lưu trữ
+                            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "videos", "episodes");
+                            if (!Directory.Exists(uploadsFolder))
+                            {
+                                Directory.CreateDirectory(uploadsFolder);
+                            }
 
-                    _context.Update(scheduleToUpdate);
+                            // 2. Tạo tên file duy nhất để tránh trùng lặp
+                            string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(viewModel.NewEpisodeVideoFile.FileName);
+                            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                            // 3. Lưu file vào server
+                            using (var fileStream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await viewModel.NewEpisodeVideoFile.CopyToAsync(fileStream);
+                            }
+
+                            // 4. Lấy đường dẫn tương đối để lưu vào DB
+                            videoPath = "/videos/episodes/" + uniqueFileName;
+                        }
+
+                        // 5. Tạo tập phim mới trong DB
+                        var newEpisode = new Episode
+                        {
+                            MovieId = viewModel.MovieId,
+                            EpisodeNumber = viewModel.NewEpisodeNumber.Value,
+                            Title = viewModel.NewEpisodeTitle,
+                            Description = viewModel.Description,
+                            ReleaseDate = viewModel.ScheduledTime.ToUniversalTime(),
+                            VideoPath = videoPath, // Lưu đường dẫn video
+                            Duration = 0, // Cần cải tiến sau
+                            IsPublished = false // Mặc định là chưa publish
+                        };
+                        _context.Episodes.Add(newEpisode);
+                        await _context.SaveChangesAsync(); // Lưu để lấy được ID của tập vừa tạo
+
+                        // 6. Gán ID cho lịch chiếu
+                        episodeIdForSchedule = newEpisode.Id;
+                    }
+
+                    // 7. Tạo lịch chiếu
+                    var schedule = new Schedule
+                    {
+                        ScheduledTime = viewModel.ScheduledTime.ToUniversalTime(),
+                        MovieId = viewModel.MovieId,
+                        EpisodeId = episodeIdForSchedule, // Sẽ là null nếu không phải tạo tập mới
+                        Description = viewModel.Description,
+                        EntryType = viewModel.EntryType,
+                    };
+                    _context.Schedules.Add(schedule);
                     await _context.SaveChangesAsync();
 
-                    // TempData["SuccessMessage"] = "Cập nhật lịch chiếu thành công!";
-                    return RedirectToAction(nameof(AdminIndex));
+                    // === KẾT THÚC LOGIC ===
+
+                    // Nếu tất cả thành công, commit transaction
+                    await transaction.CommitAsync();
+
+                    TempData["SuccessMessage"] = "Đã tạo lịch chiếu thành công!";
+                    return RedirectToAction(nameof(Manage));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!_context.Schedules.Any(e => e.Id == viewModel.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    // Nếu có bất kỳ lỗi nào xảy ra, hủy bỏ tất cả thay đổi
+                    await transaction.RollbackAsync();
+                    // Ghi log lỗi để debug
+                    // logger.LogError(ex, "Lỗi khi tạo lịch chiếu mới."); 
+                    ModelState.AddModelError("", "Đã có lỗi không mong muốn xảy ra. Chi tiết: " + ex.Message);
                 }
             }
-
-            // Nếu model không hợp lệ, tải lại dữ liệu cần thiết cho form
-            viewModel.Movies = await _context.Movies.OrderBy(m => m.Title).ToListAsync();
-            if (viewModel.MovieId > 0)
-            {
-                viewModel.Episodes = await _context.Episodes
-                    .Where(e => e.MovieId == viewModel.MovieId)
-                    .OrderBy(e => e.EpisodeNumber)
-                    .ToListAsync();
-            }
-            return View(viewModel);
-        }
-        // GET: Schedule/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            // Dùng Include để hiển thị thêm thông tin tên phim cho dễ xác nhận
-            var schedule = await _context.Schedules
-                .Include(s => s.Movie)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (schedule == null)
-            {
-                return NotFound();
-            }
-
-            return View(schedule); // Trả về thẳng model Schedule để hiển thị thông tin xác nhận
         }
 
-        // POST: Schedule/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        // Nếu model không hợp lệ, tải lại danh sách phim và trả về view với các lỗi
+        viewModel.Movies = await _context.Movies.OrderBy(m => m.Title).ToListAsync();
+        return View(viewModel);
+    }
+    // GET: /Schedule/Edit/5
+    // [Authorize(Roles = "Admin")]
+        [HttpGet("Schedule/Edit/{id?}")]
+
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null) return NotFound();
+        var schedule = await _context.Schedules.FindAsync(id);
+        if (schedule == null) return NotFound();
+
+        var viewModel = new ScheduleViewModelForAdmin
         {
-            var schedule = await _context.Schedules.FindAsync(id);
-            if (schedule != null)
-            {
-                _context.Schedules.Remove(schedule);
-            }
+            Id = schedule.Id,
+            ScheduledTime = schedule.ScheduledTime.ToLocalTime(),
+            MovieId = schedule.MovieId,
+            EpisodeId = schedule.EpisodeId,
+            Description = schedule.Description,
+            EntryType = schedule.EntryType,
+            Movies = await _context.Movies.OrderBy(m => m.Title).ToListAsync()
+        };
+
+        if (viewModel.MovieId > 0)
+        {
+            viewModel.Episodes = await _context.Episodes
+                .Where(e => e.MovieId == viewModel.MovieId)
+                .OrderBy(e => e.EpisodeNumber).ToListAsync();
+        }
+        return View(viewModel);
+    }
+
+    // POST: /Schedule/Edit/5
+    [HttpPost("Schedule/Edit/{id?}")]
+    [ValidateAntiForgeryToken]
+    // [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Edit(int id, ScheduleViewModelForAdmin viewModel)
+    {
+        // Logic Edit POST của bạn đã tốt, giữ nguyên.
+        if (id != viewModel.Id) return NotFound();
+
+        ModelState.Remove(nameof(viewModel.Movies));
+        ModelState.Remove(nameof(viewModel.Episodes));
+        // ... xóa các model state khác nếu cần
+
+        if (ModelState.IsValid)
+        {
+            var scheduleToUpdate = await _context.Schedules.FindAsync(id);
+            if (scheduleToUpdate == null) return NotFound();
+
+            scheduleToUpdate.ScheduledTime = viewModel.ScheduledTime.ToUniversalTime();
+            // ... cập nhật các trường khác
+            scheduleToUpdate.EpisodeId = (viewModel.EntryType == ScheduleType.EpisodeRelease) ? viewModel.EpisodeId : null;
 
             await _context.SaveChangesAsync();
-            // TODO: Redirect đến trang danh sách lịch chiếu của Admin
-            return RedirectToAction(nameof(AdminIndex));
-            
+            return RedirectToAction(nameof(Manage));
         }
 
-        // Hàm GetSelectableDates không thay đổi
-        // private List<DateTime> GetSelectableDates()
-        // {
-        //     var dates = new List<DateTime>();
-        //     for (int i = 0; i < 7; i++)
-        //     {
-        //         dates.Add(DateTime.Today.AddDays(i));
-        //     }
-        //     return dates;
-        // }
+        viewModel.Movies = await _context.Movies.OrderBy(m => m.Title).ToListAsync();
+        // ... tải lại dữ liệu khác nếu cần
+        return View(viewModel);
+    }
 
+    // Các action Delete và API GetEpisodesForMovie
+    // Đảm bảo tất cả đều có [Authorize(Roles = "Admin")] hoặc được gọi từ các action đã được authorize
 
-        // Hiển thị danh sách lịch chiếu (Admin)
-        // [Authorize(Roles = "Admin")]
-        // public async Task<IActionResult> Manage()
-        // {
-        //     var schedules = await _context.Schedules
-        //         .Include(s => s.Movie)
-        //         .Include(s => s.Episode)
-        //         .OrderBy(s => s.ScheduledTime)
-        //         .ToListAsync();
+    // GET: /Schedule/Delete/5
+    // [Authorize(Roles = "Admin")]
+    [HttpGet("Schedule/Delete/{id?}")]
+    public async Task<IActionResult> Delete(int? id)
+    {
+        // 1. Kiểm tra ID đầu vào
+        if (id == null)
+        {
+            return NotFound();
+        }
 
-        //     var model = schedules.Select(s => new ScheduleViewModelForAdmin
-        //     {
-        //         Id = s.Id,
-        //         ScheduledTime = s.ScheduledTime,
-        //         MovieId = s.MovieId,
-        //         EpisodeId = s.EpisodeId,
-        //         Description = s.Description,
-        //         EntryType = s.EntryType,
-        //         Movies = _context.Movies.ToList(),
-        //         Episodes = _context.Episodes.Where(e => e.MovieId == s.MovieId).ToList()
-        //     }).ToList();
+        // 2. Tìm lịch chiếu trong DB, bao gồm cả thông tin phim để hiển thị cho rõ
+        var schedule = await _context.Schedules
+            .Include(s => s.Movie) // Lấy thông tin phim liên quan
+            .Include(s => s.Episode) // Lấy thông tin tập phim liên quan
+            .FirstOrDefaultAsync(m => m.Id == id);
 
-        //     return View(model);
-        // }
+        // 3. Nếu không tìm thấy, trả về Not Found
+        if (schedule == null)
+        {
+            return NotFound();
+        }
 
-        // // Hiển thị form tạo lịch chiếu mới (Admin)
-        // [HttpGet]
-        // public IActionResult Create()
-        // {
-        //     var model = new ScheduleViewModelForAdmin
-        //     {
-        //         ScheduledTime = DateTime.Now,
-        //         Movies = _context.Movies.ToList(),
-        //         Episodes = _context.Episodes.ToList()
-        //     };
-        //     return View(model);
-        // }
+        // 4. Trả về View với đối tượng schedule để hiển thị thông tin xác nhận
+        return View(schedule);
+    }
 
-        // // Xử lý tạo lịch chiếu mới (Admin)
-        // [HttpPost]
-        // [ValidateAntiForgeryToken]
-        // public async Task<IActionResult> Create(ScheduleViewModelForAdmin model)
-        // {
-        //     if (ModelState.IsValid)
-        //     {
-        //         int? episodeId = null;
-        //         // Nếu người dùng nhập tên tập phim
-        //         if (!string.IsNullOrWhiteSpace(model.EpisodeTitle))
-        //         {
-        //             // Tạo mới Episode
-        //             var episode = new Episode
-        //             {
-        //                 MovieId = model.MovieId,
-        //                 Title = model.EpisodeTitle,
-        //                 Description = "", // Có thể bổ sung field mô tả nếu muốn
-        //                 VideoPath = "", // Có thể bổ sung field nếu muốn
-        //                 Duration = 0,
-        //                 ReleaseDate = DateTime.Now,
-        //                 CreatedAt = DateTime.Now,
-        //                 UpdatedAt = DateTime.Now
-        //             };
-        //             _context.Episodes.Add(episode);
-        //             await _context.SaveChangesAsync();
-        //             episodeId = episode.Id;
-        //         }
+    // POST: /Schedule/Delete/5
+    // [HttpPost, ActionName("Delete")]
+    [HttpPost("Schedule/Delete/{id?}")]
+    [ValidateAntiForgeryToken]
+    // [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        // 1. Tìm lịch chiếu cần xóa
+        var schedule = await _context.Schedules.FindAsync(id);
 
-        //         var schedule = new Schedule
-        //         {
-        //             ScheduledTime = model.ScheduledTime,
-        //             MovieId = model.MovieId,
-        //             EpisodeId = episodeId, // null nếu không nhập tên tập
-        //             Description = model.Description,
-        //             EntryType = model.EntryType,
-        //             CreatedAt = DateTime.Now
-        //         };
+        // 2. Nếu tìm thấy thì xóa nó
+        if (schedule != null)
+        {
+            _context.Schedules.Remove(schedule);
+            await _context.SaveChangesAsync();
+        }
 
-        //         _context.Schedules.Add(schedule);
-        //         await _context.SaveChangesAsync();
-        //         return RedirectToAction(nameof(Manage));
-        //     }
+        // 3. Chuyển hướng về trang quản lý sau khi xóa xong (hoặc dù không tìm thấy)
+        return RedirectToAction(nameof(Manage));
+    }
 
-        //     model.Movies = _context.Movies.ToList();
-        //     model.Episodes = _context.Episodes.ToList();
-        //     return View(model);
-        // }
-
-        // // Hiển thị form chỉnh sửa lịch chiếu (Admin)
-        // [HttpGet]
-        // public async Task<IActionResult> Edit(int id)
-        // {
-        //     var schedule = await _context.Schedules
-        //         .Include(s => s.Movie)
-        //         .Include(s => s.Episode)
-        //         .FirstOrDefaultAsync(s => s.Id == id);
-
-        //     if (schedule == null)
-        //     {
-        //         return NotFound();
-        //     }
-
-        //     var model = new ScheduleViewModelForAdmin
-        //     {
-        //         Id = schedule.Id,
-        //         ScheduledTime = schedule.ScheduledTime,
-        //         MovieId = schedule.MovieId,
-        //         EpisodeId = schedule.EpisodeId,
-        //         Description = schedule.Description,
-        //         EntryType = schedule.EntryType,
-        //         Movies = _context.Movies.ToList(),
-        //         Episodes = _context.Episodes.Where(e => e.MovieId == schedule.MovieId).ToList()
-        //     };
-
-        //     return View(model);
-        // }
-
-        // // Xử lý chỉnh sửa lịch chiếu (Admin)
-        // [HttpPost]
-        // [ValidateAntiForgeryToken]
-        // public async Task<IActionResult> Edit(ScheduleViewModelForAdmin model)
-        // {
-        //     if (ModelState.IsValid)
-        //     {
-        //         var schedule = await _context.Schedules.FindAsync(model.Id);
-        //         if (schedule == null)
-        //         {
-        //             return NotFound();
-        //         }
-
-        //         schedule.ScheduledTime = model.ScheduledTime;
-        //         schedule.MovieId = model.MovieId;
-        //         schedule.EpisodeId = model.EpisodeId;
-        //         schedule.Description = model.Description;
-        //         schedule.EntryType = model.EntryType;
-
-        //         _context.Schedules.Update(schedule);
-        //         await _context.SaveChangesAsync();
-        //         return RedirectToAction(nameof(Manage));
-        //     }
-
-        //     model.Movies = _context.Movies.ToList();
-        //     model.Episodes = _context.Episodes.Where(e => e.MovieId == model.MovieId).ToList();
-        //     return View(model);
-        // }
-
-        // // Hiển thị form xác nhận xóa lịch chiếu (Admin)
-        // [HttpGet]
-        // public async Task<IActionResult> Delete(int id)
-        // {
-        //     var schedule = await _context.Schedules
-        //         .Include(s => s.Movie)
-        //         .Include(s => s.Episode)
-        //         .FirstOrDefaultAsync(s => s.Id == id);
-
-        //     if (schedule == null)
-        //     {
-        //         return NotFound();
-        //     }
-
-        //     var model = new ScheduleViewModelForAdmin
-        //     {
-        //         Id = schedule.Id,
-        //         ScheduledTime = schedule.ScheduledTime,
-        //         MovieId = schedule.MovieId,
-        //         EpisodeId = schedule.EpisodeId,
-        //         Description = schedule.Description,
-        //         EntryType = schedule.EntryType,
-        //         Movies = _context.Movies.ToList(),
-        //         Episodes = _context.Episodes.Where(e => e.MovieId == schedule.MovieId).ToList()
-        //     };
-
-        //     return View(model);
-        // }
-
-        // // Xử lý xóa lịch chiếu (Admin)
-        // [HttpPost, ActionName("Delete")]
-        // [ValidateAntiForgeryToken]
-        // public async Task<IActionResult> DeleteConfirmed(int id)
-        // {
-        //     var schedule = await _context.Schedules.FindAsync(id);
-        //     if (schedule == null)
-        //     {
-        //         return NotFound();
-        //     }
-
-        //     _context.Schedules.Remove(schedule);
-        //     await _context.SaveChangesAsync();
-        //     return RedirectToAction(nameof(Manage));
-        // }
-
-        // // Action AJAX để lấy danh sách tập phim theo MovieId
-        // [HttpGet]
-        // public async Task<IActionResult> GetEpisodesByMovie(int movieId)
-        // {
-        //     var episodes = await _context.Episodes
-        //         .Where(e => e.MovieId == movieId)
-        //         .Select(e => new { id = e.Id, title = e.Title, episodeNumber = e.EpisodeNumber })
-        //         .ToListAsync();
-
-        //     return Json(episodes);
-        // }
-
-        // Hàm lấy danh sách ngày có thể chọn (7 ngày tới)
-
-
+    // GET: /Schedule/GetEpisodesForMovie?movieId=5
+    // [Authorize(Roles = "Admin")] // Bảo vệ API endpoint
+    public async Task<IActionResult> GetEpisodesForMovie(int movieId)
+    {
+        // Logic của bạn đã tốt
+        var episodes = await _context.Episodes
+            .Where(e => e.MovieId == movieId)
+            .OrderBy(e => e.EpisodeNumber)
+            .Select(e => new { id = e.Id, text = $"Tập {e.EpisodeNumber}: {e.Title}" })
+            .ToListAsync();
+        return Json(episodes);
     }
 }

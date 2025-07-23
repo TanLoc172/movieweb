@@ -1,4 +1,4 @@
-@model DashboardViewModel
+@* @model DashboardViewModel
 
 @{
     ViewData["Title"] = "Dashboard";
@@ -65,4 +65,349 @@
              <!-- Nội dung biểu đồ sẽ được thêm sau -->
         </div>
     </div>
+</div> *@
+
+@model DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<!-- THÊM CSS RIÊNG CHO CÁC BIỂU ĐỒ TRỰC TIẾP VÀO VIEW -->
+@section Styles {
+    <style>
+        .chart-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            animation: fadeInUp 0.7s ease-out;
+        }
+
+        .chart-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(213, 0, 109, 0.2);
+            border-color: var(--border-accent);
+        }
+        
+        .chart-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-secondary);
+        }
+
+        .chart-header {
+            margin-bottom: 25px;
+        }
+
+        .chart-header h4 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chart-header h4 i {
+            color: var(--primary-pink);
+            font-size: 1.5rem;
+        }
+
+        .chart-body {
+            height: 380px; /* Chiều cao cố định cho biểu đồ */
+            position: relative;
+        }
+
+        /* Responsive cho grid layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 30px;
+        }
+        
+        .grid-item-full {
+            grid-column: span 12;
+        }
+
+        .grid-item-large {
+            grid-column: span 12;
+        }
+
+        .grid-item-small {
+            grid-column: span 12;
+        }
+
+        @@media (min-width: 992px) {
+            .grid-item-large {
+                grid-column: span 7;
+            }
+            .grid-item-small {
+                grid-column: span 5;
+            }
+        }
+    </style>
+}
+
+<!-- GRID THỐNG KÊ NHANH (KPI CARDS) -->
+<div class="stats-grid">
+    <!-- Thẻ Phim -->
+    <div class="stats-card">
+        <div class="card-icon"><i class="fas fa-film"></i></div>
+        <div class="card-content">
+            <h3>@Model.MovieCount</h3>
+            <p>Tổng số phim</p>
+        </div>
+        <a asp-controller="AdMovies" asp-action="ListMovies" class="card-link"></a>
+    </div>
+
+    <!-- Thẻ Lượt xem phim -->
+    <div class="stats-card">
+        <div class="card-icon"><i class="fas fa-eye"></i></div>
+        <div class="card-content">
+            <h3>@Model.TotalViews.ToString("N0")</h3>
+            <p>Tổng lượt xem phim</p>
+        </div>
+        <a href="#" class="card-link" title="Tổng lượt xem của tất cả các phim"></a>
+    </div>
+
+    <!-- Thẻ Lượt truy cập -->
+    <div class="stats-card">
+        <div class="card-icon"><i class="fas fa-mouse-pointer"></i></div>
+        <div class="card-content">
+            <h3>@Model.TotalPageViews.ToString("N0")</h3>
+            <p>Tổng lượt truy cập</p>
+        </div>
+        <a href="#" class="card-link" title="Tổng số lần người dùng tải trang"></a>
+    </div>
+
+    <!-- Thẻ Người dùng -->
+    <div class="stats-card">
+        <div class="card-icon"><i class="fas fa-users"></i></div>
+        <div class="card-content">
+            <h3>@Model.UserCount</h3>
+            <p>Tổng số người dùng</p>
+        </div>
+        <a asp-controller="Admin" asp-action="Index2" class="card-link"></a>
+    </div>
 </div>
+
+
+<!-- GRID CHỨA CÁC BIỂU ĐỒ PHÂN TÍCH -->
+<div class="dashboard-grid" style="margin-top: 40px;">
+
+    <!-- Biểu đồ Người dùng mới (Line Chart) -->
+    <div class="grid-item-large">
+        <div class="chart-card">
+            <div class="chart-header">
+                <h4><i class="fas fa-chart-line"></i> Người dùng mới (30 ngày qua)</h4>
+            </div>
+            <div class="chart-body">
+                <canvas id="newUsersChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Biểu đồ Lượt xem theo Thể loại (Doughnut Chart) -->
+    <div class="grid-item-small">
+        <div class="chart-card">
+            <div class="chart-header">
+                <h4><i class="fas fa-chart-pie"></i> Phân bổ lượt xem</h4>
+            </div>
+            <div class="chart-body">
+                <canvas id="viewsByGenreChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Biểu đồ Top 10 Phim (Bar Chart) -->
+    <div class="grid-item-full">
+         <div class="chart-card">
+            <div class="chart-header">
+                <h4><i class="fas fa-trophy"></i> Top 10 phim xem nhiều nhất</h4>
+            </div>
+            <div class="chart-body" style="height: 450px;">
+                 <canvas id="topMoviesChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+<!-- Thư viện Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Dữ liệu từ ViewModel được serialize thành JSON
+        const newUsersData = @Html.Raw(Json.Serialize(Model.NewUsersChart));
+        const viewsByGenreData = @Html.Raw(Json.Serialize(Model.ViewsByGenreChart));
+        const topMoviesData = @Html.Raw(Json.Serialize(Model.TopMoviesChart));
+
+        // Cấu hình chung cho Chart.js để hợp với theme
+        Chart.defaults.color = 'rgba(255, 255, 255, 0.7)';
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.plugins.legend.labels.color = 'rgba(255, 255, 255, 0.8)';
+
+        // ===================================
+        // 1. Biểu đồ Người dùng mới (Line)
+        // ===================================
+        const ctxLine = document.getElementById('newUsersChart');
+        if (ctxLine) {
+            new Chart(ctxLine, {
+                type: 'line',
+                data: {
+                    labels: newUsersData.labels,
+                    datasets: [{
+                        label: 'Số người dùng',
+                        data: newUsersData.data,
+                        borderColor: '#F06292',
+                        backgroundColor: 'rgba(240, 98, 146, 0.2)',
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#D5006D',
+                        pointBorderColor: '#fff',
+                        pointHoverRadius: 7,
+                        pointRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0, color: 'rgba(255, 255, 255, 0.6)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: 'rgba(255, 255, 255, 0.6)' },
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleFont: { size: 14, weight: 'bold' },
+                            bodyFont: { size: 12 },
+                            padding: 10,
+                            cornerRadius: 8
+                        }
+                    }
+                }
+            });
+        }
+
+        // ===================================
+        // 2. Biểu đồ Phân bổ Lượt xem (Doughnut)
+        // ===================================
+        const ctxPie = document.getElementById('viewsByGenreChart');
+        if (ctxPie) {
+            new Chart(ctxPie, {
+                type: 'doughnut',
+                data: {
+                    labels: viewsByGenreData.labels,
+                    datasets: [{
+                        data: viewsByGenreData.data,
+                        backgroundColor: ['#d5006d', '#f06292', '#1a2b47', '#4A5A82', '#975C78', '#6D82A2', '#C7A2B6'],
+                        borderColor: 'rgba(36, 43, 53, 0.8)',
+                        borderWidth: 3,
+                        hoverOffset: 15
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { 
+                            position: 'bottom',
+                            align: 'center',
+                            labels: {
+                                padding: 15,
+                                boxWidth: 12,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        }
+                    }
+                },
+            });
+        }
+
+        // ===================================
+        // 3. Biểu đồ Top Phim (Bar - ngang)
+        // ===================================
+        const ctxBar = document.getElementById('topMoviesChart');
+        if(ctxBar) {
+            new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: topMoviesData.labels,
+                    datasets: [{
+                        label: 'Lượt xem',
+                        data: topMoviesData.data,
+                        backgroundColor: (context) => {
+                            const chart = context.chart;
+                            const {ctx, chartArea} = chart;
+                            if (!chartArea) return null;
+                            const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+                            gradient.addColorStop(0, '#1a2b47');
+                            gradient.addColorStop(0.5, '#f06292');
+                            gradient.addColorStop(1, '#d5006d');
+                            return gradient;
+                        },
+                        borderRadius: 5,
+                        barThickness: 'flex',
+                        maxBarThickness: 25
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // Hiển thị bar ngang
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: { color: 'rgba(255, 255, 255, 0.6)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                             ticks: { color: 'rgba(255, 255, 255, 0.9)', font: { size: 13 } },
+                             grid: { display: false }
+                        }
+                    },
+                    plugins: { 
+                        legend: { display: false },
+                         tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleFont: { size: 14, weight: 'bold' },
+                            bodyFont: { size: 12 },
+                            padding: 10,
+                            cornerRadius: 8,
+                             callbacks: {
+                                label: function(context) {
+                                    return ' Lượt xem: ' + context.parsed.x.toLocaleString('vi-VN');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
+}

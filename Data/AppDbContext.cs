@@ -23,6 +23,7 @@ namespace MovieWebsite.Data
         public DbSet<UserFavoriteMovie> UserFavoriteMovies { get; set; }
         public DbSet<Notification> Notifications { get; set; }
          public DbSet<Reel> Reels { get; set; }
+         public DbSet<AnalyticsCounter> AnalyticsCounters { get; set; }
 
         
 

@@ -69,6 +69,13 @@
                         </a>
                     </li>
 
+                     <li>
+                        <a asp-area="Admin" asp-controller="reels" asp-action="Manage"
+                            class="nav-item @(currentController == "reels" ? "active" : "")">
+                            <i class="fa-solid fa-user"></i> <span>Quản Lý Reels</span>
+                        </a>
+                     </li>
+
                 </ul>
             </nav>
             <div class="sidebar-footer">
@@ -97,6 +104,8 @@
 
     <!-- Giữ nguyên phần render script -->
     @RenderSection("Scripts", required: false)
+    @RenderSection("Style", required: false)
+
 </body>
 
 </html>

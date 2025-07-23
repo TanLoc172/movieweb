@@ -1,0 +1,98 @@
+@model ScheduleViewModelForAdmin
+@{
+    ViewData["Title"] = "Chỉnh sửa lịch chiếu";
+    Layout = "_LayoutAdmin";
+}
+
+<div class="schedule-form-container">
+    <h1>@ViewData["Title"]</h1>
+    <hr />
+
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="MovieId" class="control-label">Phim</label>
+                    <select asp-for="MovieId" id="MovieId" class="form-control"
+                        asp-items="@(new SelectList(Model.Movies, "Id", "Title", Model.MovieId))">
+                        <option value="">-- Chọn phim --</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="EntryType" class="control-label">Loại lịch chiếu</label>
+                    <select asp-for="EntryType" id="EntryType" class="form-control"
+                        asp-items="Html.GetEnumSelectList<ScheduleType>()"></select>
+                </div>
+            </div>
+        </div>
+
+        <!-- SỬA Ở ĐÂY: Thêm class section-hidden -->
+        <div id="episode-selection-section" class="section-hidden">
+            <div class="form-group">
+                <label asp-for="EpisodeId" class="control-label">Tập phim (nếu có)</label>
+                <select asp-for="EpisodeId" id="EpisodeId" class="form-control"
+                    asp-items="@(new SelectList(Model.Episodes, "Id", "Title", Model.EpisodeId))">
+                    <option value="">-- Không chọn tập (Phim lẻ/Sự kiện) --</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="ScheduledTime" class="control-label">Thời gian chiếu</label>
+                    <input asp-for="ScheduledTime" class="form-control" type="datetime-local" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Description" class="control-label">Mô tả</label>
+            <input asp-for="Description" class="form-control" />
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-submit">
+                <i class="fas fa-save"></i> Lưu thay đổi
+            </button>
+            <a asp-action="AdminIndex" class="btn btn-back">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        const initialEpisodeId = @(Model.EpisodeId.HasValue? Model.EpisodeId.Value : "null");
+    </script>
+    <script src="~/js/schedule-form.js"></script>
+
+    <!-- SỬA Ở ĐÂY: Cập nhật JavaScript để dùng class -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const entryTypeSelect = document.getElementById('EntryType');
+            const episodeSection = document.getElementById('episode-selection-section');
+
+            function toggleEpisodeVisibility() {
+                if (entryTypeSelect.value === '0') {
+                    episodeSection.classList.add('section-visible');
+                    episodeSection.classList.remove('section-hidden');
+                } else {
+                    episodeSection.classList.add('section-hidden');
+                    episodeSection.classList.remove('section-visible');
+                }
+            }
+
+            toggleEpisodeVisibility();
+            entryTypeSelect.addEventListener('change', toggleEpisodeVisibility);
+        });
+    </script>
+}

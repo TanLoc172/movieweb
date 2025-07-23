@@ -1,0 +1,333 @@
+
+@model TopRankedSectionViewModel
+
+
+@if (Model.RankedMovies != null && Model.RankedMovies.Any())
+{
+    <!-- Thêm CSS và JS của Swiper.js vào Layout chính hoặc ngay tại đây -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+    <div class="top-ranked-section">
+        <h2 class="section-title">@Model.SectionTitle</h2>
+
+        <!-- Slider main container -->
+        <div class="swiper-container top-ranked-slider-v2">
+            <div class="swiper-wrapper">
+                <!-- Slides -->
+                @foreach (var item in Model.RankedMovies)
+                {
+                    <div class="swiper-slide">
+                        <div class="ranking-item">
+                            <!-- PHẦN 1: POSTER PHIM (SỬ DỤNG CẤU TRÚC MỚI) -->
+                            <a asp-controller="Movies" asp-action="Details" asp-route-id="@item.Movie.Id"
+                                class="movie-poster-card">
+                                <img src="@(item.Movie.PosterDoc ?? "/images/default-poster.png")" alt="@item.Movie.Title"
+                                    class="poster-image" />
+
+                                <div class="poster-hover-overlay">
+                                    <i class="fas fa-play"></i>
+                                </div>
+
+                                <!-- Thêm các tag "P.Đề", "T.Minh" -->
+                                <div class="poster-badges">
+                                    @* <span class="badge-item badge-propose">P.Đề</span> *@
+                                    @* Giả sử bạn có một thuộc tính để kiểm tra Thuyết minh *@
+                                    @* @if(item.Movie.HasAudio) { 
+                                        <span class="badge-item badge-thuyet-minh">T.Minh</span>
+                                     } *@
+                                </div>
+                            </a>
+
+                            <!-- PHẦN 2: THÔNG TIN BÊN DƯỚI POSTER (Giữ nguyên) -->
+                            <div class="movie-details-below">
+                                <div class="rank-and-title">
+                                    <span class="rank-number">@item.Rank</span>
+                                    <div class="title-container">
+                                        <h3 class="movie-title text-truncate">
+                                            <a asp-controller="Movies" asp-action="Details" asp-route-id="@item.Movie.Id">
+                                                @item.Movie.Title
+                                            </a>
+                                        </h3>
+                                        <p class="movie-subtitle text-truncate">@item.Movie.EnglishTitle</p>
+                                    </div>
+                                </div>
+                                <p class="movie-ep-info">
+                                    <span>@item.Movie.TotalEpisodes Tập</span>
+                                    <span class="mx-2">•</span>
+                                    <span>@item.Movie.ReleaseYear</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Add Navigation -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var swiper = new Swiper('.top-ranked-slider-v2', {
+                slidesPerView: 'auto',
+                // TĂNG KHOẢNG CÁCH GIỮA CÁC ITEM
+                spaceBetween: 30,
+                loop: false,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                // ĐIỀU CHỈNH KHOẢNG CÁCH TƯƠNG ỨNG VỚI CÁC BREAKPOINT
+                breakpoints: {
+                    320: { spaceBetween: 20 },
+                    768: { spaceBetween: 24 },
+                    1024: { spaceBetween: 30 }
+                }
+            });
+        });
+    </script>
+
+    <!-- CSS ĐÃ ĐƯỢC CẬP NHẬT KÍCH THƯỚC -->
+    <style>
+        @* .top-ranked-section {
+            /* Các chỉ số bạn yêu cầu */
+            max-width: 100%;
+            min-width: 1200px;
+        } *@
+
+        .section-title {
+            color: #fff;
+            /* TĂNG KÍCH THƯỚC TIÊU ĐỀ */
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .top-ranked-slider-v2 {
+            width: 100%;
+            overflow: visible;
+        }
+
+        .swiper-wrapper {
+            position: relative;
+            width: 100%;
+            height: auto;
+            z-index: 1;
+            display: flex;
+            transition-property: transform;
+            transition-timing-function: var(--swiper-wrapper-transition-timing-function, initial);
+            box-sizing: content-box;
+        }
+
+        .swiper-slide {
+            /* TĂNG CHIỀU RỘNG CỦA MỖI ITEM */
+            width: 280px;
+            height: auto;
+        }
+
+        .ranking-item {
+            display: flex;
+            flex-direction: column;
+            /* TĂNG KHOẢNG CÁCH GIỮA POSTER VÀ THÔNG TIN BÊN DƯỚI */
+            gap: 16px;
+        }
+
+        /* --- CSS CHO HIỆU ỨNG NGHIÊNG XEN KẼ --- */
+        .movie-poster-card {
+            display: block;
+            width: 100%;
+            /* TĂNG CHIỀU CAO TƯƠNG ỨNG VỚI CHIỀU RỘNG MỚI ĐỂ GIỮ TỶ LỆ */
+            height: 420px;
+            position: relative;
+            background-color: #222;
+            overflow: hidden;
+            transition: transform 0.3s ease, clip-path 0.3s ease, box-shadow 0.3s ease;
+            clip-path: polygon(94.239% 100%, 5.761% 100%, 4.826% 99.95%, 3.94% 99.803%, 3.113% 99.569%, 2.358% 99.256%, 1.687% 98.87%, 1.111% 98.421%, 0.643% 97.915%, 0.294% 97.362%, 0.075% 96.768%, 0% 96.142%, 0% 3.858%, 0.087% 3.185%, 0.338% 2.552%, 0.737% 1.968%, 1.269% 1.442%, 1.92% 0.984%, 2.672% 0.602%, 3.512% 0.306%, 4.423% 0.105%, 5.391% 0.008%, 6.4% 0.024%, 94.879% 6.625%, 95.731% 6.732%, 96.532% 6.919%, 97.272% 7.178%, 97.942% 7.503%, 98.533% 7.887%, 99.038% 8.323%, 99.445% 8.805%, 99.747% 9.326%, 99.935% 9.88%, 100% 10.459%, 100% 96.142%, 99.925% 96.768%, 99.706% 97.362%, 99.357% 97.915%, 98.889% 98.421%, 98.313% 98.87%, 97.642% 99.256%, 96.887% 99.569%, 96.06% 99.803%, 95.174% 99.95%, 94.239% 100%);
+        }
+
+        .movie-poster-card:hover {
+            transform: scale(1.08);
+            clip-path: inset(0 0 0 0 round 12px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+
+        .poster-badges {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            z-index: 2;
+            display: flex;
+            gap: 6px;
+        }
+
+        .swiper-slide:nth-child(even) .movie-poster-card {
+            transform: scaleX(-1);
+        }
+
+        .swiper-slide:nth-child(even) .poster-image,
+        .swiper-slide:nth-child(even) .poster-hover-overlay,
+        .swiper-slide:nth-child(even) .poster-badges {
+            transform: scaleX(-1);
+        }
+
+        .swiper-slide:nth-child(even) .poster-badges {
+            left: auto;
+            right: 12px;
+        }
+
+        .swiper-slide:nth-child(even) .movie-poster-card:hover {
+            transform: scaleX(-1) scale(1.08);
+        }
+
+        /* ---- CÁC STYLE KHÁC GIỮ NGUYÊN ---- */
+        .poster-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .movie-poster-card:hover .poster-image {
+            transform: scale(1.05);
+        }
+
+        .swiper-slide:nth-child(even) .movie-poster-card:hover .poster-image {
+            transform: scaleX(-1) scale(1.05);
+        }
+
+        .badge-item {
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #fff;
+            border-radius: 6px;
+        }
+
+        .badge-propose {
+            background-color: rgba(30, 30, 30, 0.7);
+            backdrop-filter: blur(5px);
+        }
+
+        .badge-thuyet-minh {
+            background-color: #1a8917;
+        }
+
+        .poster-hover-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .poster-hover-overlay i {
+            font-size: 5rem;
+            color: rgba(255, 255, 255, 0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .movie-poster-card:hover .poster-hover-overlay {
+            opacity: 1;
+        }
+
+        .movie-poster-card:hover .poster-hover-overlay i {
+            transform: scale(1.1);
+        }
+
+        .movie-details-below {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .rank-and-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .rank-number {
+            /* LÀM CHO SỐ THỨ HẠNG LỚN HƠN, NỔI BẬT HƠN */
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #e0e0e0;
+            line-height: 1;
+        }
+
+        .title-container {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .movie-title {
+            /* TĂNG KÍCH THƯỚC TIÊU ĐỀ PHIM */
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+            color: #fff;
+        }
+
+        .movie-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .movie-title a:hover {
+            color: #f5c518;
+        }
+
+        .movie-subtitle {
+            /* TĂNG KÍCH THƯỚC PHỤ ĐỀ */
+            font-size: 0.9rem;
+            color: #888;
+            margin: 0;
+        }
+
+        .movie-ep-info {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin: 0;
+            /* TĂNG PADDING-LEFT ĐỂ CĂN CHỈNH VỚI SỐ THỨ HẠNG LỚN HƠN */
+            padding-left: 50px;
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: #fff;
+            background-color: rgba(20, 20, 20, 0.7);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            /* ĐIỀU CHỈNH LẠI VỊ TRÍ NÚT CHO PHÙ HỢP VỚI POSTER CAO HƠN */
+            top: 2000px;
+            transform: translateY(-50%);
+            transition: background-color 0.2s ease;
+        }
+
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            background-color: rgba(20, 20, 20, 0.9);
+        }
+
+        .swiper-button-next::after,
+        .swiper-button-prev::after {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .swiper-button-disabled {
+            display: none;
+        }
+    </style>
+
+}

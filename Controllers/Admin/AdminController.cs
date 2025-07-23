@@ -10,7 +10,7 @@ using System.Security.Claims;
 namespace MovieWebsite.Controllers
 {
     // [Area("Admin")]
-    // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly AppDbContext _context;
@@ -318,26 +318,141 @@ namespace MovieWebsite.Controllers
             }
         }
 
-        public async Task<IActionResult> Index()
-        {
-            // Tạo ViewModel để chứa dữ liệu thống kê
-            var viewModel = new DashboardViewModel
-            {
-                MovieCount = await _context.Movies.CountAsync(),
-                GenreCount = await _context.Genres.CountAsync(),
-                CountryCount = await _context.Countries.CountAsync(),
-                // Em có thể thêm các thống kê khác ở đây, ví dụ:
-                // EpisodeCount = await _context.Episodes.CountAsync(),
+        // public async Task<IActionResult> Index()
+        // {
+        //     // Tạo ViewModel để chứa dữ liệu thống kê
+        //     var viewModel = new DashboardViewModel
+        //     {
+        //         MovieCount = await _context.Movies.CountAsync(),
+        //         GenreCount = await _context.Genres.CountAsync(),
+        //         CountryCount = await _context.Countries.CountAsync(),
+        //         // Em có thể thêm các thống kê khác ở đây, ví dụ:
+        //         // EpisodeCount = await _context.Episodes.CountAsync(),
 
-                // UserCount = ...
-            };
+        //         // UserCount = ...
+        //     };
 
-            // Truyền ViewModel ra View
-            return View(viewModel);
-        }
+        //     // Truyền ViewModel ra View
+        //     return View(viewModel);
+        // }
+        
+        // Trong Controllers/AdminController.cs
 
+public async Task<IActionResult> Index()
+{
+    // Tạo ViewModel để chứa dữ liệu thống kê
+    var viewModel = new DashboardViewModel
+    {
+        // 1. Lấy dữ liệu cho các thẻ KPI (sử dụng các thuộc tính trong ViewModel mới)
+        MovieCount = await _context.Movies.CountAsync(),
+        GenreCount = await _context.Genres.CountAsync(),
+        CountryCount = await _context.Countries.CountAsync(),
+        UserCount = await _userManager.Users.CountAsync(),
+        EpisodeCount = await _context.Episodes.CountAsync(), // Tính tổng số tập
+        
+        // Thêm các truy vấn mới cho KPI
+        TotalViews = await _context.Movies.SumAsync(m => (long)m.Views),
+        TotalPageViews = (await _context.AnalyticsCounters
+                            .FirstOrDefaultAsync(c => c.CounterName == "TotalPageViews"))?.CountValue ?? 0
+    };
 
-    }
+    // 2. Lấy dữ liệu cho Biểu đồ Người dùng mới (30 ngày gần nhất)
+    var thirtyDaysAgo = DateTime.UtcNow.AddDays(-30);
+    var newUsersData = await _context.Users
+        .Where(u => u.RegistrationDate >= thirtyDaysAgo)
+        .GroupBy(u => u.RegistrationDate.Date)
+        .Select(g => new { Date = g.Key, Count = g.Count() })
+        .OrderBy(x => x.Date)
+        .ToListAsync();
+    
+    viewModel.NewUsersChart.Labels.AddRange(newUsersData.Select(d => d.Date.ToString("dd/MM")));
+    viewModel.NewUsersChart.Data.AddRange(newUsersData.Select(d => (long)d.Count));
 
+    // 3. Lấy dữ liệu cho Biểu đồ Phân bổ Lượt xem theo Thể loại
+    var viewsByGenreData = await _context.Movies
+        .Where(m => m.Genre != null)
+        .GroupBy(m => m.Genre.Name)
+        .Select(g => new { GenreName = g.Key, TotalViews = g.Sum(m => (long)m.Views) })
+        .OrderByDescending(x => x.TotalViews)
+        .Take(7)
+        .ToListAsync();
 
+    viewModel.ViewsByGenreChart.Labels.AddRange(viewsByGenreData.Select(d => d.GenreName));
+    viewModel.ViewsByGenreChart.Data.AddRange(viewsByGenreData.Select(d => d.TotalViews));
+
+    // 4. Lấy dữ liệu cho Biểu đồ Top 10 Phim
+    var topMoviesData = await _context.Movies
+        .OrderByDescending(m => m.Views)
+        .Take(10)
+        .Select(m => new { m.Title, Views = (long)m.Views })
+        .ToListAsync();
+
+    viewModel.TopMoviesChart.Labels.AddRange(topMoviesData.Select(m => m.Title));
+    viewModel.TopMoviesChart.Data.AddRange(topMoviesData.Select(m => m.Views));
+
+    // Truyền ViewModel đã đầy đủ dữ liệu ra View
+    return View(viewModel);
 }
+
+
+    
+
+    // [HttpGet]
+        //     public async Task<IActionResult> Analytics()
+        //     {
+        //         var viewModel = new AnalyticsViewModel();
+
+        //         // 1. Lấy dữ liệu cho các thẻ KPI
+        //         viewModel.TotalMovies = await _context.Movies.CountAsync();
+        //         viewModel.TotalUsers = await _userManager.Users.CountAsync();
+        //         viewModel.TotalViews = await _context.Movies.SumAsync(m => (long)m.Views);
+        //         var pageViewCounter = await _context.AnalyticsCounters.FirstOrDefaultAsync(c => c.CounterName == "TotalPageViews");
+        //         viewModel.TotalPageViews = pageViewCounter?.CountValue ?? 0;
+
+        //         // 2. Dữ liệu cho biểu đồ Người dùng mới (30 ngày gần nhất)
+        //         var thirtyDaysAgo = DateTime.UtcNow.AddDays(-30);
+        //         var newUsersData = await _context.Users
+        //             .Where(u => u.RegistrationDate >= thirtyDaysAgo)
+        //             .GroupBy(u => u.RegistrationDate.Date)
+        //             .Select(g => new { Date = g.Key, Count = g.Count() })
+        //             .OrderBy(x => x.Date)
+        //             .ToListAsync();
+
+        //         viewModel.NewUsersChart.Labels = newUsersData.Select(d => d.Date.ToString("dd/MM")).ToList();
+        //         viewModel.NewUsersChart.Data = newUsersData.Select(d => (long)d.Count).ToList();
+
+
+        //         // 3. Dữ liệu cho biểu đồ Lượt xem theo Thể loại
+        //         var viewsByGenreData = await _context.Movies
+        //             .Include(m => m.Genre)
+        //             .GroupBy(m => m.Genre.Name)
+        //             .Select(g => new
+        //             {
+        //                 GenreName = g.Key,
+        //                 TotalViews = g.Sum(m => (long)m.Views)
+        //             })
+        //             .OrderByDescending(x => x.TotalViews)
+        //             .Take(7) // Lấy 7 thể loại phổ biến nhất
+        //             .ToListAsync();
+
+        //         viewModel.ViewsByGenreChart.Labels = viewsByGenreData.Select(d => d.GenreName).ToList();
+        //         viewModel.ViewsByGenreChart.Data = viewsByGenreData.Select(d => d.TotalViews).ToList();
+
+
+        //         // 4. Dữ liệu cho biểu đồ Top 10 Phim
+        //         var topMoviesData = await _context.Movies
+        //             .OrderByDescending(m => m.Views)
+        //             .Take(10)
+        //             .Select(m => new { m.Title, Views = (long)m.Views })
+        //             .ToListAsync();
+
+        //         viewModel.TopMoviesChart.Labels = topMoviesData.Select(m => m.Title).ToList();
+        //         viewModel.TopMoviesChart.Data = topMoviesData.Select(m => m.Views).ToList();
+
+
+        //         return View(viewModel);
+        //     }
+    }
+}
+
+

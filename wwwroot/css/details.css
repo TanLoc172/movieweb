@@ -9,7 +9,7 @@
     }
 
     /* Top Banner Section */
-    .top-banner {
+    /* .top-banner {
         position: relative;
         width: 100%;
         height: 400px;
@@ -19,7 +19,7 @@
         filter: blur(8px);
         -webkit-filter: blur(8px);
         z-index: 0;
-    }
+    } */
 
     .overlay {
         position: absolute;

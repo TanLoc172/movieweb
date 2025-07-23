@@ -1,27 +1,27 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @* * {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        } *@
+        } 
         
-        @* body {
+    @* body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
             background: #f5f5f5;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-        } *@
+        } 
 
         .site-footer.footer {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             color: #fff;
             position: relative;
             overflow: hidden;
-        }
+        } *@
 
         .site-footer::before {
             content: '';
@@ -80,13 +80,7 @@
             100% { transform: scale(1.2) rotate(10deg); opacity: 1; }
         }
 
-        @* .page-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            position: relative;
-            z-index: 1;
-        } *@
+
 
         .footer-content-wrapper {
             padding: 40px 0;
@@ -354,7 +348,6 @@
 
     <footer class="site-footer footer">
         <div class="footer-banner">
-            @* <span class="star">⭐</span> *@
             <span>Hoàng Sa & Trường Sa là của Việt Nam!</span>
         </div>
         <div class="page-container">
@@ -414,3 +407,72 @@
             </div>
         </div>
     </footer>
+
+     <!-- ======================================================= -->
+    <!-- CONTAINER: Footer Section                             -->
+    <!-- ======================================================= -->
+
+        @* <link rel="stylesheet" href="~/css/footer.css" asp-append-version="true" />
+
+    <footer class="site-footer footer"> <!-- Giữ lại class 'footer' gốc -->
+        <div class="footer-banner">
+            <span class="star">⭐</span>
+            <span>Hoàng Sa & Trường Sa là của Việt Nam!</span>
+        </div>
+        
+        <div class="page-container">
+            <div class="footer-content-wrapper">
+                <!-- Phần Logo và Social Media -->
+                <div class="footer-header">
+                    <div class="footer-logo">
+                        <div class="play-icon"></div>
+                        <div class="logo-text">
+                            <h3>RoPhim</h3>
+                            <p>Phim hay cả rổ</p>
+                        </div>
+                    </div>
+                    <div class="footer-social">
+                        <a href="#" class="social-icon"><i class="fab fa-telegram-plane"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-x-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-airbnb"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <!-- Phần Links Điều hướng và Danh mục -->
+                <div class="footer-links-and-categories">
+                    <div class="footer-nav">
+                        <ul>
+                            <li><a href="#">Hỏi-Đáp</a></li>
+                            <li><a href="#">Chính sách bảo mật</a></li>
+                            <li><a href="#">Điều khoản sử dụng</a></li>
+                            <li><a href="#">Giới thiệu</a></li>
+                            <li><a href="#">Liên hệ</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-categories">
+                        <ul>
+                            <li><a href="#">Dongphim</a></li>
+                            <li><a href="#">Ghienphim</a></li>
+                            <li><a href="#">Motphim</a></li>
+                            <li><a href="#">Subnhanh</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Phần Mô tả và Bản quyền -->
+                <div class="footer-description">
+                    <p>RoPhim – Phim hay cả rổ - Trang xem phim online chất lượng cao miễn phí Vietsub, thuyết minh, lồng tiếng full HD. Kho phim mới khổng lồ, phim chiếu rạp, phim bộ, phim lẻ từ nhiều quốc gia như Việt Nam, Hàn Quốc, Trung Quốc, Thái Lan, Nhật Bản, Âu Mỹ… đa dạng thể loại. Khám phá nền tảng phim trực tuyến hay nhất 2024 chất lượng 4K!</p>
+                </div>
+
+                <div class="footer-copyright">
+                    <p>© 2024 RoPhim</p>
+                </div>
+            </div>
+        </div>
+    </footer> *@
+    

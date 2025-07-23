@@ -1,98 +1,79 @@
 @model ScheduleViewModelForAdmin
+
 @{
-    ViewData["Title"] = "Chỉnh sửa lịch chiếu";
-    Layout = "_LayoutAdmin";
+    ViewData["Title"] = "Tạo Lịch chiếu mới";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<div class="schedule-form-container">
-    <h1>@ViewData["Title"]</h1>
-    <hr />
+<h1>@ViewData["Title"]</h1>
+<hr />
 
-    <form asp-action="Edit" method="post">
-        <input type="hidden" asp-for="Id" />
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="row">
+    <div class="col-md-8">
+        <form asp-controller="Schedule" asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="MovieId" class="control-label">Phim</label>
-                    <select asp-for="MovieId" id="MovieId" class="form-control"
-                        asp-items="@(new SelectList(Model.Movies, "Id", "Title", Model.MovieId))">
-                        <option value="">-- Chọn phim --</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="EntryType" class="control-label">Loại lịch chiếu</label>
-                    <select asp-for="EntryType" id="EntryType" class="form-control"
-                        asp-items="Html.GetEnumSelectList<ScheduleType>()"></select>
-                </div>
-            </div>
-        </div>
-
-        <!-- SỬA Ở ĐÂY: Thêm class section-hidden -->
-        <div id="episode-selection-section" class="section-hidden">
-            <div class="form-group">
-                <label asp-for="EpisodeId" class="control-label">Tập phim (nếu có)</label>
-                <select asp-for="EpisodeId" id="EpisodeId" class="form-control"
-                    asp-items="@(new SelectList(Model.Episodes, "Id", "Title", Model.EpisodeId))">
-                    <option value="">-- Không chọn tập (Phim lẻ/Sự kiện) --</option>
+            <div class="form-group mb-3">
+                <label asp-for="MovieId" class="control-label">Phim</label>
+                <select asp-for="MovieId" id="movieSelect" class="form-control" asp-items="@(new SelectList(Model.Movies, "Id", "Title"))">
+                    <option value="">-- Chọn phim --</option>
                 </select>
+                <span asp-validation-for="MovieId" class="text-danger"></span>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label asp-for="ScheduledTime" class="control-label">Thời gian chiếu</label>
-                    <input asp-for="ScheduledTime" class="form-control" type="datetime-local" />
+            <div class="form-group mb-3">
+                <label asp-for="EntryType" class="control-label">Loại lịch chiếu</label>
+                <select asp-for="EntryType" id="entryTypeSelect" class="form-control" asp-items="Html.GetEnumSelectList<ScheduleType>()"></select>
+                <span asp-validation-for="EntryType" class="text-danger"></span>
+            </div>
+
+            <div id="newEpisodeSection" style="display:none;">
+                 <div class="alert alert-info">Phần này sẽ tự động tạo một tập phim mới và lên lịch cho nó.</div>
+                 <div class="form-group mb-3">
+                    <label asp-for="NewEpisodeNumber" class="control-label"></label>
+                    <input asp-for="NewEpisodeNumber" type="number" class="form-control" />
+                    <span asp-validation-for="NewEpisodeNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="NewEpisodeTitle" class="control-label"></label>
+                    <input asp-for="NewEpisodeTitle" class="form-control" />
+                    <span asp-validation-for="NewEpisodeTitle" class="text-danger"></span>
                 </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label asp-for="Description" class="control-label">Mô tả</label>
-            <input asp-for="Description" class="form-control" />
-        </div>
+            <div class="form-group mb-3">
+                <label asp-for="ScheduledTime" class="control-label">Thời gian chiếu</label>
+                <input asp-for="ScheduledTime" class="form-control" type="datetime-local" />
+                <span asp-validation-for="ScheduledTime" class="text-danger"></span>
+            </div>
 
-        <div class="form-actions">
-            <button type="submit" class="btn btn-submit">
-                <i class="fas fa-save"></i> Lưu thay đổi
-            </button>
-            <a asp-action="AdminIndex" class="btn btn-back">
-                <i class="fas fa-arrow-left"></i> Quay lại
-            </a>
-        </div>
-    </form>
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="control-label">Mô tả</label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Tạo mới" class="btn btn-primary" />
+                <a asp-controller="Schedule" asp-action="Manage" class="btn btn-secondary">Quay lại danh sách</a>
+            </div>
+        </form>
+    </div>
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
-        const initialEpisodeId = @(Model.EpisodeId.HasValue? Model.EpisodeId.Value : "null");
-    </script>
-    <script src="~/js/schedule-form.js"></script>
-
-    <!-- SỬA Ở ĐÂY: Cập nhật JavaScript để dùng class -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const entryTypeSelect = document.getElementById('EntryType');
-            const episodeSection = document.getElementById('episode-selection-section');
-
-            function toggleEpisodeVisibility() {
-                if (entryTypeSelect.value === '0') {
-                    episodeSection.classList.add('section-visible');
-                    episodeSection.classList.remove('section-hidden');
+        $(document).ready(function () {
+            function toggleNewEpisodeSection() {
+                if ($('#entryTypeSelect').val() === '@ScheduleType.EpisodeRelease.ToString()') {
+                    $('#newEpisodeSection').slideDown();
                 } else {
-                    episodeSection.classList.add('section-hidden');
-                    episodeSection.classList.remove('section-visible');
+                    $('#newEpisodeSection').slideUp();
                 }
             }
-
-            toggleEpisodeVisibility();
-            entryTypeSelect.addEventListener('change', toggleEpisodeVisibility);
+            toggleNewEpisodeSection();
+            $('#entryTypeSelect').change(toggleNewEpisodeSection);
         });
     </script>
 }

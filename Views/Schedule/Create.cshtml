@@ -1,104 +1,150 @@
 @model ScheduleViewModelForAdmin
+
 @{
-    ViewData["Title"] = "Lên lịch chiếu";
-    Layout = "_LayoutAdmin";
+    // THAY ĐỔI 1: KHÔNG DÙNG LAYOUT NỮA
+    Layout = null;
+    ViewData["Title"] = "Tạo Lịch chiếu mới";
 }
 
-<div class="schedule-form-container">
-    <h1>@ViewData["Title"]</h1>
-    <p class="text-muted">Chọn loại lịch chiếu. Nếu là "EpisodeRelease", các trường thông tin cho tập phim mới sẽ xuất
-        hiện.</p>
-    <hr />
-
-    <form asp-action="Create" method="post">
-        <div asp-validation-summary="All" class="text-danger mb-3"></div>
-
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="MovieId" class="control-label">Phim</label>
-                    <select asp-for="MovieId" class="form-control"
-                        asp-items="@(new SelectList(Model.Movies, "Id", "Title"))">
-                        <option value="">-- Chọn phim --</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="EntryType" class="control-label">Loại lịch chiếu</label>
-                    <select asp-for="EntryType" id="EntryType" class="form-control"
-                        asp-items="Html.GetEnumSelectList<ScheduleType>()"></select>
-                </div>
-            </div>
-        </div>
-
-        <!-- SỬA Ở ĐÂY: Thêm class section-hidden và h5 -->
-        <div id="new-episode-section" class="section-hidden">
-            <h5 class="text-white mb-3"><i class="fas fa-plus-circle me-2"></i>Thông tin tập phim mới</h5>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Trang Quản Trị</title>
+    
+    <!-- THAY ĐỔI 2: TỰ THÊM CSS (dùng CDN cho tiện) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    
+    <!-- Style riêng cho giao diện admin của bạn (ví dụ: dark theme) -->
+    <style>
+        body {
+            background-color: #1a1f26;
+            color: #f1f5f9;
+        }
+        .form-control, .form-select {
+            background-color: #334155;
+            color: #f1f5f9;
+            border: 1px solid #475569;
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: #334155;
+            color: #f1f5f9;
+            border-color: #3462e0;
+            box-shadow: 0 0 0 0.25rem rgba(52, 98, 224, 0.25);
+        }
+        .control-label {
+            font-weight: bold;
+            margin-bottom: .5rem;
+        }
+        hr {
+            border-color: #475569;
+        }
+        .btn-primary {
+             background-color: #3462e0;
+             border-color: #3462e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <main role="main" class="pb-3">
+            
+            <h1>@ViewData["Title"]</h1>
+            <hr />
             <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="NewEpisodeNumber" class="control-label"></label>
-                        <input asp-for="NewEpisodeNumber" type="number" class="form-control" placeholder="Ví dụ: 15" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="NewEpisodeTitle" class="control-label"></label>
-                        <input asp-for="NewEpisodeTitle" class="form-control"
-                            placeholder="Ví dụ: Cuộc chiến cuối cùng" />
-                    </div>
+                <div class="col-md-8">
+                    <form asp-controller="Schedule" asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="MovieId" class="control-label">Phim</label>
+                            <select asp-for="MovieId" id="movieSelect" class="form-select"
+                                asp-items="@(new SelectList(Model.Movies, "Id", "Title"))">
+                                <option value="">-- Chọn phim --</option>
+                            </select>
+                            <span asp-validation-for="MovieId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="EntryType" class="control-label">Loại lịch chiếu</label>
+                            <select asp-for="EntryType" id="entryTypeSelect" class="form-select"
+                                asp-items="Html.GetEnumSelectList<ScheduleType>()"></select>
+                            <span asp-validation-for="EntryType" class="text-danger"></span>
+                        </div>
+
+                        <div id="newEpisodeSection" style="display:none;">
+                            <div class="alert alert-info">Phần này sẽ tự động tạo một tập phim mới và lên lịch cho nó.</div>
+                            <div class="form-group mb-3">
+                                <label asp-for="NewEpisodeNumber" class="control-label"></label>
+                                <input asp-for="NewEpisodeNumber" type="number" class="form-control" />
+                                <span asp-validation-for="NewEpisodeNumber" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="NewEpisodeTitle" class="control-label"></label>
+                                <input asp-for="NewEpisodeTitle" class="form-control" />
+                                <span asp-validation-for="NewEpisodeTitle" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label asp-for="NewEpisodeVideoFile" class="control-label"></label>
+                                <input asp-for="NewEpisodeVideoFile" type="file" class="form-control" accept="video/*" />
+                                <span asp-validation-for="NewEpisodeVideoFile" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="ScheduledTime" class="control-label">Thời gian chiếu</label>
+                            <input asp-for="ScheduledTime" class="form-control" type="datetime-local" />
+                            <span asp-validation-for="ScheduledTime" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Description" class="control-label">Mô tả</label>
+                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" value="Tạo mới" class="btn btn-primary" />
+                            <a asp-controller="Schedule" asp-action="Manage" class="btn btn-secondary">Quay lại danh sách</a>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label asp-for="ScheduledTime" class="control-label">Thời gian chiếu</label>
-                    <input asp-for="ScheduledTime" class="form-control" type="datetime-local" />
-                </div>
-            </div>
-        </div>
+        </main>
+    </div>
 
-        <div class="form-group">
-            <label asp-for="Description" class="control-label">Mô tả chung (Tùy chọn)</label>
-            <textarea asp-for="Description" class="form-control" rows="3"
-                placeholder="Thêm mô tả cho lịch chiếu hoặc tập phim..."></textarea>
-        </div>
+    <!-- THAY ĐỔI 3: TỰ THÊM JAVASCRIPT (dùng CDN cho tiện) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-        <div class="form-actions">
-            <button type="submit" class="btn btn-submit">
-                <i class="fas fa-calendar-plus"></i> Lên lịch
-            </button>
-            <a asp-action="AdminIndex" class="btn btn-back">
-                <i class="fas fa-arrow-left"></i> Quay lại
-            </a>
-        </div>
-    </form>
-</div>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <!-- SỬA Ở ĐÂY: Cập nhật JavaScript để dùng class -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const entryTypeSelect = document.getElementById('EntryType');
-            const newEpisodeSection = document.getElementById('new-episode-section');
+        $(document).ready(function () {
+            // THAY ĐỔI 4: SỬA LẠI LOGIC JAVASCRIPT CHO ĐÚNG
+            
+            // Lấy giá trị số của enum EpisodeRelease từ C#
+            var episodeReleaseValue = '@((int)ScheduleType.EpisodeRelease)';
 
-            function toggleEpisodeSection() {
-                // Giá trị của enum ScheduleType.EpisodeRelease là 0
-                if (entryTypeSelect.value === '0') {
-                    newEpisodeSection.classList.add('section-visible');
-                    newEpisodeSection.classList.remove('section-hidden');
+            function toggleNewEpisodeSection() {
+                // So sánh giá trị của dropdown với giá trị số đã lấy
+                if ($('#entryTypeSelect').val() == episodeReleaseValue) {
+                    $('#newEpisodeSection').slideDown();
                 } else {
-                    newEpisodeSection.classList.add('section-hidden');
-                    newEpisodeSection.classList.remove('section-visible');
+                    $('#newEpisodeSection').slideUp();
                 }
             }
 
-            toggleEpisodeSection();
-            entryTypeSelect.addEventListener('change', toggleEpisodeSection);
+            // Chạy lần đầu khi trang tải
+            toggleNewEpisodeSection();
+
+            // Chạy mỗi khi người dùng thay đổi lựa chọn
+            $('#entryTypeSelect').change(toggleNewEpisodeSection);
         });
     </script>
-}
+</body>
+</html>

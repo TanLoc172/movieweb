@@ -1,34 +1,36 @@
 @model Schedule
+
 @{
-    ViewData["Title"] = "Xác nhận xóa lịch chiếu";
-    Layout = "_LayoutAdmin";
+    ViewData["Title"] = "Xác nhận Xóa";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<div class="delete-confirmation-card">
-    <h3>@ViewData["Title"]</h3>
-    <p class="text-muted">Bạn có chắc chắn muốn xóa vĩnh viễn lịch chiếu này không? Hành động này không thể hoàn tác.</p>
+<h1>@ViewData["Title"]</h1>
+
+<h3>Bạn có chắc chắn muốn xóa lịch chiếu này không?</h3>
+<div>
+    <h4>Thông tin Lịch chiếu</h4>
     <hr />
-    
     <dl class="row">
-        <dt class="col-sm-4">Phim</dt>
-        <dd class="col-sm-8">@Model.Movie.Title</dd>
+        <dt class="col-sm-3">Phim</dt>
+        <dd class="col-sm-9">@Model.Movie.Title</dd>
+        
+        @if(Model.Episode != null)
+        {
+            <dt class="col-sm-3">Tập</dt>
+            <dd class="col-sm-9">Tập @Model.Episode.EpisodeNumber: @Model.Episode.Title</dd>
+        }
 
-        <dt class="col-sm-4">Thời gian chiếu</dt>
-        <dd class="col-sm-8">@Model.ScheduledTime.ToString("HH:mm - dd/MM/yyyy")</dd>
+        <dt class="col-sm-3">Thời gian chiếu</dt>
+        <dd class="col-sm-9">@Model.ScheduledTime.ToLocalTime().ToString("F")</dd>
 
-        <dt class="col-sm-4">Mô tả</dt>
-        <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Description) ? "Không có" : Model.Description)</dd>
+        <dt class="col-sm-3">Mô tả</dt>
+        <dd class="col-sm-9">@Model.Description</dd>
     </dl>
     
-    <form asp-action="Delete">
+    <form asp-controller="Schedule" asp-action="Delete" method="post">
         <input type="hidden" asp-for="Id" />
-        <div class="form-actions">
-            <button type="submit" class="btn btn-delete-confirm">
-                <i class="bi bi-trash"></i> Xóa vĩnh viễn
-            </button>
-             <a asp-action="AdminIndex" class="btn btn-back">
-                <i class="bi bi-x-circle"></i> Hủy bỏ
-            </a>
-        </div>
+        <input type="submit" value="Xóa" class="btn btn-danger" /> |
+        <a asp-controller="Schedule" asp-action="Manage">Quay lại danh sách</a>
     </form>
 </div>

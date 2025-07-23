@@ -282,6 +282,9 @@ builder.Services.ConfigureApplicationCookie(options =>
 //         options.ExpireTimeSpan = TimeSpan.FromDays(7);
 //     });
 
+//lich chieu
+builder.Services.AddHostedService<EpisodeReleaseService>();
+
 // --- SignalR Setup ---
 builder.Services.AddSignalR();
 
@@ -367,8 +370,14 @@ catch (Exception ex)
 // --- Endpoint Mapping ---
 app.MapHub<WatchPartyHub>("/watchPartyHub"); // Định nghĩa endpoint cho hub
 
+
+// Map điểm cuối của SignalR hub
+app.MapHub<ScheduleHub>("/scheduleHub");
+
+
 // Route mặc định cho Movies controller
 app.MapControllerRoute(name: "default", pattern: "{controller=Movies}/{action=Index}/{id?}");
+app.UseMiddleware<MovieWebsite.Middleware.PageVisitCounterMiddleware>();
 
 // Route cho Admin controller (có vẻ bạn có một route admin riêng)
 // Lưu ý: Nếu bạn có nhiều route với tên "default", ASP.NET có thể chọn sai.

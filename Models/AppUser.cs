@@ -8,6 +8,8 @@ namespace MovieWebsite.Models
         // Ví dụ:
         // public string FirstName { get; set; }
         public string FullName { get; set; }
+        // THÊM DÒNG NÀY:
+        public DateTime RegistrationDate { get; set; } = DateTime.UtcNow; // Ghi lại thời gian đăng ký
         public ICollection<UserFavoriteMovie> FavoriteMovies { get; set; } = new List<UserFavoriteMovie>();
     }
 }

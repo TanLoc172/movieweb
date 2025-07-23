@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MovieWebsite.Data;
@@ -8,6 +9,8 @@ using System.Threading.Tasks;
 namespace MovieWebsite.Areas.Admin.Controllers
 {
     // [Area("Admin")] // Đừng quên khai báo Area
+        [Authorize(Roles = "Admin")]
+
     public class GenresController : Controller
     {
         private readonly AppDbContext _context;
@@ -126,7 +129,7 @@ namespace MovieWebsite.Areas.Admin.Controllers
                 await _context.SaveChangesAsync();
                 TempData["SuccessMessage"] = "Đã xóa thể loại thành công!";
             }
-            
+
             return RedirectToAction(nameof(Index));
         }
     }

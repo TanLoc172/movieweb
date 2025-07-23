@@ -38,6 +38,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9SZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/tanloc/MovieWebsite/Views/Admin/Analytics.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vQW5hbHl0aWNzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/tanloc/MovieWebsite/Views/Admin/CreateRole.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vQ3JlYXRlUm9sZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -194,6 +198,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTW92aWVzL1Nlcmllc01vdmllcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/tanloc/MovieWebsite/Views/Movies/TopRankedSeries.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTW92aWVzL1RvcFJhbmtlZFNlcmllcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/tanloc/MovieWebsite/Views/Movies/TQ.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTW92aWVzL1RRLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -234,16 +242,36 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2NoZWR1bGUvQWRtaW5JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/tanloc/MovieWebsite/Views/Schedule/AdminIndex1.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2NoZWR1bGUvQWRtaW5JbmRleDEuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/tanloc/MovieWebsite/Views/Schedule/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2NoZWR1bGUvQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tanloc/MovieWebsite/Views/Schedule/Create1.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2NoZWR1bGUvQ3JlYXRlMS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/tanloc/MovieWebsite/Views/Schedule/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2NoZWR1bGUvRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/tanloc/MovieWebsite/Views/Schedule/Delete1.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2NoZWR1bGUvRGVsZXRlMS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tanloc/MovieWebsite/Views/Schedule/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2NoZWR1bGUvRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/tanloc/MovieWebsite/Views/Schedule/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2NoZWR1bGUvRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tanloc/MovieWebsite/Views/Schedule/Edit1.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2NoZWR1bGUvRWRpdDEuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/tanloc/MovieWebsite/Views/Schedule/Index.cshtml]
@@ -254,12 +282,24 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2NoZWR1bGUvTWFuYWdlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/tanloc/MovieWebsite/Views/Schedule/Manage1.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2NoZWR1bGUvTWFuYWdlMS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tanloc/MovieWebsite/Views/Schedule/PublicIndex.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2NoZWR1bGUvUHVibGljSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/tanloc/MovieWebsite/Views/Shared/Components/Banner/Default.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0NvbXBvbmVudHMvQmFubmVyL0RlZmF1bHQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/tanloc/MovieWebsite/Views/Shared/Components/Notification/Default.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0NvbXBvbmVudHMvTm90aWZpY2F0aW9uL0RlZmF1bHQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tanloc/MovieWebsite/Views/Shared/Components/TopRankedSeries/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0NvbXBvbmVudHMvVG9wUmFua2VkU2VyaWVzL0RlZmF1bHQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/tanloc/MovieWebsite/Views/Shared/Error.cshtml]

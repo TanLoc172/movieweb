@@ -65,7 +65,7 @@
 
 @inject UserManager<AppUser> UserManager *@
 
-
+@* 
 @using Microsoft.AspNetCore.Identity
 @using MovieWebsite.Models 
 @model List<MovieWebsite.Models.AppUser>
@@ -87,7 +87,7 @@
         </div>
         <div class="card-body">
 
-            @* Hiển thị thông báo (nếu có từ controller) *@
+
             @if (!string.IsNullOrEmpty(ViewBag.StatusMessage))
             {
                 <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
@@ -96,9 +96,9 @@
                 </div>
             }
 
-            @* Bọc bảng trong div responsive để hiển thị tốt trên mọi màn hình *@
-            <div class="table-responsive">
-                <table class="table table-hover table-striped align-middle mb-0">
+            
+                    <div class="table-responsive">
+            <table class="management-table">
                     <thead class="table-light">
                         <tr>
                             <th scope="col">Tên người dùng</th>
@@ -120,10 +120,10 @@
                                 <tr>
                                     <td class="fw-bold">@user.UserName</td>
                                     <td>@user.Email</td>
-                                    <td>@Html.Raw(rolesDisplay)</td> @* Sử dụng Html.Raw nếu có span *@
+                                    <td>@Html.Raw(rolesDisplay)</td> 
                                     <td class="text-center">
                                         <div class="btn-group btn-group-sm" role="group">
-                                            @* Link Quản lý Vai trò *@
+                                            
                                             <a asp-controller="Admin"
                                                asp-action="ManageUserRoles"
                                                asp-route-userId="@user.Id"
@@ -132,7 +132,7 @@
                                                 <i class="fas fa-user-tag"></i>
                                             </a>
 
-                                            @* Link Sửa thông tin User *@
+                                            
                                             <a asp-controller="Admin"
                                                asp-action="EditUser"
                                                asp-route-id="@user.Id"
@@ -141,13 +141,12 @@
                                                 <i class="fas fa-edit"></i>
                                             </a>
 
-                                            @* Link Xóa User (sẽ chuyển đến trang xác nhận) *@
                                             <a asp-controller="Admin"
                                                asp-action="DeleteUser"
                                                asp-route-id="@user.Id"
                                                class="btn btn-danger"
                                                title="Xóa người dùng">
-                                                <i class="fas fa-trash-alt"></i> @* Hoặc fas fa-trash *@
+                                                <i class="fas fa-trash-alt"></i> 
                                             </a>
                                         </div>
                                     </td>
@@ -172,14 +171,119 @@
 </div>
 
 @section Scripts {
-    @* Đảm bảo bạn đã include Font Awesome hoặc một thư viện icon khác trong _Layout.cshtml *@
-    @* Ví dụ: <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" /> *@
 
-    @* Nếu bạn sử dụng phân trang và cần script cho nó *@
-    @* <script src="~/js/pagination.js"></script> *@
 
-    @* Nếu trang này có validation riêng, thêm vào đây *@
-    @* <partial name="_ValidationScriptsPartial" /> *@
+    <script>
+        // Optional: Tooltip cho các nút icon
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+        });
+    </script>
+} *@
+
+
+@using Microsoft.AspNetCore.Identity
+@using MovieWebsite.Models 
+@model List<MovieWebsite.Models.AppUser>
+@inject UserManager<MovieWebsite.Models.AppUser> UserManager
+
+@{
+    ViewData["Title"] = "Danh sách Người dùng";
+        Layout = "_LayoutAdmin";
+
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h1 class="h4 mb-0">@ViewData["Title"]</h1>
+            <a asp-controller="Admin" asp-action="CreateUser" class="btn btn-light btn-sm">
+                <i class="fas fa-plus me-1"></i> Thêm Người dùng
+            </a>
+        </div>
+        <div class="card-body">
+
+
+            @if (!string.IsNullOrEmpty(ViewBag.StatusMessage))
+            {
+                <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                    @ViewBag.StatusMessage
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            
+                    <div class="table-responsive">
+            <table class="management-table">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">Tên người dùng</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Vai trò</th>
+                            <th scope="col" class="text-center">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var user in Model)
+                            {
+                                // Lấy danh sách vai trò của người dùng này
+                                var roles = await UserManager.GetRolesAsync(user);
+                                // Hiển thị tên các vai trò, nếu không có thì ghi "Chưa có vai trò"
+                                var rolesDisplay = roles.Any() ? string.Join(", ", roles) : "<span class='text-muted'>Chưa có vai trò</span>";
+
+                                <tr>
+                                    <td class="fw-bold">@user.UserName</td>
+                                    <td>@user.Email</td>
+                                    <td>@Html.Raw(rolesDisplay)</td> 
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            
+                                            <a asp-controller="Admin"
+                                               asp-action="ManageUserRoles"
+                                               asp-route-userId="@user.Id"
+                                              class="btn-action manage">Phân quyền</a>
+
+
+                                            
+                                            <a asp-controller="Admin"
+                                               asp-action="EditUser"
+                                               asp-route-id="@user.Id"
+                                               class="btn-action update">Sửa</a>
+
+                                            <a asp-controller="Admin"
+                                               asp-action="DeleteUser"
+                                               asp-route-id="@user.Id"
+                                               class="btn-action delete">Xóa</a>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-4">
+                                    <p class="lead mb-1">Không có người dùng nào.</p>
+                                    <small>Nhấn nút "Thêm Người dùng" ở trên để bắt đầu.</small>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
 
     <script>
         // Optional: Tooltip cho các nút icon

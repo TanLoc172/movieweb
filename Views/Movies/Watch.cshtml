@@ -1,4 +1,4 @@
-@model MovieDetailViewModel
+ @model MovieDetailViewModel
 @{
     ViewData["Title"] = $"Xem phim: {Model?.Movie?.Title ?? "Không tìm thấy phim"}";
     var currentEpisode = ViewData["CurrentEpisode"] as MovieWebsite.Models.Episode;
@@ -915,4 +915,5 @@
             showTab('comments');
         });
     </script>
-}
+} 
+

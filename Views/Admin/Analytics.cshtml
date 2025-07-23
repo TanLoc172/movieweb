@@ -1,0 +1,243 @@
+@* @model AnalyticsViewModel
+@{
+    ViewData["Title"] = "Thống kê & Phân tích";
+    // Giả sử bạn có layout cho trang Admin
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Thêm thư viện Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">@ViewData["Title"]</h1>
+
+    <!-- Hàng thẻ KPI -->
+    <div class="row">
+        <!-- Tổng số phim -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Tổng số phim</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalMovies</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-film fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Tổng số người dùng -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Tổng số người dùng</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalUsers</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Tổng lượt xem -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tổng lượt xem phim</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalViews.ToString("N0")</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-eye fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Tổng lượt truy cập -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Tổng lượt truy cập</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalPageViews.ToString("N0")</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-mouse-pointer fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hàng chứa các biểu đồ -->
+    <div class="row">
+        <!-- Biểu đồ đường (Line Chart) -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Người dùng mới (30 ngày qua)</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="newUsersChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Biểu đồ tròn (Doughnut Chart) -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Phân bổ lượt xem theo thể loại</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-pie pt-4">
+                        <canvas id="viewsByGenreChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Biểu đồ cột -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Top 10 phim được xem nhiều nhất</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-bar">
+                        <canvas id="topMoviesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+<script>
+    // Dữ liệu từ ViewModel được serialize thành JSON
+    const newUsersData = @Html.Raw(Json.Serialize(Model.NewUsersChart));
+    const viewsByGenreData = @Html.Raw(Json.Serialize(Model.ViewsByGenreChart));
+    const topMoviesData = @Html.Raw(Json.Serialize(Model.TopMoviesChart));
+
+    // Cấu hình chung cho font chữ
+    Chart.defaults.font.family = "'Nunito', -apple-system,system-ui,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif";
+    Chart.defaults.color = '#858796';
+
+    // 1. Biểu đồ Người dùng mới
+    const ctxLine = document.getElementById('newUsersChart');
+    new Chart(ctxLine, {
+        type: 'line',
+        data: {
+            labels: newUsersData.labels,
+            datasets: [{
+                label: 'Số người dùng',
+                data: newUsersData.data,
+                lineTension: 0.3,
+                backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                pointRadius: 3,
+                pointBackgroundColor: 'rgba(78, 115, 223, 1)',
+                pointBorderColor: 'rgba(78, 115, 223, 1)',
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        // Đảm bảo chỉ hiển thị số nguyên
+                        precision: 0
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+    // 2. Biểu đồ Lượt xem theo Thể loại
+    const ctxPie = document.getElementById('viewsByGenreChart');
+    new Chart(ctxPie, {
+        type: 'doughnut',
+        data: {
+            labels: viewsByGenreData.labels,
+            datasets: [{
+                data: viewsByGenreData.data,
+                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796', '#5a5c69'],
+                hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#dda20a', '#c73021', '#666874', '#474850'],
+                hoverBorderColor: "rgba(234, 236, 244, 1)",
+            }],
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            },
+            cutout: '80%',
+        },
+    });
+
+    // 3. Biểu đồ Top Phim
+    const ctxBar = document.getElementById('topMoviesChart');
+    new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: topMoviesData.labels,
+            datasets: [{
+                label: 'Lượt xem',
+                data: topMoviesData.data,
+                backgroundColor: '#4e73df',
+                hoverBackgroundColor: '#2e59d9',
+                borderColor: '#4e73df',
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                },
+                x: {
+                    ticks: {
+                        // Cắt ngắn tên phim nếu quá dài
+                        callback: function(value) {
+                            let label = this.getLabelForValue(value);
+                            if (label.length > 20) {
+                                return label.substring(0, 20) + '...';
+                            }
+                            return label;
+                        }
+                    }
+                }
+            },
+             plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+</script>
+} *@

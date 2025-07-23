@@ -1518,9 +1518,9 @@ namespace MovieWebsite.Controllers
                 return RedirectToAction(nameof(Index)); // Chuyển hướng về trang danh sách phim chính
             }
         }
-        
 
-         /// Lấy danh sách các phim bộ (có nhiều hơn 1 tập).
+
+        /// Lấy danh sách các phim bộ (có nhiều hơn 1 tập).
         /// </summary>
         [Route("Movies/Series")]
         public async Task<IActionResult> SeriesMovies()
@@ -1542,7 +1542,7 @@ namespace MovieWebsite.Controllers
                     PageDescription = "Khám phá các bộ phim truyền hình, phim dài tập mới nhất và hấp dẫn nhất.",
                     Movies = seriesMovies
                 };
-                
+
                 _logger.LogInformation("Đã lấy thành công {MovieCount} phim bộ.", seriesMovies.Count);
 
                 // Trả về view với ViewModel
@@ -1571,7 +1571,7 @@ namespace MovieWebsite.Controllers
                     .Where(m => m.TotalEpisodes == 1)
                     .OrderByDescending(m => m.UpdatedAt)
                     .ToListAsync();
-                
+
                 // Tạo và gán dữ liệu cho ViewModel
                 var viewModel = new FeatureMoviesViewModel
                 {
@@ -1590,6 +1590,64 @@ namespace MovieWebsite.Controllers
                 _logger.LogError(ex, "Lỗi khi lấy danh sách phim lẻ.");
                 TempData["ErrorMessage"] = "Đã xảy ra lỗi khi tải danh sách phim lẻ.";
                 return RedirectToAction(nameof(Index));
+            }
+        }
+
+
+
+
+        [Route("Movies/TopRankedSeries")]
+        public async Task<IActionResult> TopRankedSeries() // Đổi tên để rõ nghĩa hơn
+        {
+            try
+            {
+                // Phân tích từ hình ảnh: "Top 10 phim bộ hôm nay"
+                // 1. "Top 10": Lấy 10 phim
+                // 2. "phim bộ": Lọc những phim có TotalEpisodes > 1
+                // 3. "hôm nay": Thuộc tính `Views` của bạn là tổng lượt xem. Để có "lượt xem hôm nay"
+                //    cần một cấu trúc DB phức tạp hơn (VD: bảng ViewLogs).
+                //    Ở đây, chúng ta sẽ tạm dùng TỔNG LƯỢT XEM để xếp hạng.
+
+                var topMoviesQuery = await _context.Movies
+                    .AsNoTracking()
+                    .Include(m => m.Episodes) // Cần include Episodes để đếm số tập đã chiếu
+                    .Where(m => m.TotalEpisodes > 1) // Chỉ lấy phim bộ
+                    .OrderByDescending(m => m.Views) // Sắp xếp theo tổng lượt xem
+                    .Take(10) // Lấy 10 phim hàng đầu
+                    .ToListAsync();
+
+                var rankedMovies = new List<RankedMovieViewModel>();
+                int rank = 1;
+                foreach (var movie in topMoviesQuery)
+                {
+                    rankedMovies.Add(new RankedMovieViewModel
+                    {
+                        Rank = rank,
+                        Movie = movie,
+                        // Đếm số tập đã thực sự phát hành (có ngày phát hành trong quá khứ)
+                        AiredEpisodesCount = movie.Episodes.Count(e => e.ReleaseDate <= DateTime.Now && e.IsPublished)
+                    });
+                    rank++;
+                }
+
+                var viewModel = new TopRankedSectionViewModel
+                {
+                    SectionTitle = "Top 10 phim bộ hôm nay",
+                    RankedMovies = rankedMovies
+                };
+
+                // Nếu bạn muốn dùng nó như một trang riêng:
+                // return View("TopRankedSeries", viewModel);
+
+                // Nếu bạn muốn dùng nó như một thành phần (component) trên trang chủ,
+                // trả về PartialView sẽ tốt hơn.
+                return PartialView("TopRankedSeries", viewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Lỗi khi lấy danh sách phim xếp hạng.");
+                // Trả về một partial view rỗng hoặc thông báo lỗi
+                return PartialView("TopRankedSeries", new TopRankedSectionViewModel());
             }
         }
 

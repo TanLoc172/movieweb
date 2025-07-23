@@ -3,9 +3,10 @@
     ViewData["Title"] = "Lịch Chiếu Phim";
     Layout = "_Layout"; // Đảm bảo bạn dùng layout chính của người dùng
 
-    string GetDayDisplayName(DateTime date, int index)
+    // Logic mới: So sánh ngày để xác định "Hôm nay"
+    string GetDayDisplayName(DateTime date)
     {
-        if (index == 0) return "Hôm nay";
+        if (date.Date == DateTime.Today) return "Hôm nay";
         var culture = new System.Globalization.CultureInfo("vi-VN");
         string dayName = culture.DateTimeFormat.GetDayName(date.DayOfWeek);
         return char.ToUpper(dayName[0]) + dayName.Substring(1);
@@ -13,28 +14,23 @@
 }
 
 <style>
+    /* TOÀN BỘ CSS TỪ GIAO DIỆN CŨ CỦA BẠN SẼ ĐƯỢC GIỮ LẠI Ở ĐÂY */
     :root {
-        --schedule-bg: #1a1f26; /* Nền chính - Đậm hơn một chút */
-        --schedule-card-bg: #334155; /* Nền của thẻ phim - Sáng hơn một chút */
-        --schedule-text-primary: #f1f5f9; /* Màu chữ chính - Trắng ngà */
-        --schedule-text-secondary: #94a3b8; /* Màu chữ phụ - Xám xanh */
-        --schedule-accent: #3462e0; /* Màu vàng cam làm điểm nhấn */
-        --schedule-border: #475569; /* Màu viền */
+        --schedule-bg: #1a1f26;
+        --schedule-card-bg: #334155;
+        --schedule-text-primary: #f1f5f9;
+        --schedule-text-secondary: #94a3b8;
+        --schedule-accent: #3462e0;
+        --schedule-border: #475569;
     }
-
-    /* Đảm bảo body và html chiếm toàn bộ chiều cao */
-    html, body {
-        background-color: var(--schedule-bg);
-    }
-
+    html, body { background-color: var(--schedule-bg); }
     .schedule-page-container {
         background-color: var(--schedule-bg);
         color: var(--schedule-text-primary);
         padding: 40px 0 80px 0;
-        min-height: calc(100vh - 80px); /* Trừ đi chiều cao của header (nếu có) */
+        min-height: calc(100vh - 80px);
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     }
-    
     .schedule-page-title {
         display: flex;
         align-items: center;
@@ -44,86 +40,36 @@
         margin-bottom: 30px;
         color: var(--schedule-text-primary);
     }
-    
-    .schedule-page-title i {
-        font-size: 1.8rem;
-        color: var(--schedule-accent);
-    }
-
-    /* --- Tab Điều Hướng Theo Ngày --- */
-    .schedule-tabs-wrapper {
-        position: relative;
-        margin-bottom: 40px;
-    }
-
+    .schedule-page-title i { font-size: 1.8rem; color: var(--schedule-accent); }
+    .schedule-tabs-wrapper { position: relative; margin-bottom: 40px; }
     .schedule-nav-tabs {
         display: flex;
-        /* SỬA Ở ĐÂY: Dãn ra trên desktop */
         justify-content: space-between; 
         border-bottom: 1px solid var(--schedule-border);
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
     }
-    
-    .schedule-nav-tabs::-webkit-scrollbar {
-        display: none;
-    }
-
-    .schedule-nav-tabs .nav-item {
-        /* SỬA Ở ĐÂY: Thêm flex-grow để các item dãn ra */
-        flex-grow: 1; 
-        text-align: center;
-    }
-
-       .schedule-nav-tabs .nav-link {
+    .schedule-nav-tabs::-webkit-scrollbar { display: none; }
+    .schedule-nav-tabs .nav-item { flex-grow: 1; text-align: center; }
+    .schedule-nav-tabs .nav-link {
         background: none;
         border: none;
         border-bottom: 3px solid transparent;
-        color: var(--schedule-text-secondary); /* Màu mặc định cho toàn bộ chữ */
+        color: var(--schedule-text-secondary);
         padding: 1rem 1rem;
         transition: all 0.2s ease-in-out;
         white-space: nowrap;
         cursor: pointer;
         width: 100%;
     }
-    
-    .schedule-nav-tabs .nav-link .date-number {
-        display: block;
-        font-size: 0.8rem;
-        font-weight: 500;
-        margin-bottom: 4px;
-        transition: color 0.2s ease-in-out;
-    }
-
-    .schedule-nav-tabs .nav-link .day-name {
-        display: block;
-        font-weight: 700;
-        font-size: 1.1rem;
-        transition: color 0.2s ease-in-out;
-    }
-
-    .schedule-nav-tabs .nav-link:hover {
-        color: var(--schedule-text-primary);
-    }
-    
-    .schedule-nav-tabs .nav-link.active {
-        border-bottom-color: var(--schedule-accent);
-    }
-
-    .schedule-nav-tabs .nav-link.active .day-name {
-        color: var(--schedule-accent); /* Chỉ đổi màu chữ của Thứ */
-    }
-
-
-    /* --- Nội dung lịch chiếu --- */
-    .schedule-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); /* Tăng kích thước tối thiểu */
-        gap: 20px;
-    }
-
-    .schedule-item-card {
+    .schedule-nav-tabs .nav-link .date-number { display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 4px; transition: color 0.2s ease-in-out; }
+    .schedule-nav-tabs .nav-link .day-name { display: block; font-weight: 700; font-size: 1.1rem; transition: color 0.2s ease-in-out; }
+    .schedule-nav-tabs .nav-link:hover { color: var(--schedule-text-primary); }
+    .schedule-nav-tabs .nav-link.active { border-bottom-color: var(--schedule-accent); }
+    .schedule-nav-tabs .nav-link.active .day-name { color: var(--schedule-accent); }
+    .schedule-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
+.schedule-item-card {
         background-color: var(--schedule-card-bg);
         border-radius: 12px;
         padding: 12px;
@@ -133,33 +79,12 @@
         text-decoration: none;
         color: var(--schedule-text-primary);
         transition: transform 0.2s ease, box-shadow 0.2s ease;
-        position: relative; /* Thêm để định vị giờ */
+        position: relative;
     }
-
-    .schedule-item-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-    }
-
-    .schedule-item-card__poster {
-        width: 60px;
-        height: 90px;
-        flex-shrink: 0;
-        border-radius: 8px;
-        overflow: hidden;
-    }
-
-    .schedule-item-card__poster img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    .schedule-item-card__info {
-        /* SỬA Ở ĐÂY: Thêm flex-grow để đẩy giờ ra xa */
-        flex-grow: 1; 
-    }
-
+    .schedule-item-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); }
+    .schedule-item-card__poster { width: 60px; height: 90px; flex-shrink: 0; border-radius: 8px; overflow: hidden; }
+    .schedule-item-card__poster img { width: 100%; height: 100%; object-fit: cover; }
+    .schedule-item-card__info { flex-grow: 1; }
     .schedule-item-card__info .movie-title {
         font-weight: 600;
         font-size: 1rem;
@@ -170,24 +95,15 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
-
-    .schedule-item-card__info .episode-info {
-        font-size: 0.9rem;
-        color: var(--schedule-text-secondary);
-        margin: 0;
-    }
-
-    /* SỬA Ở ĐÂY: Style cho giờ ra mắt */
+    .schedule-item-card__info .episode-info { font-size: 0.9rem; color: var(--schedule-text-secondary); margin: 0; }
     .schedule-item-card__time {
         font-size: 0.9rem;
         font-weight: 600;
         color: var(--schedule-accent);
-        flex-shrink: 0; /* Không co lại */
-        align-self: flex-start; /* Nằm ở trên cùng */
+        flex-shrink: 0;
+        align-self: flex-start;
         padding-top: 2px;
     }
-    
-    /* Trường hợp không có lịch chiếu */
     .schedule-empty {
         text-align: center;
         padding: 80px 20px;
@@ -200,18 +116,18 @@
 <div class="schedule-page-container">
     <div class="container">
         <h1 class="schedule-page-title">
-            <i class="fas fa-calendar-alt"></i> <!-- Thay bằng icon của bạn nếu có -->
+            <i class="fas fa-calendar-alt"></i>
             <span>Lịch chiếu</span>
         </h1>
 
-        <!-- Tab Điều Hướng Theo Ngày -->
+        <!-- Tab Điều Hướng Theo Ngày - LOGIC MỚI -->
         <div class="schedule-tabs-wrapper">
              <ul class="nav nav-tabs schedule-nav-tabs" id="schedule-tab" role="tablist">
-                @for (int i = 0; i < Model.SelectableDates.Count; i++)
+                @for (int i = 0; i < 7; i++)
                 {
-                    var date = Model.SelectableDates[i];
+                    var date = DateTime.Today.AddDays(i);
                     var isActive = (i == 0) ? "active" : "";
-                    var tabName = GetDayDisplayName(date, i);
+                    var tabName = GetDayDisplayName(date);
                     var tabId = $"tab-{date:yyyy-MM-dd}";
                     var contentId = $"content-{date:yyyy-MM-dd}";
 
@@ -225,19 +141,17 @@
             </ul>
         </div>
 
-        <!-- Nội Dung Của Các Tab -->
+        <!-- Nội Dung Của Các Tab - GIAO DIỆN CŨ, LOGIC MỚI -->
         <div class="tab-content" id="schedule-tab-content">
-            @for (int i = 0; i < Model.SelectableDates.Count; i++)
+            @for (int i = 0; i < 7; i++)
             {
-                var date = Model.SelectableDates[i];
+var date = DateTime.Today.AddDays(i);
                 var isActive = (i == 0) ? "show active" : "";
                 var contentId = $"content-{date:yyyy-MM-dd}";
 
                 <div class="tab-pane fade @isActive" id="@contentId" role="tabpanel">
-                    @if (Model.ScheduledGroups.ContainsKey(date.Date))
+                    @if (Model.ScheduledGroups.TryGetValue(date.Date, out var itemsForDate))
                     {
-                        var itemsForDate = Model.ScheduledGroups[date.Date];
-                        
                         <div class="schedule-grid">
                             @foreach (var item in itemsForDate.OrderBy(x => x.ScheduledTime))
                             {
@@ -248,19 +162,11 @@
                                     <div class="schedule-item-card__info">
                                         <h6 class="movie-title">@item.MovieTitle</h6>
                                         <p class="episode-info">
-                                            @if (item.EpisodeNumber.HasValue)
-                                            {
-                                                <span>Tập @item.EpisodeNumber</span>
-                                            }
-                                            else
-                                            {
-                                                <span>@item.EntryType.ToString()</span>
-                                            }
+                                            @item.ItemTitle
                                         </p>
                                     </div>
-                                    @* SỬA Ở ĐÂY: Thêm giờ ra mắt *@
                                     <div class="schedule-item-card__time">
-                                        @item.ScheduledTime.ToString("HH:mm")
+                                        @item.ScheduledTime.ToLocalTime().ToString("HH:mm")
                                     </div>
                                 </a>
                             }
@@ -269,7 +175,7 @@
                     else
                     {
                         <div class="schedule-empty">
-                            <i class="fas fa-calendar-check"></i>
+                            <i class="fas fa-calendar-check fa-2x mb-3"></i>
                             <p>Chưa có lịch chiếu cho ngày này.</p>
                         </div>
                     }
@@ -278,3 +184,29 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.schedule-tab');
+            const contents = document.querySelectorAll('.schedule-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contents.forEach(c => c.classList.remove('active'));
+
+                    // Add active class to clicked tab and corresponding content
+                    tab.classList.add('active');
+                    const targetContent = document.querySelector(tab.dataset.tabTarget);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+

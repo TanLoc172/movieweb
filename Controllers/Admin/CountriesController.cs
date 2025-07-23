@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MovieWebsite.Data;
@@ -8,6 +9,8 @@ using System.Threading.Tasks;
 namespace MovieWebsite.Areas.Admin.Controllers
 {
     // [Area("Admin")]
+        [Authorize(Roles = "Admin")]
+
     public class CountriesController : Controller
     {
         private readonly AppDbContext _context;

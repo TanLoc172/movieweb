@@ -224,6 +224,8 @@ public class MovieDetailViewModel
     public bool IsUserLoggedIn { get; set; } // Flag to check if user is logged in
     public bool HasFavorited { get; set; } // Flag to check if the current user has favorited this movie
     public List<Reel> Reels { get; set; } = new List<Reel>();
+
+    public List<Episode> AiredEpisodes { get; set; } = new List<Episode>();
 }
 
 public class HomeViewModel1
@@ -236,14 +238,83 @@ public class HomeViewModel1
     public List<Genre> Genres { get; set; } = new List<Genre>();
 }
 
-// ViewModel dành riêng cho trang Dashboard
+
+// // ViewModel chính cho trang Analytics
+// public class AnalyticsViewModel
+// {
+//     // Dữ liệu cho các thẻ KPI
+//     public int TotalMovies { get; set; }
+//     public int TotalUsers { get; set; }
+//     public long TotalViews { get; set; }
+//     public long TotalPageViews { get; set; }
+
+//     // Dữ liệu cho các biểu đồ
+//     public ChartData NewUsersChart { get; set; }
+//     public ChartData ViewsByGenreChart { get; set; }
+//     public ChartData TopMoviesChart { get; set; }
+
+//     public AnalyticsViewModel()
+//     {
+//         NewUsersChart = new ChartData();
+//         ViewsByGenreChart = new ChartData();
+//         TopMoviesChart = new ChartData();
+//     }
+// }
+
+// // Lớp trợ giúp để lưu trữ dữ liệu cho một biểu đồ
+// public class ChartData
+// {
+//     public List<string> Labels { get; set; } = new List<string>();
+//     public List<long> Data { get; set; } = new List<long>();
+// }
+
+
+// // ViewModel dành riêng cho trang Dashboard
+// public class DashboardViewModel
+// {
+//     public int MovieCount { get; set; }
+//     public int GenreCount { get; set; }
+//     public int CountryCount { get; set; }
+//     public int EpisodeCount { get; set; }
+//     public int UserCount { get; set; }
+// }
+
+// Lớp trợ giúp để lưu trữ dữ liệu cho một biểu đồ
+// Đặt lớp này ngay trên DashboardViewModel
+public class ChartData
+{
+    public List<string> Labels { get; set; } = new List<string>();
+    public List<long> Data { get; set; } = new List<long>();
+}
+
+// ViewModel dành riêng cho trang Dashboard - PHIÊN BẢN NÂNG CẤP
 public class DashboardViewModel
 {
+    // === CÁC THUỘC TÍNH CŨ CỦA BẠN (giữ nguyên) ===
     public int MovieCount { get; set; }
     public int GenreCount { get; set; }
     public int CountryCount { get; set; }
-    public int EpisodeCount { get; set; }
+    public int EpisodeCount { get; set; } // Giữ lại nếu bạn có dùng
     public int UserCount { get; set; }
+
+    // === CÁC THUỘC TÍNH MỚI TỪ ANALYTICSVIEWMODEL ===
+    
+    // Dữ liệu cho các thẻ KPI chi tiết
+    public long TotalViews { get; set; }
+    public long TotalPageViews { get; set; }
+
+    // Dữ liệu cho các biểu đồ
+    public ChartData NewUsersChart { get; set; }
+    public ChartData ViewsByGenreChart { get; set; }
+    public ChartData TopMoviesChart { get; set; }
+
+    // Constructor để khởi tạo các đối tượng ChartData, tránh lỗi null
+    public DashboardViewModel()
+    {
+        NewUsersChart = new ChartData();
+        ViewsByGenreChart = new ChartData();
+        TopMoviesChart = new ChartData();
+    }
 }
 
 
@@ -439,12 +510,81 @@ public class HomeViewModel
     public List<Movie> LatestMovies { get; set; }
 }
 
+
+// public class ScheduleViewModel
+// {
+//     public DateTime SelectedDate { get; set; }
+//     public List<DateTime> SelectableDates { get; set; } = new List<DateTime>();
+//     public Dictionary<DateTime, List<ScheduleItemViewModel>> ScheduledGroups { get; set; } =
+//         new Dictionary<DateTime, List<ScheduleItemViewModel>>();
+//     public string ViewType { get; set; } = "today"; // today, week, upcoming
+// }
+
+// // ViewModel cho mỗi mục lịch chiếu
+// public class ScheduleItemViewModel
+// {
+//     public int ScheduleId { get; set; }
+//     public int MovieId { get; set; }
+//     public string MovieTitle { get; set; }
+//     public string PosterPath { get; set; }
+//     public int? EpisodeNumber { get; set; }
+//     public string EpisodeTitle { get; set; }
+//     public string ItemTitle { get; set; } // Tiêu đề chung (tên tập hoặc tên phim)
+//     public DateTime ScheduledTime { get; set; }
+//     public string Description { get; set; }
+//     public ScheduleType EntryType { get; set; }
+//     public string? PosterDoc { get; internal set; }
+// }
+
+// public class ScheduleAdminItemViewModel
+// {
+//     public int Id { get; set; }
+//     public DateTime ScheduledTime { get; set; }
+//     public string MovieTitle { get; set; }
+//     public string EpisodeInfo { get; set; } // Gộp thông tin tập phim vào 1 chuỗi
+//     public string Description { get; set; }
+//     public ScheduleType EntryType { get; set; }
+// }
+
+// // ViewModel cho quản lý lịch chiếu trong Admin
+// public class ScheduleViewModelForAdmin
+// {
+//     public int Id { get; set; } // Dùng cho việc Edit, không ảnh hưởng đến Create
+
+//     [Required(ErrorMessage = "Vui lòng chọn phim")]
+//     public int MovieId { get; set; }
+
+//     [Required(ErrorMessage = "Vui lòng chọn thời gian chiếu")]
+//     public DateTime ScheduledTime { get; set; } = DateTime.Now.AddDays(1).Date.AddHours(20); // Mặc định 20:00 ngày mai
+
+//     [MaxLength(200, ErrorMessage = "Mô tả không được vượt quá 200 ký tự")]
+//     public string Description { get; set; }
+
+//     [Required(ErrorMessage = "Vui lòng chọn loại lịch chiếu")]
+//     public ScheduleType EntryType { get; set; } = ScheduleType.EpisodeRelease;
+
+//     // ----- CÁC TRƯỜNG MỚI ĐỂ TẠO TẬP PHIM -----
+//     // Các trường này chỉ bắt buộc khi EntryType là EpisodeRelease
+
+//     [Display(Name = "Số tập mới")]
+//     public int? NewEpisodeNumber { get; set; }
+
+//     [Display(Name = "Tên tập mới")]
+//     [MaxLength(200)]
+//     public string NewEpisodeTitle { get; set; }
+
+//     public int? EpisodeId { get; set; }
+//     public List<Episode> Episodes { get; set; } = new List<Episode>();
+
+//     // ----- TRƯỜNG HỖ TRỢ HIỂN THỊ TRÊN FORM -----
+//     public List<Movie> Movies { get; set; } = new List<Movie>();
+// }
+
 public class ScheduleViewModel
 {
     public DateTime SelectedDate { get; set; }
     public List<DateTime> SelectableDates { get; set; } = new List<DateTime>();
-    public Dictionary<DateTime, List<ScheduleItemViewModel>> ScheduledGroups { get; set; } =
-        new Dictionary<DateTime, List<ScheduleItemViewModel>>();
+    public Dictionary<DateTime, List<ScheduleItemViewModel>> ScheduledGroups { get; set; } = new Dictionary<DateTime, List<ScheduleItemViewModel>>();
     public string ViewType { get; set; } = "today"; // today, week, upcoming
 }
 
@@ -458,12 +598,13 @@ public class ScheduleItemViewModel
     public int? EpisodeNumber { get; set; }
     public string EpisodeTitle { get; set; }
     public string ItemTitle { get; set; } // Tiêu đề chung (tên tập hoặc tên phim)
+
+    public bool IsEpisodePublished { get; set; }
     public DateTime ScheduledTime { get; set; }
     public string Description { get; set; }
     public ScheduleType EntryType { get; set; }
     public string? PosterDoc { get; internal set; }
 }
-
 public class ScheduleAdminItemViewModel
 {
     public int Id { get; set; }
@@ -472,8 +613,8 @@ public class ScheduleAdminItemViewModel
     public string EpisodeInfo { get; set; } // Gộp thông tin tập phim vào 1 chuỗi
     public string Description { get; set; }
     public ScheduleType EntryType { get; set; }
+    
 }
-
 // ViewModel cho quản lý lịch chiếu trong Admin
 public class ScheduleViewModelForAdmin
 {
@@ -504,8 +645,14 @@ public class ScheduleViewModelForAdmin
     public int? EpisodeId { get; set; }
     public List<Episode> Episodes { get; set; } = new List<Episode>();
 
+    [Display(Name = "Video tập phim mới")]
+    public IFormFile? NewEpisodeVideoFile { get; set; }
+    // Dùng IFormFile? (nullable) để nó không bắt buộc phải có khi tạo lịch cho phim lẻ.
+
     // ----- TRƯỜNG HỖ TRỢ HIỂN THỊ TRÊN FORM -----
     public List<Movie> Movies { get; set; } = new List<Movie>();
+
+
 }
 
 public class MoviesByCountryViewModel
@@ -630,6 +777,33 @@ public class FeatureMoviesViewModel
     /// </summary>
     public List<Movie> Movies { get; set; } = new List<Movie>();
 }
+
+public class TopMoviesViewModel
+{
+    public string PageTitle { get; set; }
+    public string PageDescription { get; set; }
+    public List<Movie> TopMovies { get; set; } = new List<Movie>();
+}
+
+public class RankedMovieViewModel
+{
+    public int Rank { get; set; }
+    public Movie Movie { get; set; }
+    public int AiredEpisodesCount { get; set; } // Số tập đã phát sóng
+}
+
+/// <summary>
+/// ViewModel chính cho toàn bộ khu vực "Top Phim".
+/// </summary>
+public class TopRankedSectionViewModel
+{
+    public string SectionTitle { get; set; }
+    public List<RankedMovieViewModel> RankedMovies { get; set; } = new List<RankedMovieViewModel>();
+}
+
+
+
+
 
 
 // public class CreateWatchPartyViewModel

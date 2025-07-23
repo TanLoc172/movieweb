@@ -1,0 +1,174 @@
+@model ScheduleViewModel
+@{
+    ViewData["Title"] = "Lịch Chiếu Phim";
+    Layout = "_Layout"; // Layout của người dùng
+
+    string GetDayDisplayName(DateTime date)
+    {
+        if (date.Date == DateTime.Today) return "Hôm nay";
+        var culture = new System.Globalization.CultureInfo("vi-VN");
+        return culture.DateTimeFormat.GetDayName(date.DayOfWeek);
+    }
+}
+
+<style>
+    /* CSS CỦA BẠN RẤT ĐẸP, TÔI SẼ GIỮ NGUYÊN VÀ CHỈ THÊM MỘT CHÚT */
+    :root {
+        --schedule-bg: #1a1f26; 
+        --schedule-card-bg: #2d3748;
+        --schedule-text-primary: #f1f5f9;
+        --schedule-text-secondary: #94a3b8;
+        --schedule-accent: #f59e0b; /* Màu vàng cam */
+        --schedule-border: #4a5568;
+    }
+    body { background-color: var(--schedule-bg); }
+    .schedule-page-container {
+        color: var(--schedule-text-primary);
+        padding: 40px 0;
+    }
+    .schedule-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 30px;
+    }
+    .schedule-tabs-container { display: flex; border-bottom: 1px solid var(--schedule-border); }
+    .schedule-tab {
+        padding: 1rem;
+        text-align: center;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s ease;
+    }
+    .schedule-tab.active { border-bottom-color: var(--schedule-accent); }
+    .schedule-tab:hover { background-color: rgba(255,255,255,0.05); }
+    .schedule-tab .day-of-week { font-weight: 600; color: var(--schedule-text-primary); }
+    .schedule-tab.active .day-of-week { color: var(--schedule-accent); }
+    .schedule-tab .date-of-month { font-size: 0.9rem; color: var(--schedule-text-secondary); }
+    .schedule-content { display: none; }
+    .schedule-content.active { display: block; }
+    .schedule-timeline { border-left: 2px solid var(--schedule-border); padding-left: 30px; position: relative; }
+    .schedule-entry {
+        display: flex;
+        gap: 20px;
+        position: relative;
+        padding: 20px 0;
+        align-items: center;
+    }
+    .schedule-entry::before { /* Chấm tròn trên timeline */
+        content: '';
+        position: absolute;
+        left: -38px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 14px;
+        height: 14px;
+        background-color: var(--schedule-card-bg);
+        border: 3px solid var(--schedule-border);
+        border-radius: 50%;
+    }
+    .schedule-time { min-width: 60px; font-size: 1rem; font-weight: 600; color: var(--schedule-text-secondary); }
+    .schedule-card {
+        display: flex;
+        gap: 15px;
+        background-color: var(--schedule-card-bg);
+        padding: 15px;
+        border-radius: 8px;
+        flex-grow: 1;
+        text-decoration: none;
+        color: var(--schedule-text-primary);
+    }
+    .schedule-card-poster img { width: 60px; height: 90px; object-fit: cover; border-radius: 4px; }
+    .schedule-card-info .movie-title { font-weight: 600; margin-bottom: 5px; }
+    .schedule-card-info .episode-info { color: var(--schedule-text-secondary); font-size: 0.9rem; }
+    .schedule-empty-content { text-align: center; padding: 60px 0; color: var(--schedule-text-secondary); }
+</style>
+
+<div class="schedule-page-container container">
+    <div class="schedule-header">
+        <i class="far fa-calendar-alt"></i>
+        Lịch chiếu
+    </div>
+
+    <!-- Thanh điều hướng 7 ngày -->
+    <div class="schedule-tabs-container">
+        @for (int i = 0; i < 7; i++)
+        {
+            var date = DateTime.Today.AddDays(i);
+            var tabId = $"day-{i}";
+            <div class="schedule-tab @(i == 0 ? "active" : "")" data-tab-target="#@tabId">
+                <div class="day-of-week">@GetDayDisplayName(date)</div>
+                <div class="date-of-month">@date.ToString("dd/MM")</div>
+            </div>
+        }
+    </div>
+
+    <!-- Nội dung lịch chiếu -->
+    <div class="schedule-content-container mt-5">
+        @for (int i = 0; i < 7; i++)
+        {
+            var date = DateTime.Today.AddDays(i);
+            var tabId = $"day-{i}";
+            <div class="schedule-content @(i == 0 ? "active" : "")" id="@tabId">
+                @if (Model.ScheduledGroups.TryGetValue(date, out var itemsForDate))
+                {
+                    <div class="schedule-timeline">
+                        @foreach (var group in itemsForDate.GroupBy(item => item.ScheduledTime.ToLocalTime().ToString("HH:mm")).OrderBy(g => g.Key))
+                        {
+                            <div class="schedule-entry">
+                                <div class="schedule-time">@group.Key</div>
+                                <div class="d-flex flex-column gap-3 w-100">
+                                @foreach (var item in group)
+                                {
+                                    <a asp-controller="Movies" asp-action="Details" asp-route-id="@item.MovieId" class="schedule-card">
+                                        <div class="schedule-card-poster">
+                                            <img src="@(item.PosterPath ?? "/images/default-poster.png")" alt="@item.MovieTitle" />
+                                        </div>
+                                        <div class="schedule-card-info">
+                                            <div class="movie-title">@item.MovieTitle</div>
+                                            <div class="episode-info">@item.ItemTitle</div>
+                                        </div>
+                                    </a>
+                                }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="schedule-empty-content">
+                        <i class="fas fa-calendar-check fa-2x mb-3"></i>
+                        <p>Không có lịch chiếu cho ngày này.</p>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.schedule-tab');
+            const contents = document.querySelectorAll('.schedule-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contents.forEach(c => c.classList.remove('active'));
+
+                    // Add active class to clicked tab and corresponding content
+                    tab.classList.add('active');
+                    const targetContent = document.querySelector(tab.dataset.tabTarget);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+}

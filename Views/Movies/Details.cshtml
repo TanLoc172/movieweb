@@ -422,6 +422,18 @@ else if (!Model.Movie.IsCompleted)
    If home.css is project-specific, it's fine to link it here. *@
 <link rel="stylesheet" href="~/css/details.css" asp-append-version="true" />
 
+<style>   .top-banner {
+        position: relative;
+        width: 100%;
+        height: 900px;
+        background-image: url('@Model.Movie.PosterPath');
+        background-size: cover;
+        background-position: center;
+        filter: blur(3px);
+        -webkit-filter: blur(8px);
+        z-index: 0;
+    }</style>
+
 <!-- Top Blurred Background Banner -->
 <div class="top-banner">
     <div class="overlay"></div>
@@ -948,5 +960,5 @@ else if (!Model.Movie.IsCompleted)
             cursor: not-allowed; /* Indicate it's not editable */
         }
         /* Add any other specific styles you might need for the rating section or tabs */
-    </style>
+    </styl>
 } 
