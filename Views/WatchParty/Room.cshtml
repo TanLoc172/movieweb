@@ -1,28 +1,28 @@
-
-
-
 @model MovieWebsite.Models.WatchPartyRoom
 @{
     ViewData["Title"] = $"Xem chung: {Model.Movie?.Title ?? "Phòng Xem Chung"}";
+    Layout = null; // Trang này không sử dụng layout chung
 
-     
-   // 1. Tìm tập phim hiện tại dựa trên ID đã lưu trong phòng
-    var currentEpisode = Model.Movie?.Episodes?.FirstOrDefault(e => e.Id == Model.CurrentEpisodeId);
-
-    // 2. Nếu không tìm thấy, lấy tập đầu tiên làm mặc định
-    if (currentEpisode == null)
-    {
-        currentEpisode = Model.Movie?.Episodes?.OrderBy(e => e.EpisodeNumber).FirstOrDefault();
-    }
+    // --- LOGIC XÁC ĐỊNH TẬP PHIM ---
+    Episode currentEpisode = null;
+    Episode previousEpisode = null;
+    Episode nextEpisode = null;
+    string videoUrl = null;
+    int currentEpisodeNumber = 0;
     
-    // 3. Tìm tập tiếp theo DỰA TRÊN TẬP HIỆN TẠI đã được xác định
-    var nextEpisode = currentEpisode != null 
-        ? Model.Movie.Episodes.FirstOrDefault(e => e.EpisodeNumber > currentEpisode.EpisodeNumber) 
-        : null;
+    if (Model.Movie?.Episodes != null && Model.Movie.Episodes.Any())
+    {
+        var allEpisodes = Model.Movie.Episodes.OrderBy(e => e.EpisodeNumber).ToList();
+        currentEpisode = allEpisodes.FirstOrDefault(e => e.Id == Model.CurrentEpisodeId) ?? allEpisodes.FirstOrDefault();
 
-    // 4. Lấy các thông tin cần thiết để truyền cho View và JS
-    var videoUrl = currentEpisode?.VideoPath;
-    var currentEpisodeNumber = currentEpisode?.EpisodeNumber ?? 0;
+        if (currentEpisode != null)
+        {
+            previousEpisode = allEpisodes.LastOrDefault(e => e.EpisodeNumber < currentEpisode.EpisodeNumber);
+            nextEpisode = allEpisodes.FirstOrDefault(e => e.EpisodeNumber > currentEpisode.EpisodeNumber);
+            videoUrl = currentEpisode.VideoPath;
+            currentEpisodeNumber = currentEpisode.EpisodeNumber;
+        }
+    }
 }
 
 <!DOCTYPE html>
@@ -34,79 +34,58 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* --- Kế thừa các style từ trang Create để thống nhất --- */
-        .gradient-bg {
-            background: linear-gradient(135deg, #1e3c72 0%, #1c3257 100%);
-        }
-        .glass-effect {
-            backdrop-filter: blur(16px);
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .cinema-icons {
-            position: absolute;
-            opacity: 0.1;
-            font-size: 1.5rem;
-            color: white;
-            animation: float 4s ease-in-out infinite;
-            z-index: 0;
-        }
-        @@keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
+        .gradient-bg { background: linear-gradient(135deg, #1e3c72 0%, #1c3257 100%); }
+        .glass-effect { backdrop-filter: blur(16px); background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .cinema-icons { position: absolute; opacity: 0.1; font-size: 1.5rem; color: white; animation: float 4s ease-in-out infinite; z-index: 0; }
+        @@keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
         .icon-1 { top: 10%; left: 5%; animation-delay: 0s; } .icon-2 { top: 20%; right: 8%; animation-delay: 1s; } .icon-3 { bottom: 15%; left: 10%; animation-delay: 2s; } .icon-4 { bottom: 25%; right: 12%; animation-delay: 0.5s; } .icon-5 { top: 60%; left: 3%; animation-delay: 1.5s; } .icon-6 { top: 45%; right: 5%; animation-delay: 2.5s; }
-        
-        /* --- Tùy chỉnh cho trang xem phim --- */
-        /* Custom scrollbar cho khung chat và danh sách người tham gia */
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.1); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(251, 191, 36, 0.6); border-radius: 3px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #fbbf24; }
-
-        .pulse-dot {
-            width: 10px;
-            height: 10px;
-            background-color: #34d399; /* green-400 */
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-        @@keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(52, 211, 153, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
-        }
-        
-        /* Chat container height constraints */
-        .chat-container {
-            max-height: 500px;
-            min-height: 300px;
-        }
-        
-        /* Ensure chat messages area doesn't grow beyond container */
-        #chat-messages {
-            max-height: calc(100% - 200px); /* Account for header and input area */
-            overflow-y: auto;
-        }
-        
-        /* Responsive chat heights */
-        @@media (max-width: 1024px) {
-            .chat-container {
-                max-height: 400px;
-                min-height: 250px;
-            }
-        }
-        
-        @@media (max-width: 768px) {
-            .chat-container {
-                max-height: 350px;
-                min-height: 200px;
-            }
-        }
+        .pulse-dot { width: 10px; height: 10px; background-color: #34d399; border-radius: 50%; animation: pulse 2s infinite; }
+        @@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(52, 211, 153, 0); } 100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); } }
+        .chat-container { max-height: 500px; min-height: 300px; }
+        #chat-messages { max-height: calc(100% - 200px); overflow-y: auto; }
+        @@media (max-width: 1024px) { .chat-container { max-height: 400px; min-height: 250px; } }
+        @@media (max-width: 768px) { .chat-container { max-height: 350px; min-height: 200px; } }
+        /* Style để ẩn nội dung chính ban đầu cho khách */
+        .main-content-area { visibility: hidden; } 
     </style>
 </head>
 <body class="gradient-bg text-white font-sans">
-    <!-- Icon nền kế thừa từ trang Create -->
+
+    <!-- ===== MODAL NHẬP TÊN CHO KHÁCH ===== -->
+    <div id="name-prompt-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+        <div class="glass-effect rounded-2xl shadow-2xl p-8 max-w-sm w-full transform transition-all duration-300 scale-95 opacity-0" id="name-prompt-card">
+            <div class="text-center mb-6">
+                <div class="relative inline-block">
+                     <div class="w-24 h-24 mx-auto mb-4">
+                        <div class="w-full h-full rounded-full bg-white/20 border border-white/30 flex items-center justify-center shadow-2xl">
+                            <i class="fas fa-user-circle text-5xl text-white"></i>
+                        </div>
+                    </div>
+                </div>
+                <h2 class="text-2xl font-bold text-white mb-2">Tham gia phòng xem</h2>
+                <p class="text-white/70">Nhập tên hiển thị của bạn để vào phòng nhé!</p>
+            </div>
+            <div class="space-y-4">
+                <div class="relative">
+                    <input type="text" id="name-input" placeholder="Nhập tên của bạn..." maxlength="20"
+                           class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:border-transparent transition-all duration-300" />
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                        <i class="fas fa-keyboard text-white/40"></i>
+                    </div>
+                </div>
+                <button id="join-with-name-btn"
+                        class="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg transform transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-300">
+                    <i class="fas fa-rocket mr-2"></i>
+                    Vào phòng
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="cinema-icons icon-1"><i class="fas fa-film"></i></div>
     <div class="cinema-icons icon-2"><i class="fas fa-camera"></i></div>
     <div class="cinema-icons icon-3"><i class="fas fa-popcorn"></i></div>
@@ -114,21 +93,13 @@
     <div class="cinema-icons icon-5"><i class="fas fa-theater-masks"></i></div>
     <div class="cinema-icons icon-6"><i class="fas fa-video"></i></div>
 
-    <!-- Container chính, cho phép cuộn nếu nội dung quá dài, nhưng ưu tiên không cuộn bằng h-screen -->
-    <div class="relative z-10 flex flex-col min-h-screen p-4 gap-4"> 
-        <!-- Khu vực chính: Video và Social Panel -->
-        <!-- Sử dụng flexbox để chia layout: cột trên mobile, hàng trên desktop (lg+) -->
+    <!-- Container nội dung chính -->
+    <div class="relative z-10 flex flex-col min-h-screen p-4 gap-4 main-content-area"> 
         <main class="flex-grow flex flex-col lg:flex-row gap-4 overflow-hidden"> 
-
-            <!-- Cột trái: Video và thông tin -->
-            <!-- flex-grow cho phép cột này chiếm phần lớn không gian còn lại -->
             <div class="flex-grow flex flex-col gap-4 overflow-hidden"> 
-                <!-- Video Player -->
-                <!-- w-full và h-full để chiếm toàn bộ không gian được cấp phát -->
                 <div class="relative w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl">
                     @if (!string.IsNullOrEmpty(videoUrl))
                     {
-                        <!-- Dùng aspect-video để đảm bảo tỷ lệ khung hình video -->
                         <video id="movie-player" src="@videoUrl" controls class="w-full h-full object-contain absolute top-0 left-0"></video>
                     }
                     else
@@ -141,139 +112,71 @@
                     }
                 </div>
                 
-                <!-- Thanh thông tin dưới video -->
-               <!-- Trong file View của bạn (ví dụ: Views/WatchParty/Room.cshtml) -->
-
-<!-- Thanh thông tin dưới video -->
-<div class="glass-effect rounded-2xl p-4 flex items-center justify-between flex-wrap gap-3">
-    <div class="flex-grow">
-        <h1 class="text-xl lg:text-2xl font-bold truncate">@Model.Movie?.Title - Tập @ViewData["CurrentEpisodeNumber"]</h1>
-        <p class="text-sm text-white/70 truncate">Phòng: @Model.Name</p>
-    </div>
-    
-    <!-- KHỐI CHỨA CÁC NÚT ĐIỀU KHIỂN -->
-    <div class="flex items-center gap-4">
-        
-        <!-- ===================================== -->
-        <!-- NÚT LÙI TẬP (NÚT MỚI)                -->
-        <!-- ===================================== -->
-        @{
-            // Lấy đối tượng tập trước từ ViewBag
-            var previousEpisode = ViewBag.PreviousEpisode as Episode;
-        }
-        @if (previousEpisode != null)
-        {
-            // Nếu có tập trước đó, thì hiển thị nút
-            <button id="prev-episode-btn" 
-                    data-episode-id="@previousEpisode.Id" 
-                    title="Xem tập @previousEpisode.EpisodeNumber"
-                    class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-xl transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
-                <i class="fas fa-arrow-left"></i>
-                <span class="hidden sm:inline">Tập trước</span>
-            </button>
-        }
-        else
-        {
-            // Nếu không có tập trước, hiển thị nút bị vô hiệu hóa
-             <button title="Đây là tập đầu tiên"
-                    class="bg-gray-800 text-white/50 font-bold py-2 px-4 rounded-xl flex items-center gap-2 cursor-not-allowed opacity-50">
-                <i class="fas fa-arrow-left"></i>
-                <span class="hidden sm:inline">Tập trước</span>
-            </button>
-        }
-        
-        <!-- ===================================== -->
-        <!-- NÚT TẬP TIẾP THEO (ĐÃ CÓ)             -->
-        <!-- ===================================== -->
-        @{
-            // Lấy đối tượng tập tiếp theo từ ViewBag
-            var nextEpisode = ViewBag.NextEpisode as Episode;
-        }
-        @if (nextEpisode != null)
-        {
-            // Nếu có tập tiếp theo, thì hiển thị nút
-            <button id="next-episode-btn" 
-                    data-episode-id="@nextEpisode.Id" 
-                    title="Xem tập @nextEpisode.EpisodeNumber"
-                    class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-xl transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
-                <span class="hidden sm:inline">Tập tiếp</span>
-                <i class="fas fa-arrow-right"></i>
-            </button>
-        }
-        else
-        {
-            // Nếu không có tập tiếp theo, hiển thị nút bị vô hiệu hóa
-            <button title="Đây là tập cuối cùng"
-                    class="bg-gray-800 text-white/50 font-bold py-2 px-4 rounded-xl flex items-center gap-2 cursor-not-allowed opacity-50">
-                <span class="hidden sm:inline">Tập tiếp</span>
-                <i class="fas fa-arrow-right"></i>
-            </button>
-        }
-
-        <!-- ... Các phần tử khác như LIVE, viewer count giữ nguyên ... -->
-        <div class="flex items-center gap-2 text-green-400">
-            <div class="pulse-dot"></div>
-            <span>LIVE</span>
-        </div>
-        <div id="viewer-count" class="flex items-center gap-2 text-white/80">
-            <i class="fas fa-users"></i>
-            <span id="viewer-count-value">0</span>
-        </div>
-    </div>
-</div>
+                <div class="glass-effect rounded-2xl p-4 flex items-center justify-between flex-wrap gap-3">
+                    <div class="flex-grow">
+                        <h1 class="text-xl lg:text-2xl font-bold truncate">@Model.Movie?.Title - Tập @currentEpisodeNumber</h1>
+                        <p class="text-sm text-white/70 truncate">Phòng: @Model.Name</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        @if (previousEpisode != null)
+                        {
+                            <button id="prev-episode-btn" data-episode-id="@previousEpisode.Id" title="Xem tập @previousEpisode.EpisodeNumber" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-xl transition-all flex items-center gap-2">
+                                <i class="fas fa-arrow-left"></i>
+                                <span class="hidden sm:inline">Tập trước</span>
+                            </button>
+                        }
+                        else
+                        {
+                             <button title="Đây là tập đầu tiên" class="bg-gray-800 text-white/50 font-bold py-2 px-4 rounded-xl flex items-center gap-2 cursor-not-allowed opacity-50">
+                                <i class="fas fa-arrow-left"></i>
+                                <span class="hidden sm:inline">Tập trước</span>
+                            </button>
+                        }
+                        @if (nextEpisode != null)
+                        {
+                            <button id="next-episode-btn" data-episode-id="@nextEpisode.Id" title="Xem tập @nextEpisode.EpisodeNumber" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-xl transition-all flex items-center gap-2">
+                                <span class="hidden sm:inline">Tập tiếp</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        }
+                        else
+                        {
+                            <button title="Đây là tập cuối cùng" class="bg-gray-800 text-white/50 font-bold py-2 px-4 rounded-xl flex items-center gap-2 cursor-not-allowed opacity-50">
+                                <span class="hidden sm:inline">Tập tiếp</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        }
+                        <div class="flex items-center gap-2 text-green-400">
+                            <div class="pulse-dot"></div>
+                            <span>LIVE</span>
+                        </div>
+                        <div id="viewer-count" class="flex items-center gap-2 text-white/80">
+                            <i class="fas fa-users"></i>
+                            <span id="viewer-count-value">0</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <!-- Cột phải: Social (Chat & Participants) -->
-            <!-- w-full trên mobile, giới hạn max-w-sm (384px) trên desktop -->
             <aside class="w-full lg:max-w-sm xl:max-w-md flex-shrink-0 flex flex-col gap-4  h-full overflow-hidden"> 
-                
-                <!-- Khung người tham gia -->
                 <div class="glass-effect rounded-2xl p-4 flex flex-col h-1/2 lg:h-1/3">
                     <div class="flex items-center justify-between mb-3">
                         <h3 class="font-bold text-lg flex items-center gap-2"><i class="fas fa-users text-blue-400"></i> Người tham gia</h3>
-                        <!-- Số lượng người tham gia, cập nhật từ SignalR -->
                         <span id="participant-count" class="bg-blue-500/50 text-white text-sm font-bold px-2 py-1 rounded-full">0</span>
                     </div>
-                    <!-- Danh sách người dùng, có thanh cuộn tùy chỉnh -->
-                    <ul id="participants-list" class="flex-grow overflow-y-auto custom-scrollbar space-y-2 pr-2">
-                        <!-- JS sẽ điền danh sách người tham gia vào đây -->
-                        <li class="flex items-center gap-3 p-2 rounded-lg">
-                             <div class="relative animate-pulse">
-                                 <div class="w-10 h-10 rounded-full bg-gray-600"></div>
-                                 <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-400 border-2 border-gray-800 rounded-full"></div>
-                             </div>
-                             <span class="font-medium bg-gray-700 h-4 rounded w-24"></span>
-                        </li>
-                         <li class="flex items-center gap-3 p-2 rounded-lg">
-                             <div class="relative animate-pulse">
-                                 <div class="w-10 h-10 rounded-full bg-gray-600"></div>
-                                 <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-400 border-2 border-gray-800 rounded-full"></div>
-                             </div>
-                             <span class="font-medium bg-gray-700 h-4 rounded w-32"></span>
-                        </li>
-                        <!-- ... -->
-                    </ul>
+                    <ul id="participants-list" class="flex-grow overflow-y-auto custom-scrollbar space-y-2 pr-2"></ul>
                 </div>
-
-                <!-- Khung Chat -->
                 <div class="glass-effect rounded-2xl p-4 chat-container h-96 lg:h-[500px] flex flex-col">
                     <div class="flex items-center justify-between mb-3 flex-shrink-0">
                         <h3 class="font-bold text-lg flex items-center gap-2"><i class="fas fa-comments text-yellow-400"></i> Live Chat</h3>
-                        <!-- Trạng thái đồng bộ, ẩn khi không cần thiết -->
                         <div id="sync-status" class="flex items-center gap-2 text-green-400 text-sm hidden"> 
                             <i class="fas fa-sync fa-spin"></i>
                             <span>Đồng bộ</span>
                         </div>
                     </div>
-                    <!-- Khung chứa tin nhắn chat, có thanh cuộn tùy chỉnh -->
                     <div id="chat-messages" class="flex-1 overflow-y-auto custom-scrollbar pr-2 mb-3 space-y-3 min-h-0 max-h-full">
-                        <!-- JS sẽ điền tin nhắn vào đây -->
                         <p class="text-center text-xs text-white/50 italic">Bắt đầu trò chuyện!</p>
                     </div>
-                    
-                    <!-- Khu vực nhập tin nhắn và nút gửi -->
                     <div class="flex-shrink-0">
-                        <!-- Mã mời -->
                         <div class="bg-white/5 border border-white/10 rounded-xl p-2 flex items-center justify-between mb-3">
                              <span class="text-sm text-white/70 ml-2">Mã mời:</span>
                              <span id="inviteCodeText" class="font-mono text-yellow-400 tracking-wider">@Model.InviteCode</span>
@@ -281,7 +184,6 @@
                                  <i class="fas fa-copy"></i>
                              </button>
                         </div>
-                        <!-- Input và nút gửi -->
                         <div class="flex gap-2">
                              <input type="text" id="message-input" placeholder="Nhập bình luận..." class="flex-grow px-4 py-2 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all shadow-inner">
                              <button id="send-button" class="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold w-12 h-12 flex items-center justify-center rounded-xl shadow-lg transition-all transform hover:scale-105">
@@ -294,259 +196,169 @@
         </main>
     </div>
 
-    <!-- Thư viện SignalR -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <script>
+        (function () {
+            const video = document.getElementById('movie-player');
+            const prevEpisodeButton = document.getElementById('prev-episode-btn');
+            const nextEpisodeButton = document.getElementById('next-episode-btn');
+            const chatMessages = document.getElementById('chat-messages');
+            const messageInput = document.getElementById('message-input');
+            const sendButton = document.getElementById('send-button');
+            const participantsList = document.getElementById('participants-list');
+            const viewerCountSpan = document.getElementById('viewer-count-value');
+            const participantCountBadge = document.getElementById('participant-count');
+            const copyInviteBtn = document.getElementById('copy-invite-btn');
+            const namePromptModal = document.getElementById('name-prompt-modal');
+            const namePromptCard = document.getElementById('name-prompt-card');
+            const nameInput = document.getElementById('name-input');
+            const joinWithNameBtn = document.getElementById('join-with-name-btn');
+            const mainContent = document.querySelector('.main-content-area');
 
+            const inviteCode = "@Model.InviteCode";
+            let userName = '@(ViewData["HostUserName"] as string ?? "")';
+            let isSeeking = false;
+            let isReceivingFromServer = false;
 
-   <script>
-    // Bọc toàn bộ code trong một IIFE (Immediately Invoked Function Expression) để tránh xung đột biến toàn cục
-    (function () {
-        // --- 1. KHAI BÁO BIẾN VÀ LẤY DOM ELEMENTS ---
-        // Lấy các element cần thiết từ HTML
-        const video = document.getElementById('movie-player');
-           const prevEpisodeButton = document.getElementById('prev-episode-btn');
-        const nextEpisodeButton = document.getElementById('next-episode-btn');
-        const chatMessages = document.getElementById('chat-messages');
-        const messageInput = document.getElementById('message-input');
-        const sendButton = document.getElementById('send-button');
-        const participantsList = document.getElementById('participants-list');
-        const viewerCountSpan = document.getElementById('viewer-count-value');
-        const participantCountBadge = document.getElementById('participant-count');
-        const copyInviteBtn = document.getElementById('copy-invite-btn');
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/watchPartyHub")
+                .withAutomaticReconnect()
+                .build();
 
-        // Lấy thông tin từ Model (được render bởi Razor)
-        const inviteCode = "@Model.InviteCode";
-        const userName = '@(ViewData["HostUserName"] as string ?? "")' || "User_" + Math.floor(Math.random() * 1000);
-
-        // Các biến trạng thái để kiểm soát logic đồng bộ
-        let isSeeking = false;          // True khi người dùng đang kéo thanh tua
-        let isReceivingFromServer = false; // True khi client đang áp dụng trạng thái từ server
-
-        // --- 2. THIẾT LẬP KẾT NỐI SIGNALR ---
-        const connection = new signalR.HubConnectionBuilder()
-            .withUrl("/watchPartyHub")
-            .withAutomaticReconnect() // Tự động kết nối lại
-            .build();
-
-        // --- 3. CÁC HÀM HELPER (ĐỂ CẬP NHẬT GIAO DIỆN) ---
-
-        // Hàm thêm tin nhắn vào khung chat
-        function addMessageToChat(user, message, type = 'message') {
-            const messageElement = document.createElement('div');
-            const timeString = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
-
-            if (type === 'message') {
-                const isCurrentUser = user === userName;
-                messageElement.className = `flex gap-2 ${isCurrentUser ? 'flex-row-reverse' : ''}`;
-                messageElement.innerHTML = `
-                    <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(user)}&background=random&bold=true" alt="${user}" class="w-8 h-8 rounded-full flex-shrink-0 border-2 ${isCurrentUser ? 'border-yellow-400' : 'border-blue-400'}">
-                    <div class="flex flex-col ${isCurrentUser ? 'items-end' : 'items-start'} max-w-[70%]">
-                        <div class="px-3 py-2 rounded-lg ${isCurrentUser ? 'bg-yellow-500' : 'bg-white/20'} shadow">
-                            <p class="text-sm break-words">${message}</p>
-                        </div>
-                        <span class="text-xs text-white/50 mt-1">${user}, ${timeString}</span>
-                    </div>
-                `;
-            } else { // type === 'notification'
-                messageElement.className = 'text-center text-xs text-purple-300/80 italic py-1 px-2 rounded-full bg-purple-900/30 max-w-fit mx-auto my-1';
-                messageElement.innerHTML = `<span>${message}</span>`;
+            function addMessageToChat(user, message, type = 'message') {
+                const messageElement = document.createElement('div');
+                const timeString = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+                if (type === 'message') {
+                    const isCurrentUser = user === userName;
+                    messageElement.className = `flex gap-2 ${isCurrentUser ? 'flex-row-reverse' : ''}`;
+                    messageElement.innerHTML = `<img src="https://ui-avatars.com/api/?name=${encodeURIComponent(user)}&background=random&bold=true" alt="${user}" class="w-8 h-8 rounded-full flex-shrink-0 border-2 ${isCurrentUser ? 'border-yellow-400' : 'border-blue-400'}"><div class="flex flex-col ${isCurrentUser ? 'items-end' : 'items-start'} max-w-[70%]"><div class="px-3 py-2 rounded-lg ${isCurrentUser ? 'bg-yellow-500' : 'bg-white/20'} shadow"><p class="text-sm break-words">${message}</p></div><span class="text-xs text-white/50 mt-1">${user}, ${timeString}</span></div>`;
+                } else {
+                    messageElement.className = 'text-center text-xs text-purple-300/80 italic py-1 px-2 rounded-full bg-purple-900/30 max-w-fit mx-auto my-1';
+                    messageElement.innerHTML = `<span>${message}</span>`;
+                }
+                chatMessages.appendChild(messageElement);
+                setTimeout(() => chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' }), 100);
             }
-            chatMessages.appendChild(messageElement);
-            
-            // Đảm bảo cuộn xuống dưới cùng với animation mượt mà
-            setTimeout(() => {
-                chatMessages.scrollTo({
-                    top: chatMessages.scrollHeight,
-                    behavior: 'smooth'
+
+            function updateParticipantsList(userList) {
+                participantsList.innerHTML = '';
+                userList.sort((a, b) => (a === userName ? -1 : b === userName ? 1 : a.localeCompare(b)));
+                userList.forEach(user => {
+                    const isCurrentUser = user === userName;
+                    const li = document.createElement('li');
+                    li.className = `flex items-center gap-3 p-2 rounded-lg transition-colors duration-200 ${isCurrentUser ? 'bg-white/10' : 'hover:bg-white/5'}`;
+                    li.innerHTML = `<div class="relative flex-shrink-0"><img src="https://ui-avatars.com/api/?name=${encodeURIComponent(user)}&background=random&bold=true&size=40" alt="${user}" class="w-10 h-10 rounded-full border-2 ${isCurrentUser ? 'border-yellow-400' : 'border-blue-400'}"><div class="absolute bottom-0 right-0 w-3 h-3 bg-green-400 border-2 border-gray-800 rounded-full"></div></div><span class="font-medium truncate">${user} ${isCurrentUser ? '(Bạn)' : ''}</span>`;
+                    participantsList.appendChild(li);
                 });
-            }, 100);
-        }
+                const count = userList.length;
+                if (viewerCountSpan) viewerCountSpan.textContent = count;
+                if (participantCountBadge) participantCountBadge.textContent = count;
+            }
 
-        // Hàm cập nhật danh sách người tham gia
-        function updateParticipantsList(userList) {
-            participantsList.innerHTML = '';
-            userList.sort((a, b) => (a === userName ? -1 : b === userName ? 1 : a.localeCompare(b)));
-
-            userList.forEach(user => {
-                const isCurrentUser = user === userName;
-                const li = document.createElement('li');
-                li.className = `flex items-center gap-3 p-2 rounded-lg transition-colors duration-200 ${isCurrentUser ? 'bg-white/10' : 'hover:bg-white/5'}`;
-                li.innerHTML = `
-                    <div class="relative flex-shrink-0">
-                        <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(user)}&background=random&bold=true&size=40" alt="${user}" class="w-10 h-10 rounded-full border-2 ${isCurrentUser ? 'border-yellow-400' : 'border-blue-400'}">
-                        <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-400 border-2 border-gray-800 rounded-full"></div>
-                    </div>
-                    <span class="font-medium truncate">${user} ${isCurrentUser ? '(Bạn)' : ''}</span>
-                `;
-                participantsList.appendChild(li);
+            connection.on("ReceiveMessage", (user, message) => addMessageToChat(user, message, 'message'));
+            connection.on("UpdateUserList", updateParticipantsList);
+            connection.on("SystemMessage", (message) => addMessageToChat(null, message, 'notification'));
+            connection.on("ReceiveVideoState", (state, serverCurrentTime) => {
+                if (!video || isSeeking) return;
+                isReceivingFromServer = true;
+                video.currentTime = serverCurrentTime;
+                if (state === "play" && video.paused) video.play().catch(e => console.error(e));
+                else if (state === "pause" && !video.paused) video.pause();
+                setTimeout(() => { isReceivingFromServer = false; }, 250);
             });
-            const count = userList.length;
-            if (viewerCountSpan) viewerCountSpan.textContent = count;
-            if (participantCountBadge) participantCountBadge.textContent = count;
-        }
+            connection.on("ReloadPage", () => {
+                addMessageToChat(null, 'Chủ phòng đã chuyển tập. Đang tải lại...', 'notification');
+                setTimeout(() => window.location.reload(), 2000);
+            });
 
-        // --- 4. LẮNG NGHE SỰ KIỆN TỪ SERVER (SIGNALR EVENT HANDLERS) ---
-
-        connection.on("ReceiveMessage", (user, message) => addMessageToChat(user, message, 'message'));
-        connection.on("UpdateUserList", (userList) => updateParticipantsList(userList));
-        connection.on("SystemMessage", (message) => addMessageToChat(null, message, 'notification'));
-
-        // Lắng nghe lệnh đồng bộ video
-        connection.on("ReceiveVideoState", (state, serverCurrentTime) => {
-            if (!video || isSeeking) return;
-
-            isReceivingFromServer = true;
-            console.log(`Applying server state: ${state}, time: ${serverCurrentTime}`);
-            video.currentTime = serverCurrentTime;
-
-            if (state === "play" && video.paused) {
-                video.play().catch(e => console.error("Play prevented by browser:", e));
-            } else if (state === "pause" && !video.paused) {
-                video.pause();
+            function sendMessage() {
+                const message = messageInput.value.trim();
+                if (message) {
+                    connection.invoke("SendMessage", inviteCode, userName, message).then(() => messageInput.value = '').catch(err => console.error(err));
+                }
             }
-            setTimeout(() => { isReceivingFromServer = false; }, 250); // Cho phép client gửi tín hiệu lại sau 250ms
-        });
+            sendButton.addEventListener('click', sendMessage);
+            messageInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
+            copyInviteBtn.addEventListener('click', () => navigator.clipboard.writeText(inviteCode).then(() => {
+                const originalIcon = copyInviteBtn.innerHTML;
+                copyInviteBtn.innerHTML = '<i class="fas fa-check text-green-400"></i>';
+                setTimeout(() => copyInviteBtn.innerHTML = originalIcon, 2000);
+            }).catch(err => console.error(err)));
 
-        // Lắng nghe lệnh chuyển tập
-        connection.on("ReloadPage", () => {
-            addMessageToChat(null, 'Chủ phòng đã chuyển tập. Đang tải lại...', 'notification');
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
-        });
-
-
-        // --- 5. GỬI SỰ KIỆN LÊN SERVER (CLIENT-SIDE EVENT LISTENERS) ---
-
-        // Gửi tin nhắn chat
-        function sendMessage() {
-            const message = messageInput.value.trim();
-            if (message && connection.state === signalR.HubConnectionState.Connected) {
-                connection.invoke("SendMessage", inviteCode, userName, message)
-                    .then(() => { messageInput.value = ''; })
-                    .catch(err => console.error("Lỗi gửi tin nhắn:", err));
+            if (video) {
+                const sendState = (state, time) => {
+                    if (!isReceivingFromServer && connection.state === signalR.HubConnectionState.Connected) {
+                        connection.invoke("SyncVideoState", inviteCode, state, time).catch(err => console.error(err));
+                    }
+                };
+                video.onplay = () => !isSeeking && sendState("play", video.currentTime);
+                video.onpause = () => !isSeeking && sendState("pause", video.currentTime);
+                video.onseeking = () => isSeeking = true;
+                video.onseeked = () => {
+                    sendState(video.paused ? "pause" : "play", video.currentTime);
+                    setTimeout(() => isSeeking = false, 50);
+                };
             }
-        }
-        sendButton.addEventListener('click', sendMessage);
-        messageInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
 
-        // Sao chép mã mời
-        copyInviteBtn.addEventListener('click', () => { navigator.clipboard.writeText(inviteCode).then(() => {
-                    // Hiển thị thông báo thành công ngắn hạn
-                    const originalContent = copyInviteBtn.innerHTML;
-                    copyInviteBtn.innerHTML = '<i class="fas fa-check text-green-400"></i>';
-                    copyInviteBtn.disabled = true; // Tạm thời vô hiệu hóa nút
-                    setTimeout(() => { 
-                        copyInviteBtn.innerHTML = originalContent; 
-                        copyInviteBtn.disabled = false;
-                    }, 2000);
-                }).catch(err => {
-                    console.error("Lỗi sao chép mã mời:", err);
-                    alert("Không thể sao chép mã mời.");
-                }); });
-
-        // Đồng bộ video player
-        if (video) {
-              const sendState = (state, time) => {
-        // Chỉ gửi khi không phải đang nhận từ server và đã kết nối
-        if (isReceivingFromServer || connection.state !== signalR.HubConnectionState.Connected) return;
-
-        console.log(`Sending state: ${state}, time: ${time}`);
-        connection.invoke("SyncVideoState", inviteCode, state, time)
-            .catch(err => console.error("Lỗi gửi trạng thái video:", err));
-    };
-
-    video.onplay = () => {
-        // Chỉ gửi lệnh play nếu không phải do vừa tua xong
-        if (!isSeeking) {
-            sendState("play", video.currentTime);
-        }
-    };
-
-    video.onpause = () => {
-        // Chỉ gửi lệnh pause nếu người dùng thực sự nhấn pause (không phải do đang tua)
-        if (!isSeeking) {
-            sendState("pause", video.currentTime);
-        }
-    };
-
-    // Khi người dùng bắt đầu kéo thanh tua
-    video.onseeking = () => {
-        isSeeking = true;
-    };
-
-    // Khi người dùng đã tua xong (thả chuột)
-    video.onseeked = () => {
-        // Gửi trạng thái hiện tại (thường là đang phát) và thời gian mới
-        sendState(video.paused ? "pause" : "play", video.currentTime);
-        
-        // Đặt isSeeking lại thành false sau một khoảng trễ ngắn để sự kiện onplay không bị kích hoạt nhầm
-        setTimeout(() => {
-            isSeeking = false;
-        }, 50); 
-    };
-
-        }
-
-         // Hàm dùng chung để chuyển tập
-    function changeEpisode(episodeId) {
-        // Vô hiệu hóa cả 2 nút để tránh click liên tục
-        if (prevEpisodeButton) prevEpisodeButton.disabled = true;
-        if (nextEpisodeButton) nextEpisodeButton.disabled = true;
-        
-        if (episodeId && connection.state === signalR.HubConnectionState.Connected) {
-            connection.invoke("ChangeEpisode", inviteCode, episodeId)
-                .catch(err => {
-                    console.error("Lỗi khi gọi Hub.ChangeEpisode:", err);
-                    // Bật lại nút nếu có lỗi
-                    if (prevEpisodeButton) prevEpisodeButton.disabled = false;
-                    if (nextEpisodeButton) nextEpisodeButton.disabled = false;
-                });
-        }
-    }
-
-       if (prevEpisodeButton) {
-        prevEpisodeButton.addEventListener('click', () => {
-            const episodeId = parseInt(prevEpisodeButton.dataset.episodeId);
-            changeEpisode(episodeId);
-        });
-    }
-    // ------------------------------------
-
-    // Sửa lại sự kiện cho nút Tập tiếp theo để dùng hàm chung
-    if (nextEpisodeButton) {
-        nextEpisodeButton.addEventListener('click', () => {
-            const episodeId = parseInt(nextEpisodeButton.dataset.episodeId);
-            changeEpisode(episodeId);
-        });
-    }
-
-        // --- 6. KHỞI ĐỘNG VÀ DỌN DẸP KẾT NỐI ---
-
-        // Hàm bắt đầu kết nối
-        async function startConnection() {
-            try {
-                await connection.start();
-                console.log("SignalR Connected.");
-                await connection.invoke("JoinRoom", inviteCode, userName);
-                console.log(`Joined room: ${inviteCode} as ${userName}`);
-            } catch (err) {
-                console.error("SignalR Connection Error: ", err);
-                addMessageToChat(null, 'Không thể kết nối đến máy chủ. Vui lòng thử tải lại trang.', 'notification');
+            function changeEpisode(episodeId) {
+                if (prevEpisodeButton) prevEpisodeButton.disabled = true;
+                if (nextEpisodeButton) nextEpisodeButton.disabled = true;
+                if (episodeId) {
+                    connection.invoke("ChangeEpisode", inviteCode, episodeId).catch(err => {
+                        console.error(err);
+                        if (prevEpisodeButton) prevEpisodeButton.disabled = false;
+                        if (nextEpisodeButton) nextEpisodeButton.disabled = false;
+                    });
+                }
             }
-        }
+            if (prevEpisodeButton) prevEpisodeButton.addEventListener('click', () => changeEpisode(parseInt(prevEpisodeButton.dataset.episodeId)));
+            if (nextEpisodeButton) nextEpisodeButton.addEventListener('click', () => changeEpisode(parseInt(nextEpisodeButton.dataset.episodeId)));
 
-        startConnection();
-
-        // Dọn dẹp khi rời trang
-        window.addEventListener('beforeunload', () => {
-            if (connection.state === signalR.HubConnectionState.Connected) {
-                connection.stop();
+            async function startConnectionAndJoinRoom() {
+                try {
+                    await connection.start();
+                    await connection.invoke("JoinRoom", inviteCode, userName);
+                } catch (err) {
+                    addMessageToChat(null, 'Không thể kết nối đến máy chủ. Vui lòng tải lại trang.', 'notification');
+                }
             }
-        });
+            
+            function handleJoinWithName() {
+                const enteredName = nameInput.value.trim();
+                if (enteredName) {
+                    userName = enteredName;
+                    namePromptCard.style.transform = 'scale(0.95)';
+                    namePromptCard.style.opacity = '0';
+                    setTimeout(() => {
+                        namePromptModal.style.display = 'none';
+                        mainContent.style.visibility = 'visible';
+                    }, 300);
+                    startConnectionAndJoinRoom();
+                } else {
+                    nameInput.placeholder = "Vui lòng nhập tên của bạn!";
+                    nameInput.classList.add('border-red-500', 'focus:ring-red-500');
+                }
+            }
+            
+            document.addEventListener('DOMContentLoaded', () => {
+                if (userName) {
+                    namePromptModal.style.display = 'none';
+                    mainContent.style.visibility = 'visible';
+                    startConnectionAndJoinRoom();
+                } else {
+                    namePromptModal.style.display = 'flex';
+                    setTimeout(() => {
+                        namePromptCard.style.transform = 'scale(1)';
+                        namePromptCard.style.opacity = '1';
+                        nameInput.focus();
+                    }, 100);
+                }
+            });
 
-    })();
-</script>
-
+            joinWithNameBtn.addEventListener('click', handleJoinWithName);
+            nameInput.addEventListener('keypress', e => { if (e.key === 'Enter') handleJoinWithName(); });
+            window.addEventListener('beforeunload', () => { if (connection.state === signalR.HubConnectionState.Connected) connection.stop(); });
+        })();
+    </script>
 </body>
 </html>

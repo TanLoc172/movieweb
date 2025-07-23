@@ -2800,5 +2800,37 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\videos\episodes\9154b0d0-1051-41b0-9ce7-22da46af2ecb_[TRAILER] LÂM GIANG TIÊN - Lần đầu kết hợp đầy ngược tâm của Bạch Lộc và Tăng Thuấn Hy.mp4))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\videos\episodes\931d251c-7ca4-4133-8fa2-9e2bea6f28ab_Resident Playbook - Official Trailer - Netflix [ENG SUB].mp4))">
+      <SourceType>Package</SourceType>
+      <SourceId>MovieWebsite</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/MovieWebsite</BasePath>
+      <RelativePath>videos/episodes/931d251c-7ca4-4133-8fa2-9e2bea6f28ab_Resident Playbook - Official Trailer - Netflix [ENG SUB].mp4</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\videos\episodes\931d251c-7ca4-4133-8fa2-9e2bea6f28ab_Resident Playbook - Official Trailer - Netflix [ENG SUB].mp4))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\videos\episodes\f498e8ee-1d94-4fde-91a7-8edf5382c9e1_Resident Playbook - Official Trailer - Netflix [ENG SUB].mp4))">
+      <SourceType>Package</SourceType>
+      <SourceId>MovieWebsite</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/MovieWebsite</BasePath>
+      <RelativePath>videos/episodes/f498e8ee-1d94-4fde-91a7-8edf5382c9e1_Resident Playbook - Official Trailer - Netflix [ENG SUB].mp4</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\videos\episodes\f498e8ee-1d94-4fde-91a7-8edf5382c9e1_Resident Playbook - Official Trailer - Netflix [ENG SUB].mp4))</OriginalItemSpec>
+    </StaticWebAsset>
   </ItemGroup>
 </Project>

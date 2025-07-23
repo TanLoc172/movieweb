@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "/6nvocH4ARkBESZDPdBPD0cCO+30LT1/dhnDOvjJRhI=",
+  "Hash": "kHQJ0DkkciBDaX/qUSZE9rAxs4hLlKOoqspn2VirTEk=",
   "Source": "MovieWebsite",
   "BasePath": "_content/MovieWebsite",
   "Mode": "Default",
@@ -3359,6 +3359,44 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/videos/episodes/9154b0d0-1051-41b0-9ce7-22da46af2ecb_[TRAILER] LÂM GIANG TIÊN - Lần đầu kết hợp đầy ngược tâm của Bạch Lộc và Tăng Thuấn Hy.mp4"
+    },
+    {
+      "Identity": "/Users/tanloc/MovieWebsite/wwwroot/videos/episodes/931d251c-7ca4-4133-8fa2-9e2bea6f28ab_Resident Playbook - Official Trailer - Netflix [ENG SUB].mp4",
+      "SourceId": "MovieWebsite",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/tanloc/MovieWebsite/wwwroot/",
+      "BasePath": "_content/MovieWebsite",
+      "RelativePath": "videos/episodes/931d251c-7ca4-4133-8fa2-9e2bea6f28ab_Resident Playbook - Official Trailer - Netflix [ENG SUB].mp4",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/videos/episodes/931d251c-7ca4-4133-8fa2-9e2bea6f28ab_Resident Playbook - Official Trailer - Netflix [ENG SUB].mp4"
+    },
+    {
+      "Identity": "/Users/tanloc/MovieWebsite/wwwroot/videos/episodes/f498e8ee-1d94-4fde-91a7-8edf5382c9e1_Resident Playbook - Official Trailer - Netflix [ENG SUB].mp4",
+      "SourceId": "MovieWebsite",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/tanloc/MovieWebsite/wwwroot/",
+      "BasePath": "_content/MovieWebsite",
+      "RelativePath": "videos/episodes/f498e8ee-1d94-4fde-91a7-8edf5382c9e1_Resident Playbook - Official Trailer - Netflix [ENG SUB].mp4",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/videos/episodes/f498e8ee-1d94-4fde-91a7-8edf5382c9e1_Resident Playbook - Official Trailer - Netflix [ENG SUB].mp4"
     }
   ]
 }

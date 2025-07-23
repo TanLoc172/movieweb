@@ -1,4 +1,3 @@
-
 // using Microsoft.AspNetCore.Mvc;
 // using Microsoft.AspNetCore.Mvc.Rendering;
 // using Microsoft.EntityFrameworkCore;
@@ -164,74 +163,97 @@
 //             }
 //         }
 
-        
+//         // ===== PHƯƠNG THỨC MỚI ĐỂ CHUYỂN TẬP =====
+//         public async Task ChangeEpisode(string roomCode,  int newEpisodeId)
+//         {
+//             var room = await _context.WatchPartyRooms
+//         .Include(r => r.Movie)
+//         .FirstOrDefaultAsync(r => r.InviteCode == roomCode);
+
+//             if (room != null)
+//             {
+//                 // Kiểm tra xem episode mới có thuộc về phim của phòng này không
+//                 bool episodeExistsInMovie = await _context.Episodes
+//                     .AnyAsync(e => e.Id == newEpisodeId && e.MovieId == room.MovieId);
+
+//                 if (episodeExistsInMovie)
+//                 {
+//                     // Cập nhật tập phim hiện tại của phòng
+//                     room.CurrentEpisodeId = newEpisodeId;
+//                     await _context.SaveChangesAsync();
+
+//                     // Gửi lệnh ReloadPage đến tất cả client
+//                     await Clients.Group(roomCode).SendAsync("ReloadPage");
+//                 }
+//             }
+//         }
 //     }
 // }
 
-
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using MovieWebsite.Data;
 using MovieWebsite.Models;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Security.Claims; // QUAN TRỌNG: Cần cho việc lấy User ID
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
 
 namespace MovieWebsite.Hubs
 {
     public class WatchPartyHub : Hub
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<AppUser> _userManager; // Dịch vụ để quản lý người dùng Identity
 
-        // Lưu trữ người dùng đang hoạt động trong mỗi phòng (inviteCode -> tập hợp các ConnectionId)
+        // Các biến tĩnh để lưu trạng thái của các phòng trong bộ nhớ (memory)
+        // Dùng static để dữ liệu được chia sẻ giữa tất cả các kết nối đến Hub
         private static readonly Dictionary<string, HashSet<string>> _roomUsers = new Dictionary<string, HashSet<string>>();
-        // Lưu trữ tên người dùng theo ConnectionId để dễ dàng truy xuất
         private static readonly Dictionary<string, string> _userNames = new Dictionary<string, string>();
-        // Lưu trữ mapping từ ConnectionId của client đến inviteCode của phòng họ đang tham gia
         private static readonly Dictionary<string, string> _connectionToRoomMap = new Dictionary<string, string>();
 
-        public WatchPartyHub(AppDbContext context)
+        // Constructor được cập nhật để nhận thêm UserManager thông qua Dependency Injection
+        public WatchPartyHub(AppDbContext context, UserManager<AppUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        // Xử lý khi một client mới kết nối đến Hub
+        // Phương thức được SignalR tự động gọi khi một client mới kết nối
         public override async Task OnConnectedAsync()
         {
-            // Không làm gì ở đây, vì người dùng sẽ gọi JoinRoom để xác định phòng
+            // Chúng ta không làm gì ở đây, vì client sẽ chủ động gọi "JoinRoom" sau khi kết nối
             await base.OnConnectedAsync();
         }
 
-        // Xử lý khi một client ngắt kết nối
+        // Phương thức được SignalR tự động gọi khi một client ngắt kết nối
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            // Lấy inviteCode của phòng mà client đang tham gia
+            // Tìm xem client vừa ngắt kết nối đang ở phòng nào
             if (_connectionToRoomMap.TryGetValue(Context.ConnectionId, out string? roomId))
             {
-                // Lấy tên người dùng trước khi nó bị xóa
+                // Lấy tên của người dùng đã rời đi
                 string userName = _userNames.TryGetValue(Context.ConnectionId, out var name) ? name : "Một người dùng";
 
-                // Xóa người dùng khỏi danh sách phòng
+                // Xóa người dùng khỏi danh sách của phòng
                 if (_roomUsers.ContainsKey(roomId) && _roomUsers[roomId].Contains(Context.ConnectionId))
                 {
                     _roomUsers[roomId].Remove(Context.ConnectionId);
 
-                    // Gửi tin nhắn thông báo rời đi cho những người còn lại trong phòng
+                    // Gửi thông báo hệ thống cho những người còn lại
                     await Clients.Group(roomId).SendAsync("SystemMessage", $"{userName} đã rời phòng.");
 
-                    // Cập nhật danh sách người dùng cho tất cả mọi người trong phòng
+                    // Yêu cầu tất cả client cập nhật lại danh sách người dùng
                     await SendUserListToRoom(roomId);
                 }
 
-                // Dọn dẹp các dictionary
+                // Dọn dẹp thông tin của client đã ngắt kết nối khỏi các dictionary
                 _connectionToRoomMap.Remove(Context.ConnectionId);
                 _userNames.Remove(Context.ConnectionId);
 
-                // Nếu phòng không còn ai, có thể xóa nó khỏi _roomUsers để tiết kiệm bộ nhớ
+                // Nếu phòng không còn ai, xóa phòng khỏi dictionary để giải phóng bộ nhớ
                 if (_roomUsers.ContainsKey(roomId) && !_roomUsers[roomId].Any())
                 {
                     _roomUsers.Remove(roomId);
@@ -241,121 +263,130 @@ namespace MovieWebsite.Hubs
             await base.OnDisconnectedAsync(exception);
         }
 
-        // Phương thức được gọi từ client khi họ vào một phòng xem chung
-        // Đổi tên tham số 'roomId' thành 'inviteCode' cho phù hợp với front-end
-        public async Task JoinRoom(string inviteCode, string userName)
+        /// <summary>
+        /// Phương thức được client gọi để tham gia một phòng xem chung.
+        /// </summary>
+        /// <param name="inviteCode">Mã mời của phòng.</param>
+        /// <param name="guestName">Tên do người dùng khách tự nhập.</param>
+        public async Task JoinRoom(string inviteCode, string guestName)
         {
-            // Kiểm tra xem phòng có tồn tại trong DB không
             var room = await _context.WatchPartyRooms.FirstOrDefaultAsync(r => r.InviteCode == inviteCode);
             if (room == null)
             {
-                // Nếu phòng không tồn tại, thông báo cho client gọi và thoát.
                 await Clients.Caller.SendAsync("SystemMessage", $"Phòng xem chung với mã '{inviteCode}' không tồn tại.");
                 return;
             }
 
-            // Sử dụng inviteCode làm định danh phòng cho các nhóm SignalR và dictionary
+            string finalUserName;
+
+            // **LOGIC CHÍNH: Ưu tiên lấy tên người dùng đã đăng nhập**
+            if (Context.User.Identity != null && Context.User.Identity.IsAuthenticated)
+            {
+                // Lấy đối tượng AppUser từ thông tin xác thực của kết nối hiện tại
+                var user = await _userManager.GetUserAsync(Context.User);
+                
+                // Ưu tiên FullName, nếu không có thì dùng UserName mặc định của Identity
+                finalUserName = user?.FullName ?? Context.User.Identity.Name ?? "Thành viên";
+            }
+            else
+            {
+                // Nếu là khách, sử dụng tên họ nhập. Nếu họ không nhập tên, tạo một tên ngẫu nhiên.
+                finalUserName = string.IsNullOrWhiteSpace(guestName) 
+                    ? $"Khách_{Guid.NewGuid().ToString().Substring(0, 4)}" 
+                    : guestName;
+            }
+
             string roomId = inviteCode;
 
-            // Thêm client vào nhóm SignalR của phòng
+            // Thêm kết nối hiện tại vào một nhóm (group) của SignalR có tên là inviteCode
             await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
 
-            // Lưu trữ thông tin người dùng vào các dictionary
+            // Lưu trữ thông tin kết nối và tên người dùng vào các dictionary
             if (!_roomUsers.ContainsKey(roomId))
             {
                 _roomUsers[roomId] = new HashSet<string>();
             }
             _roomUsers[roomId].Add(Context.ConnectionId);
-            _userNames[Context.ConnectionId] = userName;
+            _userNames[Context.ConnectionId] = finalUserName;
             _connectionToRoomMap[Context.ConnectionId] = roomId;
 
-            // Gửi tin nhắn thông báo người dùng mới tham gia cho tất cả mọi người trong phòng
-            await Clients.Group(roomId).SendAsync("SystemMessage", $"{userName} đã tham gia phòng.");
+            // Gửi thông báo chào mừng đến tất cả mọi người trong phòng
+            await Clients.Group(roomId).SendAsync("SystemMessage", $"{finalUserName} đã tham gia phòng.");
 
-            // Cập nhật danh sách người dùng cho tất cả mọi người trong phòng
+            // Yêu cầu cập nhật lại danh sách người dùng trên giao diện của mọi người
             await SendUserListToRoom(roomId);
         }
 
-        // Phương thức được gọi khi client gửi tin nhắn chat
+        /// <summary>
+        /// Nhận tin nhắn chat từ một client và phát lại cho cả phòng.
+        /// </summary>
         public async Task SendMessage(string inviteCode, string userName, string message)
         {
-            // Lưu tin nhắn vào cơ sở dữ liệu
+            // (Tùy chọn) Lưu tin nhắn vào CSDL
             var room = await _context.WatchPartyRooms.FirstOrDefaultAsync(r => r.InviteCode == inviteCode);
             if (room != null)
             {
-                var chatMessage = new ChatMessage
+                _context.ChatMessages.Add(new ChatMessage
                 {
                     RoomId = room.Id,
                     UserName = userName,
                     Message = message,
-                    Timestamp = DateTime.Now
-                };
-                _context.ChatMessages.Add(chatMessage);
+                    Timestamp = DateTime.UtcNow
+                });
                 await _context.SaveChangesAsync();
             }
 
-            // Gửi tin nhắn đến tất cả các client trong phòng
-            // Front-end sẽ nhận và hiển thị tin nhắn này.
+            // Gửi tin nhắn đến tất cả các client trong nhóm
             await Clients.Group(inviteCode).SendAsync("ReceiveMessage", userName, message);
         }
 
-        // Phương thức được gọi khi người điều khiển (hoặc client khác) thay đổi trạng thái video
+        /// <summary>
+        /// Nhận trạng thái video (play, pause, seek) từ một client và phát lại cho cả phòng.
+        /// </summary>
         public async Task SyncVideoState(string inviteCode, string state, double currentTime)
         {
-            // Gửi cập nhật trạng thái video đến tất cả các client khác trong phòng
-            // Dùng 'Clients.Group' thay vì 'Clients.OthersInGroup' để đảm bảo mọi client,
-            // kể cả người điều khiển ban đầu, đều nhận được trạng thái mới nhất.
+            // Gửi trạng thái mới đến tất cả các client trong nhóm (kể cả người gửi ban đầu để đảm bảo đồng bộ)
             await Clients.Group(inviteCode).SendAsync("ReceiveVideoState", state, currentTime);
         }
 
-        // Helper method để gửi danh sách người dùng hiện tại trong một phòng
-        private async Task SendUserListToRoom(string roomId)
-        {
-            if (_roomUsers.TryGetValue(roomId, out HashSet<string>? userConnections))
-            {
-                var userList = new List<string>();
-                foreach (var connectionId in userConnections)
-                {
-                    // Lấy tên người dùng từ ConnectionId
-                    if (_userNames.TryGetValue(connectionId, out string? userName))
-                    {
-                        userList.Add(userName);
-                    }
-                }
-
-                // Gửi danh sách tên người dùng tới tất cả các client trong nhóm
-                // Client sẽ sử dụng danh sách này để cập nhật giao diện.
-                await Clients.Group(roomId).SendAsync("UpdateUserList", userList);
-            }
-            else
-            {
-                // Nếu phòng không còn ai hoặc chưa có người dùng, gửi danh sách rỗng
-                await Clients.Group(roomId).SendAsync("UpdateUserList", new List<string>());
-            }
-        }
-
-        // ===== PHƯƠNG THỨC MỚI ĐỂ CHUYỂN TẬP =====
-        public async Task ChangeEpisode(string roomCode,  int newEpisodeId)
+        /// <summary>
+        /// Nhận yêu cầu chuyển tập, cập nhật CSDL và yêu cầu các client tải lại trang.
+        /// </summary>
+        public async Task ChangeEpisode(string roomCode, int newEpisodeId)
         {
             var room = await _context.WatchPartyRooms
-        .Include(r => r.Movie)
-        .FirstOrDefaultAsync(r => r.InviteCode == roomCode);
+                .FirstOrDefaultAsync(r => r.InviteCode == roomCode);
 
             if (room != null)
             {
-                // Kiểm tra xem episode mới có thuộc về phim của phòng này không
                 bool episodeExistsInMovie = await _context.Episodes
                     .AnyAsync(e => e.Id == newEpisodeId && e.MovieId == room.MovieId);
 
                 if (episodeExistsInMovie)
                 {
-                    // Cập nhật tập phim hiện tại của phòng
                     room.CurrentEpisodeId = newEpisodeId;
                     await _context.SaveChangesAsync();
-
-                    // Gửi lệnh ReloadPage đến tất cả client
+                    
+                    // Gửi lệnh "ReloadPage" đến tất cả các client trong phòng
                     await Clients.Group(roomCode).SendAsync("ReloadPage");
                 }
+            }
+        }
+
+        /// <summary>
+        /// Hàm nội bộ để lấy và gửi danh sách người dùng hiện tại trong một phòng.
+        /// </summary>
+        private async Task SendUserListToRoom(string roomId)
+        {
+            if (_roomUsers.TryGetValue(roomId, out var userConnections))
+            {
+                var userList = userConnections
+                    .Select(connectionId => _userNames.TryGetValue(connectionId, out var name) ? name : null)
+                    .Where(name => name != null)
+                    .ToList();
+
+                // Gửi danh sách tên người dùng đến tất cả client trong nhóm
+                await Clients.Group(roomId).SendAsync("UpdateUserList", userList);
             }
         }
     }
