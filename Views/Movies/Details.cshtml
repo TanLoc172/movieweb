@@ -530,7 +530,7 @@ else if (!Model.Movie.IsCompleted)
                     <li><strong>Lượt xem:</strong> @Model.Movie.Views</li>
                 </ul>
 
-                <!-- Next Episode Notification -->
+                @* <!-- Next Episode Notification -->
                 @if (Model.NextEpisodeScheduleTime.HasValue)
                 {
                     <div class="next-episode-notification">
@@ -543,6 +543,31 @@ else if (!Model.Movie.IsCompleted)
                     <div class="next-episode-notification" style="background: linear-gradient(90deg, #17a2b8, #20c997);">
                         <i class="fas fa-info-circle"></i>
                         <span>Lịch chiếu tập tiếp theo sẽ được cập nhật sớm.</span>
+                    </div>
+                } *@
+
+                 <!-- Next Episode Notification -->
+             @if (Model.NextEpisodeScheduleTime.HasValue)
+                {
+                    var nextEpisodeNum = Model.AiredEpisodes.Any() ? Model.AiredEpisodes.Max(e => e.EpisodeNumber) + 1 : 1;
+                    var releaseTime = Model.NextEpisodeScheduleTime.Value.ToLocalTime();
+
+                    <div class="next-episode-notification">
+                        <i class="fas fa-bell icon"></i>
+                        <span class="info-text">
+                            Tập @nextEpisodeNum dự kiến phát sóng vào @releaseTime.ToString("HH:mm") ngày @releaseTime.ToString("dd/MM/yyyy").
+                        </span>
+                        <span class="countdown-text" id="countdown-timer" data-release-time="@Model.NextEpisodeScheduleTime.Value.ToString("o")">
+                            <!-- JavaScript sẽ điền nội dung đếm ngược vào đây -->
+                        </span>
+                    </div>
+                }
+                else if (!Model.Movie.IsCompleted)
+                {
+                    // Thêm class "updating" để có màu khác
+                    <div class="next-episode-notification" style="background: linear-gradient(90deg, #17a2b8, #20c997);">
+                            <i class="fas fa-info-circle icon"></i>
+                        <span class="info-text">Phim đang được cập nhật. Lịch chiếu tập mới sẽ được thông báo sớm nhất.</span>
                     </div>
                 }
                 <!-- Episode Selection -->

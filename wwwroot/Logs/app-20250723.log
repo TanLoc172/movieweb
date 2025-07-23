@@ -30,3 +30,138 @@
 2025-07-23 08:02:37.038 +07:00 [INF] Đã lấy danh sách 0 phim của thể loại Hoạt Hình.
 2025-07-23 08:04:14.677 +07:00 [INF] User created a new account with password. UserId: 920e808d-567b-42cb-90e5-812f349110af
 2025-07-23 08:05:23.301 +07:00 [INF] Dịch vụ kiểm tra lịch chiếu đang dừng.
+2025-07-23 08:23:19.408 +07:00 [INF] Đã áp dụng migrations cho AppDbContext.
+2025-07-23 08:23:19.447 +07:00 [INF] Đã áp dụng migrations cho ApplicationDbContext (Identity).
+2025-07-23 08:23:19.452 +07:00 [INF] Thư mục Uploads đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Uploads
+2025-07-23 08:23:19.452 +07:00 [INF] Thư mục Logs đã được tạo hoặc xác minh tại: /Users/tanloc/MovieWebsite/wwwroot/Logs
+2025-07-23 08:23:19.579 +07:00 [INF] Dịch vụ kiểm tra lịch chiếu đang khởi động.
+2025-07-23 08:23:29.591 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:23:32.781 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-07-23 08:23:39.879 +07:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2025-07-23 08:23:48.934 +07:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2025-07-23 08:23:49.012 +07:00 [ERR] Failed executing DbCommand (3ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "Episodes"
+WHERE "Id" = @p0
+RETURNING 1;
+2025-07-23 08:23:49.034 +07:00 [ERR] An exception occurred in the database while saving changes for context type 'MovieWebsite.Data.AppDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 19: 'FOREIGN KEY constraint failed'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 19: 'FOREIGN KEY constraint failed'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2025-07-23 08:23:49.035 +07:00 [ERR] Lỗi khi chỉnh sửa phim ID: 8
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 19: 'FOREIGN KEY constraint failed'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at MovieWebsite.Areas.Admin.Controllers.AdMoviesController.Edit(Int32 id, MovieViewModel movieVM) in /Users/tanloc/MovieWebsite/Controllers/Admin/AdMoviesController.cs:line 906
+2025-07-23 08:23:49.041 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.IO.DirectoryNotFoundException: Could not find a part of the path '/Uploads/poster_5c85cce7-40e0-40ff-8d8e-a0539bb4f7b0.jpg'.
+   at System.IO.FileSystem.DeleteFile(String fullPath)
+   at MovieWebsite.Areas.Admin.Controllers.AdMoviesController.Edit(Int32 id, MovieViewModel movieVM) in /Users/tanloc/MovieWebsite/Controllers/Admin/AdMoviesController.cs:line 916
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at MovieWebsite.Middleware.PageVisitCounterMiddleware.InvokeAsync(HttpContext context, AppDbContext dbContext) in /Users/tanloc/MovieWebsite/Middleware/PageVisitCounterMiddleware.cs:line 41
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-23 08:24:02.914 +07:00 [INF] Đã cập nhật phim: Chuyện Đời Bác Sĩ Nội Trú (ID: 8)
+2025-07-23 08:24:21.204 +07:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2025-07-23 08:24:21.229 +07:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2025-07-23 08:24:29.584 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:25:29.582 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:26:29.591 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:27:29.611 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:27:29.616 +07:00 [INF] Công chiếu tập '6' của Phim ID 8!
+2025-07-23 08:27:29.652 +07:00 [INF] Đã yêu cầu tạo thông báo trong database cho tập phim ID 35.
+2025-07-23 08:27:29.725 +07:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2025-07-23 08:27:29.735 +07:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2025-07-23 08:28:29.613 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:29:29.615 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:30:29.616 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:31:29.617 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:32:29.618 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:33:29.619 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:34:29.619 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:35:29.622 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:36:29.621 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:37:29.622 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:38:29.624 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:39:29.625 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:40:29.630 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:41:29.627 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:42:29.629 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:43:29.629 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:44:29.631 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:45:29.632 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:46:29.633 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:47:29.634 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:48:29.636 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:49:29.636 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:50:29.635 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:51:29.637 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 08:51:29.658 +07:00 [INF] Công chiếu tập '7' của Phim ID 8!
+2025-07-23 08:51:29.671 +07:00 [INF] Đã yêu cầu tạo thông báo trong database cho tập phim ID 36.
+2025-07-23 09:03:49.708 +07:00 [INF] Dịch vụ đang kiểm tra các tập phim đã đến lịch chiếu.
+2025-07-23 09:04:15.971 +07:00 [INF] Dịch vụ kiểm tra lịch chiếu đang dừng.
